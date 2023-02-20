@@ -1,0 +1,69 @@
+﻿<UserControl x:Class="ChessWPF.Views.Boards.GameBoard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.Boards"
+             xmlns:Views.Cells="clr-namespace:ChessWPF.Views.Cells" xmlns:viewmodels="clr-namespace:ChessWPF.ViewModels"
+             xmlns:View.Menus="clr-namespace:ChessWPF.Views.Menus"
+             d:DataContext="{d:DesignInstance Type=viewmodels:BoardViewModel}"
+             mc:Ignorable="d" 
+             d:DesignHeight="800" d:DesignWidth="800"
+             >
+
+
+
+    <Grid Name="gameBoard" >
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="8" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="7" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="6" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="4" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="3" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="8" Grid.Column="0" Text="2" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="9" Grid.Column="0" Text="1" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <TextBlock Grid.Row="10" Grid.Column="1" Text="A" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="2" Text="B" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="3" Text="C" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="4" Text="D" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="5" Text="E" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="6" Text="F" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="7" Text="G" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="10" Grid.Column="8" Text="H" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+
+        <Border Grid.Row="2" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="2" >
+        </Border>
+        <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="2" DataContext="{Binding MenuViewModel}">
+            
+        </View.Menus:Menu>
+        <local:ChessBoard Grid.Row="2" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="8" DataContext="{Binding BoardViewModel}">
+            
+        </local:ChessBoard>
+    </Grid>
+</UserControl>

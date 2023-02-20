@@ -1,0 +1,108 @@
+﻿<UserControl x:Class="ChessWPF.Views.Boards.ChessBoard"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.Boards"
+             xmlns:Views.Cells="clr-namespace:ChessWPF.Views.Cells"
+             mc:Ignorable="d" 
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+            <RowDefinition />
+
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+
+        </Grid.ColumnDefinitions>
+        <Border Grid.Row="1" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="2" >
+        </Border>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="0" DataContext="{Binding CellViewModels[0][0]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="1" DataContext="{Binding CellViewModels[0][1]}" Background="{StaticResource OddTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="2" DataContext="{Binding CellViewModels[0][2]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="3" DataContext="{Binding CellViewModels[0][3]}" Background="{StaticResource OddTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="4" DataContext="{Binding CellViewModels[0][4]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="5" DataContext="{Binding CellViewModels[0][5]}" Background="{StaticResource OddTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="6" DataContext="{Binding CellViewModels[0][6]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="7" DataContext="{Binding CellViewModels[0][7]}" Background="{StaticResource OddTile}"/>
+
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="0" DataContext="{Binding CellViewModels[1][0]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="1" DataContext="{Binding CellViewModels[1][1]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="2" DataContext="{Binding CellViewModels[1][2]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="3" DataContext="{Binding CellViewModels[1][3]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="4" DataContext="{Binding CellViewModels[1][4]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="5" DataContext="{Binding CellViewModels[1][5]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="6" DataContext="{Binding CellViewModels[1][6]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="1" Grid.Column="7" DataContext="{Binding CellViewModels[1][7]}" Background="{StaticResource EvenTile}"/>
+
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="0" DataContext="{Binding CellViewModels[2][0]}" Background="{StaticResource EvenTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="1" DataContext="{Binding CellViewModels[2][1]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="2" DataContext="{Binding CellViewModels[2][2]}" Background="{StaticResource EvenTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="3" DataContext="{Binding CellViewModels[2][3]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="4" DataContext="{Binding CellViewModels[2][4]}" Background="{StaticResource EvenTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="5" DataContext="{Binding CellViewModels[2][5]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="6" DataContext="{Binding CellViewModels[2][6]}" Background="{StaticResource EvenTile}" />
+        <Views.Cells:ChessCell Grid.Row="2" Grid.Column="7" DataContext="{Binding CellViewModels[2][7]}" Background="{StaticResource OddTile}" />
+
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="0" DataContext="{Binding CellViewModels[3][0]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="1" DataContext="{Binding CellViewModels[3][1]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="2" DataContext="{Binding CellViewModels[3][2]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="3" DataContext="{Binding CellViewModels[3][3]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="4" DataContext="{Binding CellViewModels[3][4]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="5" DataContext="{Binding CellViewModels[3][5]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="6" DataContext="{Binding CellViewModels[3][6]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="3" Grid.Column="7" DataContext="{Binding CellViewModels[3][7]}" Background="{StaticResource EvenTile}"/>
+
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="0" DataContext="{Binding CellViewModels[4][0]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="1" DataContext="{Binding CellViewModels[4][1]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="2" DataContext="{Binding CellViewModels[4][2]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="3" DataContext="{Binding CellViewModels[4][3]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="4" DataContext="{Binding CellViewModels[4][4]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="5" DataContext="{Binding CellViewModels[4][5]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="6" DataContext="{Binding CellViewModels[4][6]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="4" Grid.Column="7" DataContext="{Binding CellViewModels[4][7]}" Background="{StaticResource OddTile}" />
+
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="0" DataContext="{Binding CellViewModels[5][0]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="1" DataContext="{Binding CellViewModels[5][1]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="2" DataContext="{Binding CellViewModels[5][2]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="3" DataContext="{Binding CellViewModels[5][3]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="4" DataContext="{Binding CellViewModels[5][4]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="5" DataContext="{Binding CellViewModels[5][5]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="6" DataContext="{Binding CellViewModels[5][6]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="5" Grid.Column="7" DataContext="{Binding CellViewModels[5][7]}" Background="{StaticResource EvenTile}"/>
+
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="0" DataContext="{Binding CellViewModels[6][0]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="1" DataContext="{Binding CellViewModels[6][1]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="2" DataContext="{Binding CellViewModels[6][2]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="3" DataContext="{Binding CellViewModels[6][3]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="4" DataContext="{Binding CellViewModels[6][4]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="5" DataContext="{Binding CellViewModels[6][5]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="6" DataContext="{Binding CellViewModels[6][6]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="6" Grid.Column="7" DataContext="{Binding CellViewModels[6][7]}" Background="{StaticResource OddTile}" />
+
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="0" DataContext="{Binding CellViewModels[7][0]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="1" DataContext="{Binding CellViewModels[7][1]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="2" DataContext="{Binding CellViewModels[7][2]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="3" DataContext="{Binding CellViewModels[7][3]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="4" DataContext="{Binding CellViewModels[7][4]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="5" DataContext="{Binding CellViewModels[7][5]}" Background="{StaticResource EvenTile}"/>
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="6" DataContext="{Binding CellViewModels[7][6]}" Background="{StaticResource OddTile}" />
+        <Views.Cells:ChessCell Grid.Row="7" Grid.Column="7" DataContext="{Binding CellViewModels[7][7]}" Background="{StaticResource EvenTile}"/>
+    </Grid>
+    
+</UserControl>
