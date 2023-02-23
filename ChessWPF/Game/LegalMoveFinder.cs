@@ -72,28 +72,35 @@ namespace ChessWPF.Game
                         }
                     }
                 }
-                if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece != null)
+                if (IsCellValid(pawn.Cell.Row - 1, pawn.Cell.Col - 1, board))
                 {
-                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
+
+                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece != null)
                     {
-                        legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
+                        if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
+                        {
+                            legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
+                        }
                     }
-                }
-                else
-                {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
+                    else
+                    {
+                        protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
+                    }
                 }
 
-                if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece != null)
+                if (IsCellValid(pawn.Cell.Row - 1, pawn.Cell.Col + 1, board))
                 {
-                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
+                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece != null)
                     {
-                        legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
+                        if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
+                        {
+                            legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
+                        }
                     }
-                }
-                else
-                {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
+                    else
+                    {
+                        protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
+                    }
                 }
                 if (lastMove != null)
                 {
@@ -113,27 +120,34 @@ namespace ChessWPF.Game
                         }
                     }
                 }
-                if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece != null)
+                if (IsCellValid(pawn.Cell.Row + 1, pawn.Cell.Col - 1, board))
                 {
-                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
+                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece != null)
                     {
-                        legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
+                        if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
+                        {
+                            legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
+                        }
+                    }
+                    else
+                    {
+                        protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
                     }
                 }
-                else
+
+                if (IsCellValid(pawn.Cell.Row + 1, pawn.Cell.Col + 1, board))
                 {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
-                }
-                if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece != null)
-                {
-                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
+                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece != null)
                     {
-                        legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
+                        if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
+                        {
+                            legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
+                        }
                     }
-                }
-                else
-                {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
+                    else
+                    {
+                        protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
+                    }
                 }
                 if (lastMove != null)
                 {
@@ -881,7 +895,17 @@ namespace ChessWPF.Game
             if (board.Cells[king.Cell.Row, king.Cell.Col + 3].Piece != null && board.Cells[king.Cell.Row, king.Cell.Col + 3].Piece.PieceType == PieceType.Rook)
             {
                 var rook = board.Cells[king.Cell.Row, king.Cell.Col + 3].Piece;
-                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook.Cell.Row && m.CellOneBefore.Col == rook.Cell.Col))
+                bool wayIsClear = true;
+                for (int i = king.Cell.Col + 1; i < board.Cells.GetLength(1) - 1; i++)
+                {
+                    if (board.Cells[king.Cell.Row, i].Piece != null)
+                    {
+                        wayIsClear = false;
+                        break;
+                    }
+                }
+
+                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook.Cell.Row && m.CellOneBefore.Col == rook.Cell.Col) && wayIsClear)
                 {
                     if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col + 2))
                     && !board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col + 1))
@@ -896,7 +920,17 @@ namespace ChessWPF.Game
             if (board.Cells[king.Cell.Row, king.Cell.Col - 4].Piece != null && board.Cells[king.Cell.Row, king.Cell.Col - 4].Piece.PieceType == PieceType.Rook)
             {
                 var rook = board.Cells[king.Cell.Row, king.Cell.Col - 4].Piece;
-                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook.Cell.Row && m.CellOneBefore.Col == rook.Cell.Col))
+
+                bool wayIsClear = true;
+                for (int i = king.Cell.Col - 1; i > 1; i--)
+                {
+                    if (board.Cells[king.Cell.Row, i].Piece != null)
+                    {
+                        wayIsClear = false;
+                        break;
+                    }
+                }
+                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook.Cell.Row && m.CellOneBefore.Col == rook.Cell.Col) && wayIsClear)
                 {
                     if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col - 2))
                     && !board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col - 1))
