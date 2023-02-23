@@ -15,18 +15,8 @@ namespace ChessWPF.ViewModels
         private bool canBeMovedTo;
         private bool isSelected;
         private bool canBeSelected;
+        private bool canBeSelectedForPromotion;
         private Brush cellBackground;
-
-
-
-
-
-
-
-
-
-
-
 
         public CellViewModel(Cell cell)
         {
@@ -43,6 +33,7 @@ namespace ChessWPF.ViewModels
             }
             UpdateCellImage();
         }
+
         public Cell Cell
         {
             get
@@ -110,6 +101,13 @@ namespace ChessWPF.ViewModels
                 OnPropertyChanged(nameof(CanBeSelected));
             }
         }
+
+        public bool CanBeSelectedForPromotion
+        {
+            get { return canBeSelectedForPromotion; }
+            set { canBeSelectedForPromotion = value; }
+        }
+
         public Brush CellBackground
         {
             get { return cellBackground; }
@@ -119,6 +117,9 @@ namespace ChessWPF.ViewModels
                 OnPropertyChanged(nameof(CellBackground));
             }
         }
+
+     
+
         public ICommand SelectCommand { get; set; }
         public ICommand MoveCommand { get; set; }
 
