@@ -95,6 +95,11 @@ namespace ChessWPF.Singleton
             BoardViewModel.UndoMove();
         }
 
+        public void SelectPieceForPromotion(CellViewModel cellViewModel)
+        {
+            BoardViewModel.PromotePiece(cellViewModel.Cell.Piece.PieceType);
+        }
+
         private void GetLegalMoves(Piece piece)
         {
             //var newLegalMoves = LegalMoveFinder.GetLegalMoves(piece);
