@@ -18,19 +18,33 @@ namespace ChessWPF.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            return cellViewModel.CanBeSelected && base.CanExecute(parameter);
+            if (cellViewModel.CanBeSelectedForPromotion)
+            {
+                return true;
+            }
+            else if (cellViewModel.CanBeSelected)
+            {
+                return true;
+            }
+            return cellViewModel.CanBeSelected || cellViewModel.CanBeSelectedForPromotion;
             //return false;
         }
         public override void Execute(object? parameter)
         {
-            cellViewModel.IsSelected = true;
-            BackgroundSingleton.Instance.SelectCell(cellViewModel);
-            //BackgroundSingleton.Instance.GameBoardViewModel.CellsAreUpdated = false;
-            //BackgroundSingleton.Instance.CellsAreUpdated = false;
+            if (cellViewModel.CanBeSelectedForPromotion)
+            {
+                BackgroundSingleton.Instance.SelectPieceForPromotion(cellViewModel);
+            }
+            else
+            {
+                cellViewModel.IsSelected = true;
+                BackgroundSingleton.Instance.SelectCell(cellViewModel);
+            }
+
         }
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CellViewModel.IsSelected) || e.PropertyName == nameof(CellViewModel.CellImage) || e.PropertyName == nameof(CellViewModel.CanBeSelected))
+            if (e.PropertyName == nameof(CellViewModel.IsSelected) || e.PropertyName == nameof(CellViewModel.CanBeSelected) || e.PropertyName == nameof(CellViewModel.CanBeSelectedForPromotion))
             {
                 OnCanExecuteChanged();
             }
