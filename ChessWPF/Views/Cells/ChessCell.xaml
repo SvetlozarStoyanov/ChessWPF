@@ -8,13 +8,10 @@
              d:DesignHeight="200" d:DesignWidth="100">
     <Grid>
         <Border BorderBrush="Black" BorderThickness="1"/>
-
         <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged">
         </Button>
         <Button Command="{Binding MoveCommand}" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
         </Button>
         <Image x:Name="img" Source="{Binding CellImage}" Opacity="1" />
-
-        <!--<TextBlock Text="{Binding Position}"/>-->
     </Grid>
 </UserControl>
