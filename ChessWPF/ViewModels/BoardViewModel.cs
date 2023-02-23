@@ -20,9 +20,8 @@ namespace ChessWPF.ViewModels
         private bool cellsAreUpdated;
         private bool gameHasStarted;
         private PieceColor turnColor;
-
-
-
+        private List<Cell> backupCells;
+        private Move promotionMove;
 
 
 
@@ -33,6 +32,7 @@ namespace ChessWPF.ViewModels
             cellViewModels = new CellViewModel[8][];
             MatchCellViewModelsToCells();
             TurnColor = PieceColor.White;
+            backupCells = new List<Cell>();
         }
 
         public Board Board
@@ -94,7 +94,6 @@ namespace ChessWPF.ViewModels
                 for (int col = 0; col < board.Cells.GetLength(1); col++)
                 {
                     cellViewModels[row][col] = new CellViewModel(board.Cells[row, col]);
-                    //cellViewModels[row][col].UpdateCellImage();
                 }
             }
         }
@@ -126,52 +125,214 @@ namespace ChessWPF.ViewModels
 
         public void MovePiece(Cell cell, CellViewModel selectedCell)
         {
+            var selectedPieceType = selectedCell.Cell.Piece.PieceType;
             Move move = CreateMove(cell, selectedCell);
             if (move.CellTwoAfter.Piece.PieceType == PieceType.King && Math.Abs(move.CellOneBefore.Col - move.CellTwoAfter.Col) == 2)
             {
                 move = MoveRookInCastlingMove(move);
             }
-            if (Board.Moves.Count > 0 && selectedCell.Cell.Piece.PieceType == PieceType.Pawn)
+            else if (selectedPieceType == PieceType.Pawn)
             {
-                var lastMovedPiece = board.Moves.Peek().CellTwoAfter.Piece;
-                if (lastMovedPiece.PieceType == PieceType.Pawn && cell.Col == move.CellTwoAfter.Piece.Cell.Col && lastMovedPiece.Cell.Col == move.CellTwoAfter.Piece.Cell.Col &&  move.CellTwoBefore.Piece == null)
+                if (move.CellTwoAfter.Piece.PieceType == PieceType.Pawn && (move.CellTwoAfter.Row == 0 || move.CellTwoAfter.Row == 7))
                 {
-                    move = EnPassantMove(move);
+                    var pawn = move.CellTwoAfter.Piece;
+                    CreatePromotionMove(move, pawn);
+                    MarkWhichPiecesCanBeSelected();
+                }
+                if (Board.Moves.Count > 0)
+                {
+                    var lastMovedPiece = board.Moves.Peek().CellTwoAfter.Piece;
+                    if (lastMovedPiece.PieceType == PieceType.Pawn
+                        && cell.Col == move.CellTwoAfter.Piece.Cell.Col
+                        && move.CellTwoBefore.Piece == null
+                        && Math.Abs(lastMovedPiece.Cell.Col - move.CellOneBefore.Col) == 1
+                        && lastMovedPiece.Cell.Row == move.CellOneAfter.Row)
+                    {
+                        move = EnPassantMove(move);
+                    }
                 }
             }
-            //CellViewModels[selectedCell.Cell.Row][selectedCell.Cell.Col].IsSelected = false;
-            selectedCell.Cell.Piece = null;
-            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
-            CellViewModels[move.CellOneAfter.Row][move.CellOneAfter.Col].UpdateCellImage();
-            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateCellImage();
-            CellViewModels[move.CellTwoAfter.Row][move.CellTwoAfter.Col].UpdateCellImage();
+            if (backupCells.Count == 0)
+            {
+                FinishMove(move, selectedCell);
+            }
+        }
+
+        public void UndoMove()
+        {
+            Move move = Board.Moves.Pop();
+            Cell cellOneBefore = move.CellOneBefore;
+            CellViewModels[cellOneBefore.Row][cellOneBefore.Col].Cell = cellOneBefore;
+            CellViewModels[cellOneBefore.Row][cellOneBefore.Col].Cell.Piece = cellOneBefore.Piece;
+            Board.Cells[cellOneBefore.Row, cellOneBefore.Col] = cellOneBefore;
+            CellViewModels[cellOneBefore.Row][cellOneBefore.Col].UpdateCellImage();
+
+            Cell cellTwoBefore = move.CellTwoBefore;
+            Cell cellTwoAfter = move.CellTwoAfter;
+            CellViewModels[cellTwoBefore.Row][cellTwoBefore.Col].Cell = cellTwoBefore;
+            CellViewModels[cellTwoBefore.Row][cellTwoBefore.Col].Cell.Piece = cellTwoBefore.Piece;
+            Board.Cells[cellTwoBefore.Row, cellTwoBefore.Col] = cellTwoBefore;
+
+            CellViewModels[cellTwoBefore.Row][cellTwoBefore.Col].UpdateCellImage();
+
             if (move.CellThreeBefore != null)
             {
-                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].UpdateCellImage();
-                CellViewModels[move.CellThreeAfter.Row][move.CellThreeAfter.Col].UpdateCellImage();
+                Cell cellThreeBefore = move.CellThreeBefore;
+                CellViewModels[cellThreeBefore.Row][cellThreeBefore.Col].Cell = cellThreeBefore;
+                CellViewModels[cellThreeBefore.Row][cellThreeBefore.Col].Cell.Piece = cellThreeBefore.Piece;
+                Board.Cells[cellThreeBefore.Row, cellThreeBefore.Col] = cellThreeBefore;
+                CellViewModels[cellThreeBefore.Row][cellThreeBefore.Col].UpdateCellImage();
             }
             if (move.CellFourBefore != null)
             {
-                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].UpdateCellImage();
-                CellViewModels[move.CellFourAfter.Row][move.CellFourAfter.Col].UpdateCellImage();
+                Cell cellFourBefore = move.CellFourBefore;
+                CellViewModels[cellFourBefore.Row][cellFourBefore.Col].Cell = cellFourBefore;
+                CellViewModels[cellFourBefore.Row][cellFourBefore.Col].Cell.Piece = cellFourBefore.Piece;
+                Board.Cells[cellFourBefore.Row, cellFourBefore.Col] = cellFourBefore;
+                CellViewModels[cellFourBefore.Row][cellFourBefore.Col].UpdateCellImage();
             }
-            Board.Moves.Push(move);
-            if (!GameHasStarted)
+            if (!Board.Moves.Any())
             {
-                GameHasStarted = true;
+                GameHasStarted = false;
             }
             PrepareForNextTurn();
+        }
+
+        public void PromotePiece(PieceType pieceType)
+        {
+            var cell = promotionMove.CellTwoAfter;
+            cell.Piece = PieceConstructor.ConstructPieceByType(pieceType, TurnColor, cell);
+            promotionMove.CellTwoAfter.Piece = cell.Piece;
+            promotionMove.CellTwoAfter.Piece.Cell = cell;
+            CellViewModels[cell.Row][cell.Col].Cell.Piece = cell.Piece;
+            CellViewModels[cell.Row][cell.Col].Cell.Piece.Cell = cell;
+            CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = false;
+            RestoreBackupCells();
+            FinishMove(promotionMove, null);
+        }
+
+        private void ResetMatchCellViewModelsToCells()
+        {
+            for (int row = 0; row < board.Cells.GetLength(0); row++)
+            {
+                for (int col = 0; col < board.Cells.GetLength(1); col++)
+                {
+                    cellViewModels[row][col].Cell = board.Cells[row, col];
+
+                    cellViewModels[row][col].UpdateCellImage();
+                    cellViewModels[row][col].CanBeMovedTo = false;
+                    cellViewModels[row][col].IsSelected = false;
+
+                }
+            }
+        }
+
+        private void ReverseTurnColor()
+        {
+            if (TurnColor == PieceColor.White)
+            {
+                TurnColor = PieceColor.Black;
+            }
+            else if (TurnColor == PieceColor.Black)
+            {
+                TurnColor = PieceColor.White;
+            }
+        }
+
+        private void MarkWhichPiecesCanBeSelected()
+        {
+            Board.Pieces[PieceColor.White] = new List<Piece>();
+            Board.Pieces[PieceColor.Black] = new List<Piece>();
+            if (backupCells.Count > 0)
+            {
+                foreach (var cellViewModelRow in CellViewModels)
+                {
+                    foreach (var cellViewModel in cellViewModelRow)
+                    {
+                        cellViewModel.CanBeSelected = false;
+                    }
+
+                }
+            }
+            else
+            {
+                var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+                for (int row = 0; row < CellViewModels.Length; row++)
+                {
+                    for (int col = 0; col < CellViewModels.Length; col++)
+                    {
+                        CellViewModels[row][col].Cell = Board.Cells[row, col];
+                        var currCellViewModel = CellViewModels[row][col];
+                        if (Board.Cells[row, col].Piece == null)
+                        {
+                            currCellViewModel.CanBeSelected = false;
+                        }
+                        else if (Board.Cells[row, col].Piece.Color == TurnColor)
+                        {
+                            Board.Pieces[TurnColor].Add(Board.Cells[row, col].Piece);
+                            //currCellViewModel.UpdateCellImage();
+                            currCellViewModel.CanBeSelected = true;
+                        }
+                        else
+                        {
+                            Board.Pieces[oppositeColor].Add(Board.Cells[row, col].Piece);
+
+                            currCellViewModel.CanBeSelected = false;
+                        }
+                        currCellViewModel.UpdateCellImage();
+                    }
+                }
+
+                var king = (King)Board.Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
+                king.Attackers.Clear();
+                king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor);
+                foreach (var piece in Board.Pieces[oppositeColor])
+                {
+                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
+                    piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+                    piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+                    var checkedKingCell = piece.LegalMoves.FirstOrDefault(c => c.Piece != null && c.Piece.PieceType == PieceType.King);
+                    if (checkedKingCell != null)
+                    {
+                        king.Attackers.Add(piece);
+                    }
+                }
+                var validMovesToStopCheck = new List<Cell>();
+                if (king.Attackers.Count == 1)
+                {
+                    validMovesToStopCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, king.Attackers.First(), board);
+                }
+                foreach (var piece in Board.Pieces[TurnColor])
+                {
+                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
+                    if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
+                    {
+                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
+                    }
+                    else if (king.Defenders.Any(d => d.Item1 == piece))
+                    {
+                        var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
+                        var movesToPreventPotentialCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, Board);
+                        movesToPreventPotentialCheck.Remove(currDefenderAndPotentialAttacker.Item1.Cell);
+                        movesToPreventPotentialCheck.Add(currDefenderAndPotentialAttacker.Item2.Cell);
+                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
+                    }
+                    piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+                    piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+                }
+            }
         }
 
         private Move CreateMove(Cell cell, CellViewModel selectedCell)
         {
             Move move = new Move();
+            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             move.CellOneBefore = new Cell(selectedCell.Cell.Row, selectedCell.Cell.Col);
-            move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Cell.Piece, move.CellOneBefore);
+            move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Cell.Piece.PieceType, TurnColor, move.CellOneBefore);
             move.CellTwoBefore = new Cell(cell.Row, cell.Col, cell.Piece);
             if (cell.Piece != null)
             {
-                move.CellTwoBefore.Piece = PieceConstructor.ConstructPieceByType(cell.Piece, move.CellTwoBefore);
+                move.CellTwoBefore.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, oppositeColor, move.CellTwoBefore);
             }
 
             CellViewModels[cell.Row][cell.Col].Cell.Piece = selectedCell.Cell.Piece;
@@ -182,8 +343,8 @@ namespace ChessWPF.ViewModels
             move.CellOneAfter = new Cell(selectedCell.Cell.Row, selectedCell.Cell.Col, null);
 
             move.CellTwoAfter = new Cell(cell.Row, cell.Col);
-            move.CellTwoAfter.Piece = PieceConstructor.ConstructPieceByType(cell.Piece, move.CellTwoAfter);
-            //selectedCell.Cell.Piece = null;
+            move.CellTwoAfter.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, TurnColor, move.CellTwoAfter);
+            selectedCell.Cell.Piece = null;
 
             return move;
         }
@@ -195,12 +356,11 @@ namespace ChessWPF.ViewModels
             {
                 case PieceColor.White:
                     move.CellThreeBefore = new Cell(move.CellTwoBefore.Row + 1, move.CellTwoBefore.Col);
-                    move.CellThreeBefore.Piece = PieceConstructor.ConstructPieceByType(Board.Cells[move.CellTwoBefore.Row + 1, move.CellTwoBefore.Col].Piece, move.CellThreeBefore);
+                    move.CellThreeBefore.Piece = PieceConstructor.ConstructPieceByType(Board.Cells[move.CellTwoBefore.Row + 1, move.CellTwoBefore.Col].Piece.PieceType, PieceColor.Black, move.CellThreeBefore);
                     break;
                 case PieceColor.Black:
                     move.CellThreeBefore = new Cell(move.CellTwoBefore.Row - 1, move.CellTwoBefore.Col);
-                    move.CellThreeBefore.Piece = PieceConstructor.ConstructPieceByType(Board.Cells[move.CellTwoBefore.Row - 1, move.CellTwoBefore.Col].Piece, move.CellThreeBefore);
-
+                    move.CellThreeBefore.Piece = PieceConstructor.ConstructPieceByType(Board.Cells[move.CellTwoBefore.Row - 1, move.CellTwoBefore.Col].Piece.PieceType, PieceColor.White, move.CellThreeBefore);
                     break;
             }
             Board.Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].Piece = null;
@@ -253,148 +413,89 @@ namespace ChessWPF.ViewModels
             return move;
         }
 
-        public void UndoMove()
+        private void CreatePromotionMove(Move move, Piece pawn)
         {
-            Move move = Board.Moves.Pop();
-            Cell cellOneBefore = move.CellOneBefore;
-            CellViewModels[cellOneBefore.Row][cellOneBefore.Col].Cell = cellOneBefore;
-            CellViewModels[cellOneBefore.Row][cellOneBefore.Col].Cell.Piece = cellOneBefore.Piece;
-            Board.Cells[cellOneBefore.Row, cellOneBefore.Col] = cellOneBefore;
-            CellViewModels[cellOneBefore.Row][cellOneBefore.Col].UpdateCellImage();
+            backupCells = new List<Cell>();
+            var rowIncrement = 0;
+            var promotionCellsPieces = new List<PieceType>() { PieceType.Queen, PieceType.Rook, PieceType.Bishop, PieceType.Knight };
+            switch (pawn.Color)
+            {
+                case PieceColor.White:
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var currCell = new Cell(pawn.Cell.Row + rowIncrement++, pawn.Cell.Col);
+                        backupCells.Add(currCell);
+                        if (Board.Cells[currCell.Row, currCell.Col].Piece != null)
+                        {
+                            backupCells[i].Piece = PieceConstructor.ConstructPieceByType(Board.Cells[currCell.Row, currCell.Col].Piece.PieceType, Board.Cells[currCell.Row, currCell.Col].Piece.Color, Board.Cells[currCell.Row, currCell.Col]);
+                        }
+                        Board.Cells[currCell.Row, currCell.Col].Piece = PieceConstructor.ConstructPieceForPromotion(promotionCellsPieces[i], pawn.Color);
+                        CellViewModels[currCell.Row][currCell.Col].CanBeSelectedForPromotion = true;
+                        CellViewModels[currCell.Row][currCell.Col].UpdateCellImage();
+                    }
+                    break;
+                case PieceColor.Black:
+                    for (int i = 0; i < 4; i++)
+                    {
+                        var currCell = new Cell(pawn.Cell.Row - rowIncrement++, pawn.Cell.Col);
+                        backupCells.Add(currCell);
+                        if (Board.Cells[currCell.Row, currCell.Col].Piece != null)
+                        {
+                            backupCells[i].Piece = PieceConstructor.ConstructPieceByType(Board.Cells[currCell.Row, currCell.Col].Piece.PieceType, Board.Cells[currCell.Row, currCell.Col].Piece.Color, Board.Cells[currCell.Row, currCell.Col]);
+                        }
+                        Board.Cells[currCell.Row, currCell.Col].Piece = PieceConstructor.ConstructPieceForPromotion(promotionCellsPieces[i], pawn.Color);
+                        CellViewModels[currCell.Row][currCell.Col].CanBeSelectedForPromotion = true;
+                        CellViewModels[currCell.Row][currCell.Col].UpdateCellImage();
+                    }
+                    break;
+            }
+            promotionMove = move;
+        }
 
-            Cell cellTwoBefore = move.CellTwoBefore;
-            Cell cellTwoAfter = move.CellTwoAfter;
-            CellViewModels[cellTwoBefore.Row][cellTwoBefore.Col].Cell = cellTwoBefore;
-            CellViewModels[cellTwoBefore.Row][cellTwoBefore.Col].Cell.Piece = cellTwoBefore.Piece;
-            Board.Cells[cellTwoBefore.Row, cellTwoBefore.Col] = cellTwoBefore;
+        private void FinishMove(Move move, CellViewModel selectedCell)
+        {
+            if (selectedCell != null)
+            {
+                selectedCell.Cell.Piece = null;
+            }
 
-            CellViewModels[cellTwoBefore.Row][cellTwoBefore.Col].UpdateCellImage();
+            CellViewModels[move.CellOneAfter.Row][move.CellOneAfter.Col].UpdateCellImage();
 
+            CellViewModels[move.CellTwoAfter.Row][move.CellTwoAfter.Col].UpdateCellImage();
             if (move.CellThreeBefore != null)
             {
-                Cell cellThreeBefore = move.CellThreeBefore;
-                CellViewModels[cellThreeBefore.Row][cellThreeBefore.Col].Cell = cellThreeBefore;
-                CellViewModels[cellThreeBefore.Row][cellThreeBefore.Col].Cell.Piece = cellThreeBefore.Piece;
-                Board.Cells[cellThreeBefore.Row, cellThreeBefore.Col] = cellThreeBefore;
-                CellViewModels[cellThreeBefore.Row][cellThreeBefore.Col].UpdateCellImage();
+                CellViewModels[move.CellThreeAfter.Row][move.CellThreeAfter.Col].UpdateCellImage();
             }
             if (move.CellFourBefore != null)
             {
-                Cell cellFourBefore = move.CellFourBefore;
-                CellViewModels[cellFourBefore.Row][cellFourBefore.Col].Cell = cellFourBefore;
-                CellViewModels[cellFourBefore.Row][cellFourBefore.Col].Cell.Piece = cellFourBefore.Piece;
-                Board.Cells[cellFourBefore.Row, cellFourBefore.Col] = cellFourBefore;
-                CellViewModels[cellFourBefore.Row][cellFourBefore.Col].UpdateCellImage();
+                CellViewModels[move.CellFourAfter.Row][move.CellFourAfter.Col].UpdateCellImage();
             }
-            if (!Board.Moves.Any())
+            Board.Moves.Push(move);
+            if (!GameHasStarted)
             {
-                GameHasStarted = false;
+                GameHasStarted = true;
             }
             PrepareForNextTurn();
         }
 
-        private void ResetMatchCellViewModelsToCells()
+        private void RestoreBackupCells()
         {
-            for (int row = 0; row < board.Cells.GetLength(0); row++)
+            foreach (var cell in backupCells.Where(c => c.Row != 7 && c.Row != 0))
             {
-                //cellViewModels[row] = new CellViewModel[8];
-                for (int col = 0; col < board.Cells.GetLength(1); col++)
+                Board.Cells[cell.Row, cell.Col] = cell;
+                if (cell.Piece != null)
                 {
-                    cellViewModels[row][col].Cell = board.Cells[row, col];
-                    //cellViewModels[row][col].Cell.Piece = board.Cells[row, col].Piece;
-                    //cellViewModels[row][col].Cell.Piece.Cell = cellViewModels[row][col].Cell;
-                    cellViewModels[row][col].UpdateCellImage();
-                    cellViewModels[row][col].CanBeMovedTo = false;
-                    cellViewModels[row][col].IsSelected = false;
-                    //cellViewModels[row][col].UpdateCanBeSelected();
-                    //cellViewModels[row][col].UpdateCellImage();
+                    Board.Cells[cell.Row, cell.Col].Piece = cell.Piece;
                 }
-            }
-        }
-
-        private void ReverseTurnColor()
-        {
-            if (TurnColor == PieceColor.White)
-            {
-                TurnColor = PieceColor.Black;
-            }
-            else if (TurnColor == PieceColor.Black)
-            {
-                TurnColor = PieceColor.White;
-            }
-        }
-
-        private void MarkWhichPiecesCanBeSelected()
-        {
-            Board.Pieces[PieceColor.White] = new List<Piece>();
-            Board.Pieces[PieceColor.Black] = new List<Piece>();
-            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            foreach (var cellViewModelsRows in cellViewModels)
-            {
-                foreach (var cellViewModel in cellViewModelsRows/*.Where(cr => cr.Cell.Piece != null)*/)
+                else
                 {
-                    if (cellViewModel.Cell.Piece == null)
-                    {
-                        cellViewModel.CanBeSelected = false;
-                    }
-                    else if (cellViewModel.Cell.Piece.Color == TurnColor)
-                    {
-                        Board.Pieces[TurnColor].Add(cellViewModel.Cell.Piece);
-                        cellViewModel.CanBeSelected = true;
-                    }
-                    else
-                    {
-                        Board.Pieces[oppositeColor].Add(cellViewModel.Cell.Piece);
-                        cellViewModel.CanBeSelected = false;
-                    }
-                    //cellViewModel.Cell.Piece.ValidMoves = LegalMoveFinder.GetLegalMoves(cellViewModel.Cell.Piece);
+                    Board.Cells[cell.Row, cell.Col].Piece = null;
                 }
-                //foreach (var cellViewModel in cellViewModelsRows.Where(cr => cr.Cell.Piece != null && cr.Cell.Piece.Color != TurnColor))
-                //{
-                //    cellViewModel.CanBeSelected = false;
-                //    cellViewModel.Cell.Piece.ValidMoves = LegalMoveFinder.GetLegalMoves(cellViewModel.Cell.Piece);
-                //    Board.Pieces[oppositeColor].Add(cellViewModel.Cell.Piece);
-                //}
+                //CellViewModels[cell.Row][cell.Col].Cell.Piece = null;
+                //CellViewModels[cell.Row][cell.Col].UpdateCellImage();
+                CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = false;
             }
-
-            var king = (King)Board.Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
-            king.Attackers.Clear();
-            king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor);
-            foreach (var piece in Board.Pieces[oppositeColor])
-            {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
-                piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
-                piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
-                var checkedKingCell = piece.LegalMoves.FirstOrDefault(c => c.Piece != null && c.Piece.PieceType == PieceType.King);
-                if (checkedKingCell != null)
-                {
-                    //King king = (King)checkedKingCell.Piece;
-                    king.Attackers.Add(piece);
-                }
-            }
-            var validMovesToStopCheck = new List<Cell>();
-            if (king.Attackers.Count == 1)
-            {
-                validMovesToStopCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, king.Attackers.First(), board);
-            }
-            foreach (var piece in Board.Pieces[TurnColor])
-            {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
-                if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
-                {
-                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
-                }
-                else if (king.Defenders.Any(d => d.Item1 == piece))
-                {
-                    var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
-                    var movesToPreventPotentialCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, Board);
-                    movesToPreventPotentialCheck.Remove(currDefenderAndPotentialAttacker.Item1.Cell);
-                    movesToPreventPotentialCheck.Add(currDefenderAndPotentialAttacker.Item2.Cell);
-                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
-                }
-                piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
-                piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
-            }
+            backupCells = new List<Cell>();
         }
     }
 }
