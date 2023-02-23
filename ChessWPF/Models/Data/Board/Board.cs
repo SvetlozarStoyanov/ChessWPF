@@ -23,10 +23,12 @@ namespace ChessWPF.Models.Data.Board
                 { PieceColor.Black, new List<Piece>() }
             };
             CreateCells(Cells);
-            SetupPiecesDemo();
+            SetupPieces();
+            //SetupPiecesDemo();
             //SetupPiecesCheckBishopTest();
             //SetupPiecesCheckRookTest();
             //SetupPiecesEnPassantTest();
+            //SetupPiecesPromotionTest();
         }
         public Cell[,] Cells { get { return cells; } set { cells = value; } }
         public Stack<Move> Moves
@@ -51,6 +53,71 @@ namespace ChessWPF.Models.Data.Board
                     cells[row, col] = new Cell(row, col);
                 }
             }
+        }
+
+        private void SetupPieces()
+        {
+            SetupKings();
+            SetupPawns();
+            SetupQueens();
+            SetupRooks();
+            SetupBishops();
+            SetupKnights();
+        }
+
+        private void SetupKings()
+        {
+            Cells[0, 4].Piece = new King(PieceColor.Black, Cells[0, 4]);
+
+            Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
+        }
+
+        private void SetupQueens()
+        {
+            Cells[0, 3].Piece = new Queen(PieceColor.Black, Cells[0, 3]);
+
+            Cells[7, 3].Piece = new Queen(PieceColor.White, Cells[7, 3]);
+        }
+
+        private void SetupBishops()
+        {
+            Cells[0, 2].Piece = new Bishop(PieceColor.Black, Cells[0, 2]);
+            Cells[0, 5].Piece = new Bishop(PieceColor.Black, Cells[0, 5]);
+
+            Cells[7, 2].Piece = new Bishop(PieceColor.White, Cells[7, 2]);
+            Cells[7, 5].Piece = new Bishop(PieceColor.White, Cells[7, 5]);
+        }
+
+        private void SetupKnights()
+        {
+            Cells[0, 1].Piece = new Knight(PieceColor.Black, Cells[0, 1]);
+            Cells[0, 6].Piece = new Knight(PieceColor.Black, Cells[0, 6]);
+
+            Cells[7, 1].Piece = new Knight(PieceColor.White, Cells[7, 1]);
+            Cells[7, 6].Piece = new Knight(PieceColor.White, Cells[7, 6]);
+        }
+
+        private void SetupPawns()
+        {
+            int row = 1;
+            for (int col = 0; col < Cells.GetLength(0); col++)
+            {
+                Cells[row, col].Piece = new Pawn(PieceColor.Black, Cells[row, col]);
+            }
+            row = 6;
+            for (int col = 0; col < Cells.GetLength(0); col++)
+            {
+                Cells[row, col].Piece = new Pawn(PieceColor.White, Cells[row, col]);
+            }
+        }
+
+        private void SetupRooks()
+        {
+            Cells[0, 0].Piece = new Rook(PieceColor.Black, Cells[0, 0]);
+            Cells[0, 7].Piece = new Rook(PieceColor.Black, Cells[0, 7]);
+
+            Cells[7, 7].Piece = new Rook(PieceColor.White, Cells[7, 7]);
+            Cells[7, 0].Piece = new Rook(PieceColor.White, Cells[7, 0]);
         }
 
         private void SetupPiecesDemo()
@@ -102,6 +169,18 @@ namespace ChessWPF.Models.Data.Board
 
             Cells[1, 1].Piece = new Pawn(PieceColor.Black, Cells[1, 1]);
             Cells[4, 5].Piece = new Pawn(PieceColor.Black, Cells[4, 5]);
+
+            Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
+            Cells[1, 4].Piece = new King(PieceColor.Black, Cells[1, 4]);
+        }
+
+        private void SetupPiecesPromotionTest()
+        {
+            Cells[1, 1].Piece = new Pawn(PieceColor.White, Cells[1, 1]);
+            Cells[1, 6].Piece = new Pawn(PieceColor.White, Cells[1, 6]);
+
+            Cells[6, 1].Piece = new Pawn(PieceColor.Black, Cells[6, 1]);
+            Cells[6, 7].Piece = new Pawn(PieceColor.Black, Cells[6, 7]);
 
             Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
             Cells[1, 4].Piece = new King(PieceColor.Black, Cells[1, 4]);
