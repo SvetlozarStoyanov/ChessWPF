@@ -12,6 +12,7 @@
         </Button>
         <Button Command="{Binding MoveCommand}" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
         </Button>
-        <Image x:Name="img" Source="{Binding CellImage}" Opacity="1" />
+        <Image x:Name="imgPiece" Source="{Binding CellImage}" Opacity="1" />
+        <Image x:Name="imgSelector"/>
     </Grid>
 </UserControl>
