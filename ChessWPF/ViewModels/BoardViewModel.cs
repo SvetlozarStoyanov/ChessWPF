@@ -1,15 +1,11 @@
-﻿using ChessWPF.Commands;
-using ChessWPF.Constants;
+﻿using ChessWPF.Constants;
 using ChessWPF.Game;
 using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Singleton;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Windows.Controls;
-using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
 {
@@ -141,14 +137,18 @@ namespace ChessWPF.ViewModels
                 }
                 if (Board.Moves.Count > 0)
                 {
-                    var lastMovedPiece = board.Moves.Peek().CellTwoAfter.Piece;
-                    if (lastMovedPiece.PieceType == PieceType.Pawn
-                        && cell.Col == move.CellTwoAfter.Piece.Cell.Col
-                        && move.CellTwoBefore.Piece == null
-                        && Math.Abs(lastMovedPiece.Cell.Col - move.CellOneBefore.Col) == 1
-                        && lastMovedPiece.Cell.Row == move.CellOneAfter.Row)
+                    var lastMove = board.Moves.Peek();
+                    if (Math.Abs(lastMove.CellOneBefore.Row - lastMove.CellTwoBefore.Row) == 2)
                     {
-                        move = EnPassantMove(move);
+                        var lastMovedPiece = lastMove.CellTwoAfter.Piece;
+                        if (lastMovedPiece.PieceType == PieceType.Pawn
+                            && cell.Col == move.CellTwoAfter.Piece.Cell.Col
+                            && move.CellTwoBefore.Piece == null
+                            && Math.Abs(lastMovedPiece.Cell.Col - move.CellOneBefore.Col) == 1
+                            && lastMovedPiece.Cell.Row == move.CellOneAfter.Row)
+                        {
+                            move = EnPassantMove(move);
+                        }
                     }
                 }
             }
