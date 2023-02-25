@@ -74,7 +74,7 @@ namespace ChessWPF.Game
                 }
                 if (IsCellValid(pawn.Cell.Row - 1, pawn.Cell.Col - 1, board))
                 {
-
+                    protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
                     if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece != null)
                     {
                         if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
@@ -82,24 +82,17 @@ namespace ChessWPF.Game
                             legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
                         }
                     }
-                    else
-                    {
-                        protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
-                    }
                 }
 
                 if (IsCellValid(pawn.Cell.Row - 1, pawn.Cell.Col + 1, board))
                 {
+                    protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
                     if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece != null)
                     {
                         if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
                         {
                             legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
                         }
-                    }
-                    else
-                    {
-                        protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
                     }
                 }
                 if (lastMove != null)
@@ -122,6 +115,7 @@ namespace ChessWPF.Game
                 }
                 if (IsCellValid(pawn.Cell.Row + 1, pawn.Cell.Col - 1, board))
                 {
+                    protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
                     if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece != null)
                     {
                         if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
@@ -129,24 +123,17 @@ namespace ChessWPF.Game
                             legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
                         }
                     }
-                    else
-                    {
-                        protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
-                    }
                 }
 
                 if (IsCellValid(pawn.Cell.Row + 1, pawn.Cell.Col + 1, board))
                 {
+                    protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
                     if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece != null)
                     {
                         if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
                         {
                             legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
                         }
-                    }
-                    else
-                    {
-                        protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
                     }
                 }
                 if (lastMove != null)
