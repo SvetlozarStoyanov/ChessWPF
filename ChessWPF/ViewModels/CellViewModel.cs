@@ -10,28 +10,27 @@ namespace ChessWPF.ViewModels
     public class CellViewModel : ViewModelBase
     {
         private Cell cell;
-        private string position;
+
         private BitmapImage cellImage;
         private bool canBeMovedTo;
         private bool isSelected;
         private bool canBeSelected;
         private bool canBeSelectedForPromotion;
-        private Brush cellBackground;
+        private bool isInCheck;
+
+
+
 
         public CellViewModel(Cell cell)
         {
             this.cell = cell;
-            Position = $"{cell.Row} {cell.Col}";
             SelectCommand = new SelectCommand(this);
             MoveCommand = new MoveCommand(this);
-            CanBeMovedTo = false;
-            IsSelected = false;
-            CellBackground = Brushes.Brown;
-            if (Cell.Piece != null)
-            {
-                CanBeSelected = true;
-            }
-            UpdateCellImage();
+            PromoteCommand = new PromoteCommand(this);
+            CheckCommand = new CheckCommand(this);
+            //CanBeMovedTo = false;
+            //IsSelected = false;
+            //CanBeSelectedForPromotion = false;
         }
 
         public Cell Cell
@@ -60,18 +59,6 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public string Position
-        {
-            get
-            {
-                return position;
-            }
-            set
-            {
-                position = value;
-                OnPropertyChanged(nameof(Position));
-            }
-        }
         public bool CanBeMovedTo
         {
             get { return canBeMovedTo; }
@@ -105,23 +92,27 @@ namespace ChessWPF.ViewModels
         public bool CanBeSelectedForPromotion
         {
             get { return canBeSelectedForPromotion; }
-            set { canBeSelectedForPromotion = value; }
-        }
-
-        public Brush CellBackground
-        {
-            get { return cellBackground; }
             set
             {
-                cellBackground = value;
-                OnPropertyChanged(nameof(CellBackground));
+                canBeSelectedForPromotion = value;
+                OnPropertyChanged(nameof(CanBeSelectedForPromotion));
             }
         }
 
-     
+        public bool IsInCheck
+        {
+            get { return isInCheck; }
+            set
+            {
+                isInCheck = value;
+                OnPropertyChanged(nameof(IsInCheck));
+            }
+        }
 
         public ICommand SelectCommand { get; set; }
         public ICommand MoveCommand { get; set; }
+        public ICommand PromoteCommand { get; set; }
+        public ICommand CheckCommand { get; set; }
 
         public void UpdateCellImage()
         {
