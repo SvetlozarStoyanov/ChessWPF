@@ -1,5 +1,4 @@
-﻿using ChessWPF.Models.Data.Board;
-using System;
+﻿using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -15,41 +14,42 @@ namespace ChessWPF.Views.Cells
         public ChessCell()
         {
             InitializeComponent();
-            if (cellBtnSelect.IsEnabled)
-            {
-                Panel.SetZIndex(cellBtnSelect, 2);
-                Panel.SetZIndex(cellBtnMove, 1);
-            }
+
+            Panel.SetZIndex(cellBtnSelect, 2);
+            Panel.SetZIndex(imgPiece, 1);
+
             string imageUrl = $"/Graphics/Selectors/Green Marker.png";
             Uri resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgSelector.Source = new BitmapImage(resourceUri);
+            imageUrl = $"/Graphics/Selectors/Red Marker.png";
+            resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgSelector.Height = 30;
             imgSelector.Width = 30;
-            //imgSelector.HorizontalAlignment = HorizontalAlignment.Center;
-            //imgSelector.VerticalAlignment = VerticalAlignment.Center;
+            imgCheckMarker.Source = new BitmapImage(resourceUri);
             imgSelector.Opacity = 0;
-
+            imgCheckMarker.Opacity = 0;
+            imgCheckMarker.Height = 85;
+            imgCheckMarker.Width = 85;
+            imgCheckMarker.HorizontalAlignment = HorizontalAlignment.Center;
+            imgCheckMarker.VerticalAlignment = VerticalAlignment.Center;
         }
-        private void cellBtnSelect_IsEnabledChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (cellBtnSelect.IsEnabled)
             {
                 Panel.SetZIndex(cellBtnSelect, 2);
-                Panel.SetZIndex(cellBtnMove, 1);
             }
             else
             {
                 Panel.SetZIndex(cellBtnSelect, 1);
-                Panel.SetZIndex(cellBtnMove, 2);
             }
 
         }
 
-        private void cellBtnMove_IsEnabledChanged(object sender, System.Windows.DependencyPropertyChangedEventArgs e)
+        private void cellBtnMove_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (cellBtnMove.IsEnabled)
             {
-                Panel.SetZIndex(cellBtnSelect, 1);
                 Panel.SetZIndex(cellBtnMove, 2);
                 cellBtnMove.Opacity = 0.5;
                 cellBtnMove.Background = Brushes.DarkSlateGray;
@@ -57,7 +57,6 @@ namespace ChessWPF.Views.Cells
             }
             else
             {
-                Panel.SetZIndex(cellBtnSelect, 2);
                 Panel.SetZIndex(cellBtnMove, 1);
                 cellBtnMove.Opacity = 0;
                 cellBtnMove.Background = null;
@@ -65,6 +64,36 @@ namespace ChessWPF.Views.Cells
 
             }
 
+        }
+
+        private void cellBtnPromote_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (cellBtnPromote.IsEnabled)
+            {
+                Panel.SetZIndex(cellBtnPromote, 2);
+                cellBackground.Background = Brushes.White;
+                cellBackground.Opacity = 1;
+                imgPiece.Opacity = 1;
+            }
+            else
+            {
+                Panel.SetZIndex(cellBtnPromote, 1);
+                cellBackground.Background = null;
+            }
+        }
+
+        private void checkBtn_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (checkBtn.IsEnabled)
+            {
+                Panel.SetZIndex(imgCheckMarker, 1);
+                imgCheckMarker.Opacity = 1;
+            }
+            else
+            {
+                Panel.SetZIndex(imgCheckMarker, 0);
+                imgCheckMarker.Opacity = 0.0;
+            }
         }
     }
 }
