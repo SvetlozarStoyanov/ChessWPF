@@ -21,6 +21,7 @@
     <None Remove="Graphics\Chess Pieces\White Queen.png" />
     <None Remove="Graphics\Chess Pieces\White Rook.png" />
     <None Remove="Graphics\Selectors\Green Marker.png" />
+    <None Remove="Graphics\Selectors\Red Marker.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -40,6 +41,7 @@
   <ItemGroup>
     <Resource Include="Graphics\Chess Pieces\Black Pawn.png" />
     <Resource Include="Graphics\Selectors\Green Marker.png" />
+    <Resource Include="Graphics\Selectors\Red Marker.png" />
   </ItemGroup>
 
   <ItemGroup>

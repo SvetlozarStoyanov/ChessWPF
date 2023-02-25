@@ -251,7 +251,6 @@ namespace ChessWPF.ViewModels
                     {
                         cellViewModel.CanBeSelected = false;
                     }
-
                 }
             }
             else
@@ -263,6 +262,10 @@ namespace ChessWPF.ViewModels
                     {
                         CellViewModels[row][col].Cell = Board.Cells[row, col];
                         var currCellViewModel = CellViewModels[row][col];
+                        if (currCellViewModel.IsInCheck)
+                        {
+                            currCellViewModel.IsInCheck = false;
+                        }
                         if (Board.Cells[row, col].Piece == null)
                         {
                             currCellViewModel.CanBeSelected = false;
@@ -270,7 +273,6 @@ namespace ChessWPF.ViewModels
                         else if (Board.Cells[row, col].Piece.Color == TurnColor)
                         {
                             Board.Pieces[TurnColor].Add(Board.Cells[row, col].Piece);
-                            //currCellViewModel.UpdateCellImage();
                             currCellViewModel.CanBeSelected = true;
                         }
                         else
@@ -286,6 +288,8 @@ namespace ChessWPF.ViewModels
                 var king = (King)Board.Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
                 king.Attackers.Clear();
                 king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor);
+                CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
+
                 foreach (var piece in Board.Pieces[oppositeColor])
                 {
                     var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
@@ -295,6 +299,8 @@ namespace ChessWPF.ViewModels
                     if (checkedKingCell != null)
                     {
                         king.Attackers.Add(piece);
+                        king.IsInCheck = true;
+                        CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = true;
                     }
                 }
                 var validMovesToStopCheck = new List<Cell>();
@@ -491,8 +497,6 @@ namespace ChessWPF.ViewModels
                 {
                     Board.Cells[cell.Row, cell.Col].Piece = null;
                 }
-                //CellViewModels[cell.Row][cell.Col].Cell.Piece = null;
-                //CellViewModels[cell.Row][cell.Col].UpdateCellImage();
                 CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = false;
             }
             backupCells = new List<Cell>();
