@@ -862,7 +862,8 @@ namespace ChessWPF.Game
             }
 
             if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(lm => lm.Row == king.Cell.Row && lm.Col == king.Cell.Col))
-                && !board.Moves.Any(m => m.CellTwoAfter.Piece.PieceType == PieceType.King && m.CellTwoAfter.Piece.Color == king.Color))
+                && !board.Moves.Any(m => m.CellTwoAfter.Piece.PieceType == PieceType.King && m.CellTwoAfter.Piece.Color == king.Color)
+                && king.Cell.Col == 4)
             {
                 var legalCastlingMoves = CheckForCastling(king, board, oppositeColor);
                 if (legalCastlingMoves.Count > 0)
