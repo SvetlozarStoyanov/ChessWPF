@@ -14,7 +14,7 @@ namespace ChessWPF.Models.Data.Board
         public Cell(int row, int col, Piece? piece) : this(row, col)
         {
             Piece = piece;
-            
+
         }
         public int Row { get; set; }
         public int Col { get; set; }
@@ -24,6 +24,15 @@ namespace ChessWPF.Models.Data.Board
         public override bool Equals(object? obj)
         {
             return this.Row == (obj as Cell).Row && this.Col == (obj as Cell).Col;
+        }
+
+        public bool IsEvenCell()
+        {
+            if (Row % 2 == 0 && Col % 2 == 0)
+            {
+                return true;
+            }
+            return false;
         }
     }
 }
