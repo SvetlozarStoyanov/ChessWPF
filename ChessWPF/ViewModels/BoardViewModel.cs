@@ -139,6 +139,11 @@ namespace ChessWPF.ViewModels
 
         public void PrepareForNextTurn()
         {
+            if (gameHasEnded)
+            {
+                MakeAllPiecesUnselectable();
+                return;
+            }
             ReverseTurnColor();
             //FindChecks();
             MarkWhichPiecesCanBeSelected();
@@ -274,13 +279,7 @@ namespace ChessWPF.ViewModels
             Board.Pieces[PieceColor.Black] = new List<Piece>();
             if (backupCells.Count > 0)
             {
-                foreach (var cellViewModelRow in CellViewModels)
-                {
-                    foreach (var cellViewModel in cellViewModelRow)
-                    {
-                        cellViewModel.CanBeSelected = false;
-                    }
-                }
+                MakeAllPiecesUnselectable();
             }
             else
             {
@@ -366,13 +365,62 @@ namespace ChessWPF.ViewModels
                     {
                         GameResult = "Stalemate!";
                     }
-                    //GameHasEnded = true;
-                    //MarkWhichPiecesCanBeSelected();                
                 }
-                var isGameDrawn = CheckForDraw();
-                if (isGameDrawn)
+                if (CheckForDraw())
                 {
                     GameResult = "Draw!";
+                    MakeAllPiecesUnselectable();
+                }
+                else if (Board.Moves.Count > 9)
+                {
+                    if (CheckForThreefoldRepetition())
+                    {
+                        GameResult = "Draw by threefold repetition!";
+                        MakeAllPiecesUnselectable();
+
+                    }
+
+                }
+            }
+        }
+
+        private bool CheckForThreefoldRepetition()
+        {
+            var movesAreRepeated = false;
+
+            var movesAsArray = Board.Moves.Reverse().ToArray();
+            if ((movesAsArray[movesAsArray.Length - 1].Equals(movesAsArray[movesAsArray.Length - 5])
+                && movesAsArray[movesAsArray.Length - 1].IsOppositeMove(movesAsArray[movesAsArray.Length - 3]))
+                && (movesAsArray[movesAsArray.Length - 3].Equals(movesAsArray[movesAsArray.Length - 7])
+                && movesAsArray[movesAsArray.Length - 3].IsOppositeMove(movesAsArray[movesAsArray.Length - 5])
+                && (movesAsArray[movesAsArray.Length - 5].Equals(movesAsArray[movesAsArray.Length - 9])
+                && movesAsArray[movesAsArray.Length - 5].IsOppositeMove(movesAsArray[movesAsArray.Length - 7]))
+                && (movesAsArray[movesAsArray.Length - 2].Equals(movesAsArray[movesAsArray.Length - 6])
+                && movesAsArray[movesAsArray.Length - 2].IsOppositeMove(movesAsArray[movesAsArray.Length - 4]))
+                && (movesAsArray[movesAsArray.Length - 4].Equals(movesAsArray[movesAsArray.Length - 8])
+                && movesAsArray[movesAsArray.Length - 4].IsOppositeMove(movesAsArray[movesAsArray.Length - 6])))
+                && (movesAsArray[movesAsArray.Length - 6].Equals(movesAsArray[movesAsArray.Length - 10])
+                && movesAsArray[movesAsArray.Length - 6].IsOppositeMove(movesAsArray[movesAsArray.Length - 8])))
+            {
+                movesAreRepeated = true;
+            }
+            //else if (movesAsArray[movesAsArray.Length - 2].Equals(movesAsArray[movesAsArray.Length - 4])
+            //    && movesAsArray[movesAsArray.Length - 2].Equals(movesAsArray[movesAsArray.Length - 6]))
+            //{
+            //    movesAreRepeated = true;
+            //}
+
+
+            return movesAreRepeated;
+        }
+
+        private void MakeAllPiecesUnselectable()
+        {
+            foreach (var cellViewModelRow in CellViewModels)
+            {
+                foreach (var cellViewModel in cellViewModelRow)
+                {
+                    cellViewModel.CanBeSelected = false;
                 }
             }
         }
@@ -384,24 +432,27 @@ namespace ChessWPF.ViewModels
             {
                 isGameDrawn = true;
             }
-            else if (Board.Pieces.Count == 3)
+            else if (Board.Pieces.Sum(p => p.Value.Count) == 3)
             {
                 if (Board.Pieces.Any(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop || p.PieceType == PieceType.Knight)))
                 {
                     isGameDrawn = true;
                 }
             }
-            else if (Board.Pieces.Count == 4)
+            else if (Board.Pieces.Sum(p => p.Value.Count) == 4)
             {
                 if (Board.Pieces.All(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop)))
                 {
-                    if (Board.Pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell()
+                    if ((Board.Pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell()
                         && Board.Pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell())
+                        || !Board.Pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell()
+                        && !Board.Pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell())
                     {
-                        return true;   
+                        return true;
                     }
                 }
             }
+
             return isGameDrawn;
         }
 
