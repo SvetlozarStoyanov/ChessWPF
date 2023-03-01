@@ -67,24 +67,22 @@ namespace ChessWPF.Singleton
             BoardViewModel.ResetBoard();
         }
 
-
-
         public void SelectCell(CellViewModel cellViewModel)
         {
             SelectedCell = BoardViewModel.CellViewModels[cellViewModel.Cell.Row][cellViewModel.Cell.Col];
             GetLegalMoves(SelectedCell.Cell.Piece);
         }
 
-
-
         public void MovePiece(Cell cell)
         {
             BoardViewModel.MovePiece(cell, SelectedCell);
             ClearLegalMoves();
             SelectedCell = null;
+            if (BoardViewModel.GameResult != null)
+            {
+                BoardViewModel.GameHasEnded = true;
+            }
         }
-
-
 
         public void UndoMove()
         {

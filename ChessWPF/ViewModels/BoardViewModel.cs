@@ -1,4 +1,5 @@
-﻿using ChessWPF.Constants;
+﻿using ChessWPF.Commands;
+using ChessWPF.Constants;
 using ChessWPF.Game;
 using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
@@ -6,6 +7,7 @@ using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
 {
@@ -18,9 +20,28 @@ namespace ChessWPF.ViewModels
         private PieceColor turnColor;
         private List<Cell> backupCells;
         private Move promotionMove;
+        private bool gameHasEnded;
 
+        private string gameResult;
 
-
+        public string GameResult
+        {
+            get { return gameResult; }
+            set
+            {
+                gameResult = value;
+                OnPropertyChanged(nameof(GameResult));
+            }
+        }
+        public bool GameHasEnded
+        {
+            get { return gameHasEnded; }
+            set
+            {
+                gameHasEnded = value;
+                OnPropertyChanged(nameof(GameHasEnded));
+            }
+        }
 
         public BoardViewModel()
         {
@@ -29,6 +50,7 @@ namespace ChessWPF.ViewModels
             MatchCellViewModelsToCells();
             TurnColor = PieceColor.White;
             backupCells = new List<Cell>();
+            EndGameCommand = new EndGameCommand(this);
         }
 
         public Board Board
@@ -82,6 +104,8 @@ namespace ChessWPF.ViewModels
             set { turnColor = value; }
         }
 
+        public ICommand EndGameCommand { get; set; }
+
         public void MatchCellViewModelsToCells()
         {
             for (int row = 0; row < board.Cells.GetLength(0); row++)
@@ -103,6 +127,8 @@ namespace ChessWPF.ViewModels
         {
             Board = new Board();
             GameHasStarted = false;
+            GameHasEnded = false;
+            GameResult = null;
             //cellViewModels = new CellViewModel[8][];
             //MatchCellViewModelsToCells();
             ResetMatchCellViewModelsToCells();
@@ -195,6 +221,11 @@ namespace ChessWPF.ViewModels
             {
                 GameHasStarted = false;
             }
+            if (GameHasEnded)
+            {
+                GameHasEnded = false;
+                GameResult = null;
+            }
             PrepareForNextTurn();
         }
 
@@ -218,11 +249,9 @@ namespace ChessWPF.ViewModels
                 for (int col = 0; col < board.Cells.GetLength(1); col++)
                 {
                     cellViewModels[row][col].Cell = board.Cells[row, col];
-
                     cellViewModels[row][col].UpdateCellImage();
                     cellViewModels[row][col].CanBeMovedTo = false;
                     cellViewModels[row][col].IsSelected = false;
-
                 }
             }
         }
@@ -313,7 +342,8 @@ namespace ChessWPF.ViewModels
                     var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
                     if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
                     {
-                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
+                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
+                            .Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
                     }
                     else if (king.Defenders.Any(d => d.Item1 == piece))
                     {
@@ -326,7 +356,53 @@ namespace ChessWPF.ViewModels
                     piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                     piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
                 }
+                if (Board.Pieces[TurnColor].Sum(p => p.LegalMoves.Count) == 0)
+                {
+                    if (king.Attackers.Count > 0)
+                    {
+                        GameResult = $"{oppositeColor} wins by checkmate!";
+                    }
+                    else
+                    {
+                        GameResult = "Stalemate!";
+                    }
+                    //GameHasEnded = true;
+                    //MarkWhichPiecesCanBeSelected();                
+                }
+                var isGameDrawn = CheckForDraw();
+                if (isGameDrawn)
+                {
+                    GameResult = "Draw!";
+                }
             }
+        }
+
+        private bool CheckForDraw()
+        {
+            var isGameDrawn = false;
+            if (Board.Pieces.Sum(p => p.Value.Count) == 2)
+            {
+                isGameDrawn = true;
+            }
+            else if (Board.Pieces.Count == 3)
+            {
+                if (Board.Pieces.Any(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop || p.PieceType == PieceType.Knight)))
+                {
+                    isGameDrawn = true;
+                }
+            }
+            else if (Board.Pieces.Count == 4)
+            {
+                if (Board.Pieces.All(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop)))
+                {
+                    if (Board.Pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell()
+                        && Board.Pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell())
+                    {
+                        return true;   
+                    }
+                }
+            }
+            return isGameDrawn;
         }
 
         private Move CreateMove(Cell cell, CellViewModel selectedCell)

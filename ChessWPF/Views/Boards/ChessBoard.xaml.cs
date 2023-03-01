@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessWPF.Singleton;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -23,7 +24,15 @@ namespace ChessWPF.Views.Boards
         public ChessBoard()
         {
             InitializeComponent();
+            //btnGameEnd.IsEnabled = false;
         }
 
+        private void btnGameEnd_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (btnGameEnd.IsEnabled)
+            {
+                MessageBox.Show(BackgroundSingleton.Instance.BoardViewModel.GameResult,"Game over!");
+            }
+        }
     }
 }
