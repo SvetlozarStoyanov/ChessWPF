@@ -27,7 +27,7 @@ namespace ChessWPF.Views.Cells
             imgSelector.Width = 30;
             imgCheckMarker.Source = new BitmapImage(resourceUri);
             imgSelector.Opacity = 0;
-            imgCheckMarker.Opacity = 0;
+            //imgCheckMarker.Opacity = 0;
             imgCheckMarker.Height = 85;
             imgCheckMarker.Width = 85;
             imgCheckMarker.HorizontalAlignment = HorizontalAlignment.Center;

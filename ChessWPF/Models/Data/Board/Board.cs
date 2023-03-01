@@ -191,7 +191,10 @@ namespace ChessWPF.Models.Data.Board
         {
             Cells[6, 7].Piece = new Pawn(PieceColor.Black, Cells[6, 7]);
 
-            Cells[2, 6].Piece = new Queen(PieceColor.White, Cells[2, 6]);
+            //Cells[2, 6].Piece = new Queen(PieceColor.White, Cells[2, 6]);
+            Cells[7, 7].Piece = new Bishop(PieceColor.White, Cells[7, 7]);
+            Cells[0, 0].Piece = new Bishop(PieceColor.Black, Cells[0, 0]);
+            //Cells[6, 2].Piece = new Knight(PieceColor.Black, Cells[6, 2]);
 
             Cells[6, 6].Piece = new King(PieceColor.White, Cells[6, 6]);
             Cells[1, 4].Piece = new King(PieceColor.Black, Cells[1, 4]);
