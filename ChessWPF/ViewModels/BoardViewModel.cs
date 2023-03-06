@@ -145,14 +145,13 @@ namespace ChessWPF.ViewModels
                 return;
             }
             ReverseTurnColor();
-            //FindChecks();
             MarkWhichPiecesCanBeSelected();
         }
 
 
-        public void MovePiece(Cell cell, CellViewModel selectedCell)
+        public void MovePiece(Cell cell, Cell selectedCell)
         {
-            var selectedPieceType = selectedCell.Cell.Piece.PieceType;
+            var selectedPieceType = selectedCell.Piece.PieceType;
             Move move = CreateMove(cell, selectedCell);
             if (move.CellTwoAfter.Piece.PieceType == PieceType.King && Math.Abs(move.CellOneBefore.Col - move.CellTwoAfter.Col) == 2)
             {
@@ -242,6 +241,8 @@ namespace ChessWPF.ViewModels
             promotionMove.CellTwoAfter.Piece.Cell = cell;
             CellViewModels[cell.Row][cell.Col].Cell.Piece = cell.Piece;
             CellViewModels[cell.Row][cell.Col].Cell.Piece.Cell = cell;
+            //Board.Cells[cell.Row, cell.Col].Piece = cell.Piece;
+            //Board.Cells[cell.Row, cell.Col].Piece.Cell = cell;
             CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = false;
             RestoreBackupCells();
             FinishMove(promotionMove, null);
@@ -350,6 +351,10 @@ namespace ChessWPF.ViewModels
                         var movesToPreventPotentialCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, Board);
                         movesToPreventPotentialCheck.Remove(currDefenderAndPotentialAttacker.Item1.Cell);
                         movesToPreventPotentialCheck.Add(currDefenderAndPotentialAttacker.Item2.Cell);
+                        if (king.Attackers.Count == 1 && king.Attackers.First().PieceType == PieceType.Knight)
+                        {
+                            legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
+                        }
                         legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
                     }
                     piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
@@ -456,28 +461,33 @@ namespace ChessWPF.ViewModels
             return isGameDrawn;
         }
 
-        private Move CreateMove(Cell cell, CellViewModel selectedCell)
+        private Move CreateMove(Cell cell, Cell selectedCell)
         {
             Move move = new Move();
             var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            move.CellOneBefore = new Cell(selectedCell.Cell.Row, selectedCell.Cell.Col);
-            move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Cell.Piece.PieceType, TurnColor, move.CellOneBefore);
+            move.CellOneBefore = new Cell(selectedCell.Row, selectedCell.Col);
+            move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Piece.PieceType, TurnColor, move.CellOneBefore);
             move.CellTwoBefore = new Cell(cell.Row, cell.Col, cell.Piece);
             if (cell.Piece != null)
             {
                 move.CellTwoBefore.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, oppositeColor, move.CellTwoBefore);
             }
 
-            CellViewModels[cell.Row][cell.Col].Cell.Piece = selectedCell.Cell.Piece;
-            CellViewModels[cell.Row][cell.Col].Cell.Piece.PieceType = selectedCell.Cell.Piece.PieceType;
-            CellViewModels[cell.Row][cell.Col].Cell.Piece.Color = selectedCell.Cell.Piece.Color;
-            CellViewModels[cell.Row][cell.Col].Cell.Piece.Cell = new Cell(cell.Row, cell.Col, CellViewModels[cell.Row][cell.Col].Cell.Piece);
+            //CellViewModels[cell.Row][cell.Col].Cell.Piece = selectedCell.Piece;
+            //CellViewModels[cell.Row][cell.Col].Cell.Piece.PieceType = selectedCell.Piece.PieceType;
+            //CellViewModels[cell.Row][cell.Col].Cell.Piece.Color = selectedCell.Piece.Color;
+            //CellViewModels[cell.Row][cell.Col].Cell.Piece.Cell = new Cell(cell.Row, cell.Col, CellViewModels[cell.Row][cell.Col].Cell.Piece);
 
-            move.CellOneAfter = new Cell(selectedCell.Cell.Row, selectedCell.Cell.Col, null);
+            Board.Cells[cell.Row, cell.Col].Piece = selectedCell.Piece;
+            //Board.Cells[cell.Row, cell.Col].Piece.PieceType = selectedCell.Piece.PieceType;
+            //Board.Cells[cell.Row, cell.Col].Piece.Color = selectedCell.Piece.Color;
+            Board.Cells[cell.Row, cell.Col].Piece.Cell = new Cell(cell.Row, cell.Col, CellViewModels[cell.Row][cell.Col].Cell.Piece);
+
+            move.CellOneAfter = new Cell(selectedCell.Row, selectedCell.Col, null);
 
             move.CellTwoAfter = new Cell(cell.Row, cell.Col);
             move.CellTwoAfter.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, TurnColor, move.CellTwoAfter);
-            selectedCell.Cell.Piece = null;
+            selectedCell.Piece = null;
 
             return move;
         }
@@ -506,7 +516,7 @@ namespace ChessWPF.ViewModels
             var king = move.CellTwoAfter.Piece;
             var colDiff = move.CellOneBefore.Col - move.CellTwoBefore.Col;
             var cell = new Cell(0, 0);
-            var selectedCell = new CellViewModel(cell);
+            var selectedCell = new Cell(-1, -1);
             var rookMove = new Move();
             switch (king.Color)
             {
@@ -514,13 +524,13 @@ namespace ChessWPF.ViewModels
                     if (colDiff < 0)
                     {
                         cell = Board.Cells[king.Cell.Row, king.Cell.Col - 1];
-                        selectedCell = CellViewModels[king.Cell.Row][king.Cell.Col + 1];
+                        selectedCell = Board.Cells[king.Cell.Row, king.Cell.Col + 1];
                         rookMove = CreateMove(cell, selectedCell);
                     }
                     if (colDiff > 0)
                     {
                         cell = Board.Cells[king.Cell.Row, king.Cell.Col + 1];
-                        selectedCell = CellViewModels[king.Cell.Row][king.Cell.Col - 2];
+                        selectedCell = Board.Cells[king.Cell.Row, king.Cell.Col - 2];
                         rookMove = CreateMove(cell, selectedCell);
                     }
                     break;
@@ -528,13 +538,13 @@ namespace ChessWPF.ViewModels
                     if (colDiff < 0)
                     {
                         cell = Board.Cells[king.Cell.Row, king.Cell.Col - 1];
-                        selectedCell = CellViewModels[king.Cell.Row][king.Cell.Col + 1];
+                        selectedCell = Board.Cells[king.Cell.Row, king.Cell.Col + 1];
                         rookMove = CreateMove(cell, selectedCell);
                     }
                     if (colDiff > 0)
                     {
                         cell = Board.Cells[king.Cell.Row, king.Cell.Col + 1];
-                        selectedCell = CellViewModels[king.Cell.Row][king.Cell.Col - 2];
+                        selectedCell = Board.Cells[king.Cell.Row, king.Cell.Col - 2];
                         rookMove = CreateMove(cell, selectedCell);
                     }
                     break;
@@ -585,11 +595,11 @@ namespace ChessWPF.ViewModels
             promotionMove = move;
         }
 
-        private void FinishMove(Move move, CellViewModel selectedCell)
+        private void FinishMove(Move move, Cell selectedCell)
         {
             if (selectedCell != null)
             {
-                selectedCell.Cell.Piece = null;
+                selectedCell.Piece = null;
             }
 
             CellViewModels[move.CellOneAfter.Row][move.CellOneAfter.Col].UpdateCellImage();
