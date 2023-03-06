@@ -30,7 +30,11 @@ namespace ChessWPF.Models.Data.Board
             //SetupPiecesEnPassantTest();
             //SetupPiecesPromotionTest();
             //SetupPiecesStalemateTest();
+            //SetupPiecesKnightCheckTest();
         }
+
+
+
         public Cell[,] Cells { get { return cells; } set { cells = value; } }
         public Stack<Move> Moves
         {
@@ -198,6 +202,19 @@ namespace ChessWPF.Models.Data.Board
 
             Cells[6, 6].Piece = new King(PieceColor.White, Cells[6, 6]);
             Cells[1, 4].Piece = new King(PieceColor.Black, Cells[1, 4]);
+
+        }
+
+        private void SetupPiecesKnightCheckTest()
+        {
+            Cells[6, 3].Piece = new Knight(PieceColor.White, Cells[6, 3]);
+            Cells[7, 5].Piece = new Queen(PieceColor.White, Cells[7, 5]);
+
+            Cells[3, 5].Piece = new Pawn(PieceColor.Black, Cells[3, 5]);
+
+            Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
+            Cells[2, 5].Piece = new King(PieceColor.Black, Cells[2, 5]);
+
 
         }
     }
