@@ -50,10 +50,12 @@ namespace ChessWPF.Views.Cells
         {
             if (cellBtnMove.IsEnabled)
             {
-                Panel.SetZIndex(cellBtnMove, 2);
+                Panel.SetZIndex(cellBtnMove, 3);
                 cellBtnMove.Opacity = 0.5;
                 cellBtnMove.Background = Brushes.DarkSlateGray;
                 imgSelector.Opacity = 1;
+                Panel.SetZIndex(imgSelector, 2);
+
             }
             else
             {
@@ -61,6 +63,7 @@ namespace ChessWPF.Views.Cells
                 cellBtnMove.Opacity = 0;
                 cellBtnMove.Background = null;
                 imgSelector.Opacity = 0;
+                Panel.SetZIndex(imgSelector, 1);
 
             }
 
