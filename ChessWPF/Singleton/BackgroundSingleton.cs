@@ -75,7 +75,7 @@ namespace ChessWPF.Singleton
 
         public void MovePiece(Cell cell)
         {
-            BoardViewModel.MovePiece(cell, SelectedCell);
+            BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             ClearLegalMoves();
             SelectedCell = null;
             if (BoardViewModel.GameResult != null)
@@ -96,6 +96,10 @@ namespace ChessWPF.Singleton
         public void SelectPieceForPromotion(CellViewModel cellViewModel)
         {
             BoardViewModel.PromotePiece(cellViewModel.Cell.Piece.PieceType);
+            if (BoardViewModel.GameResult != null)
+            {
+                BoardViewModel.GameHasEnded = true;
+            }
         }
 
         private void GetLegalMoves(Piece piece)
