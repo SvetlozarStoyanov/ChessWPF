@@ -5,7 +5,6 @@ using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.Singleton;
 using System;
 using System.Collections.Generic;
-using System.Drawing;
 using System.Linq;
 
 namespace ChessWPF.Game

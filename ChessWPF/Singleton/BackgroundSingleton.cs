@@ -75,8 +75,8 @@ namespace ChessWPF.Singleton
 
         public void MovePiece(Cell cell)
         {
-            BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             ClearLegalMoves();
+            BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             SelectedCell = null;
             if (BoardViewModel.GameResult != null)
             {
@@ -104,7 +104,6 @@ namespace ChessWPF.Singleton
 
         private void GetLegalMoves(Piece piece)
         {
-            //var newLegalMoves = LegalMoveFinder.GetLegalMoves(piece);
             var newLegalMoves = SelectedCell.Cell.Piece.LegalMoves;
             if (newLegalMoves != legalMoves)
             {
@@ -119,7 +118,7 @@ namespace ChessWPF.Singleton
 
             foreach (var cell in newLegalMoves)
             {
-                boardViewModel.CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
+                BoardViewModel.CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
             }
         }
 
@@ -127,7 +126,7 @@ namespace ChessWPF.Singleton
         {
             foreach (var cell in legalMoves)
             {
-                boardViewModel.CellViewModels[cell.Row][cell.Col].CanBeMovedTo = false;
+                BoardViewModel.CellViewModels[cell.Row][cell.Col].CanBeMovedTo = false;
             }
             legalMoves = new List<Cell>();
         }
@@ -138,11 +137,6 @@ namespace ChessWPF.Singleton
             {
                 ClearLegalMoves();
             }
-        }
-
-        private void UpdateBoard()
-        {
-            Board = BoardViewModel.Board;
         }
     }
 }

@@ -64,9 +64,7 @@ namespace ChessWPF.Views.Cells
                 cellBtnMove.Background = null;
                 imgSelector.Opacity = 0;
                 Panel.SetZIndex(imgSelector, 1);
-
             }
-
         }
 
         private void cellBtnPromote_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
