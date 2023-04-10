@@ -204,6 +204,8 @@ namespace ChessWPF.ViewModels
             }
         }
 
+       
+
         public void PromotePiece(PieceType pieceType)
         {
             Board.PromotePiece(pieceType);
@@ -225,6 +227,8 @@ namespace ChessWPF.ViewModels
                     cellViewModels[row][col].Cell = board.Cells[row, col];
                     cellViewModels[row][col].UpdateCellImage();
                     cellViewModels[row][col].CanBeMovedTo = false;
+
+
                     cellViewModels[row][col].IsSelected = false;
                 }
             }
@@ -313,6 +317,7 @@ namespace ChessWPF.ViewModels
             foreach (var cell in Board.BackupCells)
             {
                 CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = true;
+                cellViewModels[cell.Row][cell.Col].IsInCheck = false;
                 CellViewModels[cell.Row][cell.Col].UpdateCellImage();
             }
         }
