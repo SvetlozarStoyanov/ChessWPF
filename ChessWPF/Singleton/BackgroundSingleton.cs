@@ -13,11 +13,13 @@ namespace ChessWPF.Singleton
     {
         private static BackgroundSingleton instance = null;
         private static readonly object padlock = new object();
-        private Board board;
         private List<Cell> legalMoves = new List<Cell>();
-        private bool cellsAreUpdated;
-        private BoardViewModel boardViewModel;
         private CellViewModel selectedCell;
+        private GameViewModel gameViewModel;
+
+        
+
+
 
 
 
@@ -42,29 +44,41 @@ namespace ChessWPF.Singleton
                 }
             }
         }
+        public GameViewModel GameViewModel
+        {
+            get { return gameViewModel; }
+            set { gameViewModel = value; }
+        }
+
+        public MenuViewModel MenuViewModel
+        {
+            get { return GameViewModel.MenuViewModel; }
+            set { GameViewModel.MenuViewModel = value; }
+        }
+
         public BoardViewModel BoardViewModel
         {
-            get { return boardViewModel; }
-            set { boardViewModel = value; }
+            get { return GameViewModel.BoardViewModel; }
+            set { GameViewModel.BoardViewModel = value; }
         }
-        public Board Board { get => boardViewModel.Board; set => boardViewModel.Board = value; }
+        public Board Board { get => BoardViewModel.Board; set => BoardViewModel.Board = value; }
         public List<Cell> LegalMoves
         {
             get { return legalMoves; }
         }
-        public bool CellsAreUpdated { get => cellsAreUpdated; set => cellsAreUpdated = value; }
         public CellViewModel SelectedCell { get => selectedCell; set => selectedCell = value; }
-
 
         public void StartGame()
         {
             BoardViewModel.StartGame();
+            MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
         }
 
         public void ResetBoard()
         {
             UnselectSelectedCell();
             BoardViewModel.ResetBoard();
+            MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
         }
 
         public void SelectCell(CellViewModel cellViewModel)
@@ -81,6 +95,11 @@ namespace ChessWPF.Singleton
             if (BoardViewModel.GameResult != null)
             {
                 BoardViewModel.GameHasEnded = true;
+                MenuViewModel.UpdateGameStatus(BoardViewModel.GameResult);
+            }
+            else
+            {
+                MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
             }
         }
 
@@ -91,6 +110,7 @@ namespace ChessWPF.Singleton
                 UnselectSelectedCell();
             }
             BoardViewModel.UndoMove();
+            MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
         }
 
         public void SelectPieceForPromotion(CellViewModel cellViewModel)
@@ -99,6 +119,11 @@ namespace ChessWPF.Singleton
             if (BoardViewModel.GameResult != null)
             {
                 BoardViewModel.GameHasEnded = true;
+                MenuViewModel.UpdateGameStatus(BoardViewModel.GameResult);
+            }
+            else
+            {
+                MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
             }
         }
 

@@ -5,9 +5,10 @@
         private BoardViewModel boardViewModel;
         private MenuViewModel menuViewModel;
 
-        public GameViewModel()
+        public GameViewModel(BoardViewModel boardViewModel, MenuViewModel menuViewModel)
         {
-
+            BoardViewModel = boardViewModel;
+            MenuViewModel = menuViewModel;
         }
 
 
@@ -17,7 +18,7 @@
             set
             {
                 boardViewModel = value;
-                OnPropertyChanged(nameof(BoardViewModel));
+                //OnPropertyChanged(nameof(BoardViewModel));
             }
         }
         public MenuViewModel MenuViewModel

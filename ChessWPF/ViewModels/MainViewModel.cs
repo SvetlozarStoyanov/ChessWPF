@@ -7,11 +7,10 @@ namespace ChessWPF.ViewModels
         public GameViewModel GameViewModel { get; set; }
         public MainViewModel()
         {
-            GameViewModel = new GameViewModel();
-            
-            BackgroundSingleton.Instance.BoardViewModel = new BoardViewModel();
-            GameViewModel.BoardViewModel = BackgroundSingleton.Instance.BoardViewModel;
-            GameViewModel.MenuViewModel = new MenuViewModel();
+            BoardViewModel boardViewModel = new BoardViewModel();
+            MenuViewModel menuViewModel = new MenuViewModel(boardViewModel);
+            GameViewModel = new GameViewModel(boardViewModel, menuViewModel);
+            BackgroundSingleton.Instance.GameViewModel = GameViewModel;
             BackgroundSingleton.Instance.StartGame();
         }
     }
