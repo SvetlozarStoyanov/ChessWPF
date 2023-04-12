@@ -33,6 +33,7 @@ namespace ChessWPF.Views.Cells
             imgCheckMarker.HorizontalAlignment = HorizontalAlignment.Center;
             imgCheckMarker.VerticalAlignment = VerticalAlignment.Center;
         }
+
         private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (cellBtnSelect.IsEnabled)
@@ -41,6 +42,8 @@ namespace ChessWPF.Views.Cells
             }
             else
             {
+                //cellBtnSelect.Background = null;
+                //cellBtnSelect.Opacity = 0;
                 Panel.SetZIndex(cellBtnSelect, 1);
             }
 
@@ -96,5 +99,57 @@ namespace ChessWPF.Views.Cells
                 imgCheckMarker.Opacity = 0.0;
             }
         }
+
+
+
+        //private void cellBtnSelect_Click(object sender, RoutedEventArgs e)
+        //{
+        //    cellBtnSelect.Background = Brushes.Purple;
+        //    cellBtnSelect.Opacity = 0.5;
+        //}
+
+
+
+        //private void cellBtnSelect_LostFocus(object sender, RoutedEventArgs e)
+        //{
+        //    cellBtnSelect.Background = null;
+        //    cellBtnSelect.Opacity = 0;
+        //}
+
+        //private void cellBtnSelect_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    if (cellBtnSelect.IsFocused)
+        //    {
+        //        cellBtnSelect.Background = Brushes.Purple;
+        //        cellBtnSelect.Opacity = 0.5;
+        //        cellBtnSelect.BorderBrush = null;
+        //        //if (cellBtnSelect.IsMouseOver)
+        //        //{
+        //        //    cellBtnSelect.Foreground = Brushes.Red;
+                    
+        //        //    cellBtnSelect.Background = Brushes.Purple;
+        //        //    cellBtnSelect.Opacity = 0.5;
+        //        //}
+        //    }
+        //    else
+        //    {
+        //        cellBtnSelect.Background = null;
+        //        cellBtnSelect.Opacity = 0;
+        //    }
+        //}
+
+        //private void cellBtnSelect_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
+        //{
+        //    if (cellBtnSelect.IsFocused)
+        //    {
+        //        cellBtnSelect.Background = Brushes.Purple;
+        //        cellBtnSelect.Opacity = 0.5;
+        //    }
+        //    else
+        //    {
+        //        cellBtnSelect.Background = null;
+        //        cellBtnSelect.Opacity = 0;
+        //    }
+        //}
     }
 }

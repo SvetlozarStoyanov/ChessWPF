@@ -8,7 +8,9 @@
              d:DesignHeight="200" d:DesignWidth="100">
     <Grid x:Name="cellBackground">
         <Border BorderBrush="Black" BorderThickness="1"/>
-        <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged">
+        <!--<Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" Click="cellBtnSelect_Click" LostFocus="cellBtnSelect_LostFocus"  MouseEnter="cellBtnSelect_MouseEnter" MouseLeave="cellBtnSelect_MouseLeave">
+        </Button>-->
+        <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" >
         </Button>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
         </Button>
