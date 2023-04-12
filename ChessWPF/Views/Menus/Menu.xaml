@@ -6,10 +6,21 @@
              xmlns:local="clr-namespace:ChessWPF.Views.Menus"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <StackPanel>
-        <Menu>
-            <MenuItem Header="New Game" Command="{Binding ResetBoardCommand}"></MenuItem>
-            <MenuItem Header="Undo Move" Command="{Binding UndoMoveCommand}"></MenuItem>
-        </Menu>
-    </StackPanel>
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"></ColumnDefinition>
+            <ColumnDefinition Width="2.7*"></ColumnDefinition>
+            <ColumnDefinition Width="1*"></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <StackPanel>
+            <Menu>
+                <MenuItem Header="New Game" Command="{Binding ResetBoardCommand}"></MenuItem>
+                <MenuItem Header="Undo Move" Command="{Binding UndoMoveCommand}"></MenuItem>
+            </Menu>
+        </StackPanel>
+        <TextBlock Grid.Column="1" Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+    </Grid>
 </UserControl>
