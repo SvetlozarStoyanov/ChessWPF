@@ -59,9 +59,10 @@
 
         <Border Grid.Row="2" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="2" >
         </Border>
-        <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="2" DataContext="{Binding MenuViewModel}">
+        <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="10" DataContext="{Binding MenuViewModel}">
             
         </View.Menus:Menu>
+        
         <local:ChessBoard Grid.Row="2" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="8" DataContext="{Binding BoardViewModel}">
             
         </local:ChessBoard>

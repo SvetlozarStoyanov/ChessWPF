@@ -31,7 +31,7 @@ namespace ChessWPF.Views.Boards
         {
             if (btnGameEnd.IsEnabled)
             {
-                MessageBox.Show(BackgroundSingleton.Instance.BoardViewModel.GameResult,"Game over!");
+                MessageBox.Show(BackgroundSingleton.Instance.BoardViewModel.GameResult, "Game over!");
             }
         }
     }
