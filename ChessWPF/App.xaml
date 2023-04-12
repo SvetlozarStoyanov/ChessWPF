@@ -9,8 +9,8 @@
             <SolidColorBrush x:Key="EvenTile" Color="#FAE8C8"/>
             <Style TargetType="Button">
                 <Setter Property="Background" Value="Transparent"></Setter>
-                <!--<Setter Property="Opacity" Value="1"></Setter>-->
-                <!--<Setter Property="Foreground" Value="Transparent"></Setter>-->
+                <Setter Property="Opacity" Value="1"></Setter>
+                <Setter Property="Foreground" Value="Transparent"></Setter>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
                         <Setter Property="Background"  Value="{x:Null}"></Setter>
@@ -22,10 +22,22 @@
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
                         <Setter Property="Background"  Value="{x:Null}"></Setter>
+                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
                         <Setter Property="Background"  Value="{x:Null}"></Setter>
+                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="Background"  Value="{x:Null}"></Setter>
+                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="False">
+                        <Setter Property="Background"  Value="{x:Null}"></Setter>
+                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                 </Style.Triggers>
