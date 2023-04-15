@@ -32,21 +32,36 @@ namespace ChessWPF.Views.Cells
             imgCheckMarker.Width = 85;
             imgCheckMarker.HorizontalAlignment = HorizontalAlignment.Center;
             imgCheckMarker.VerticalAlignment = VerticalAlignment.Center;
+            cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
+            cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
+            cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
+            checkBtn.Style = this.FindResource("defaultBtn") as Style;
         }
 
         private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
+            cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
+            cellBtnSelect.Opacity = 0;
             if (cellBtnSelect.IsEnabled)
             {
                 Panel.SetZIndex(cellBtnSelect, 2);
             }
             else
             {
-                //cellBtnSelect.Background = null;
-                //cellBtnSelect.Opacity = 0;
                 Panel.SetZIndex(cellBtnSelect, 1);
             }
 
+        }
+        private void cellBtnSelect_Click(object sender, RoutedEventArgs e)
+        {
+            cellBtnSelect.Opacity = 0.6;
+            cellBtnSelect.Style = this.FindResource("selectedBtn") as Style;
+        }
+
+        private void cellBtnSelect_LostFocus(object sender, RoutedEventArgs e)
+        {
+            cellBtnSelect.Opacity = 0;
+            cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
         }
 
         private void cellBtnMove_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -58,7 +73,6 @@ namespace ChessWPF.Views.Cells
                 cellBtnMove.Background = Brushes.DarkSlateGray;
                 imgSelector.Opacity = 1;
                 Panel.SetZIndex(imgSelector, 2);
-
             }
             else
             {
@@ -99,57 +113,5 @@ namespace ChessWPF.Views.Cells
                 imgCheckMarker.Opacity = 0.0;
             }
         }
-
-
-
-        //private void cellBtnSelect_Click(object sender, RoutedEventArgs e)
-        //{
-        //    cellBtnSelect.Background = Brushes.Purple;
-        //    cellBtnSelect.Opacity = 0.5;
-        //}
-
-
-
-        //private void cellBtnSelect_LostFocus(object sender, RoutedEventArgs e)
-        //{
-        //    cellBtnSelect.Background = null;
-        //    cellBtnSelect.Opacity = 0;
-        //}
-
-        //private void cellBtnSelect_MouseEnter(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    if (cellBtnSelect.IsFocused)
-        //    {
-        //        cellBtnSelect.Background = Brushes.Purple;
-        //        cellBtnSelect.Opacity = 0.5;
-        //        cellBtnSelect.BorderBrush = null;
-        //        //if (cellBtnSelect.IsMouseOver)
-        //        //{
-        //        //    cellBtnSelect.Foreground = Brushes.Red;
-                    
-        //        //    cellBtnSelect.Background = Brushes.Purple;
-        //        //    cellBtnSelect.Opacity = 0.5;
-        //        //}
-        //    }
-        //    else
-        //    {
-        //        cellBtnSelect.Background = null;
-        //        cellBtnSelect.Opacity = 0;
-        //    }
-        //}
-
-        //private void cellBtnSelect_MouseLeave(object sender, System.Windows.Input.MouseEventArgs e)
-        //{
-        //    if (cellBtnSelect.IsFocused)
-        //    {
-        //        cellBtnSelect.Background = Brushes.Purple;
-        //        cellBtnSelect.Opacity = 0.5;
-        //    }
-        //    else
-        //    {
-        //        cellBtnSelect.Background = null;
-        //        cellBtnSelect.Opacity = 0;
-        //    }
-        //}
     }
 }
