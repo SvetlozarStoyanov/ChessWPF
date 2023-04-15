@@ -7,42 +7,55 @@
         <ResourceDictionary>
             <SolidColorBrush x:Key="OddTile" Color="#14691B"/>
             <SolidColorBrush x:Key="EvenTile" Color="#FAE8C8"/>
-            <Style TargetType="Button">
+            <Style x:Key="defaultBtn" x:Name="DefaultButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"></Setter>
-                <Setter Property="Opacity" Value="1"></Setter>
+                <Setter Property="Opacity" Value="0"></Setter>
                 <Setter Property="Foreground" Value="Transparent"></Setter>
                 <Style.Triggers>
                     <Trigger Property="IsEnabled" Value="False">
-                        <Setter Property="Background"  Value="{x:Null}"></Setter>
+                        <Setter Property="Background"  Value="Transparent"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                     <Trigger Property="IsEnabled" Value="True">
-                        <Setter Property="Background" Value="{x:Null}"></Setter>
+                        <Setter Property="Background" Value="Transparent"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="True">
-                        <Setter Property="Background"  Value="{x:Null}"></Setter>
-                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                     <Trigger Property="IsMouseOver" Value="False">
-                        <Setter Property="Background"  Value="{x:Null}"></Setter>
-                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                     <Trigger Property="IsFocused" Value="True">
-                        <Setter Property="Background"  Value="{x:Null}"></Setter>
-                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                     <Trigger Property="IsFocused" Value="False">
-                        <Setter Property="Background"  Value="{x:Null}"></Setter>
-                        <Setter Property="Foreground"  Value="{x:Null}"></Setter>
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
                         <Setter Property="Opacity"  Value="0"></Setter>
                     </Trigger>
                 </Style.Triggers>
             </Style>
-
+            <Style x:Key="selectedBtn" x:Name="SelectedButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="Opacity" Value="1"></Setter>
+                <Setter Property="Foreground" Value="Transparent"></Setter>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="Button">
+                            <Grid Background="DarkBlue">
+                                <ContentPresenter />
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 
