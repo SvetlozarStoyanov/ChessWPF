@@ -36,6 +36,16 @@ namespace ChessWPF.Game
                         validMovesToStopCheck = GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff);
                     }
                     break;
+                case Models.Data.Pieces.Enums.PieceType.Knook:
+                    if (king.Cell.Row == attacker.Cell.Row || king.Cell.Col == attacker.Cell.Col)
+                    {
+                        validMovesToStopCheck = GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff);
+                    }
+                    else
+                    {
+                        validMovesToStopCheck.Add(attacker.Cell);
+                    }
+                    break;
             }
             return validMovesToStopCheck;
         }

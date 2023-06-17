@@ -6,7 +6,7 @@ namespace ChessWPF.Game
 {
     public static class PieceConstructor
     {
-        public static Piece ConstructPieceByType(PieceType pieceType,PieceColor color, Cell cell)
+        public static Piece ConstructPieceByType(PieceType pieceType, PieceColor color, Cell cell)
         {
             switch (pieceType)
             {
@@ -20,6 +20,8 @@ namespace ChessWPF.Game
                     return new Rook(color, cell);
                 case PieceType.Queen:
                     return new Queen(color, cell);
+                case PieceType.Knook:
+                    return new Knook(color, cell);
                 case PieceType.King:
                     return new King(color, cell);
             }
@@ -36,6 +38,8 @@ namespace ChessWPF.Game
                     return new Bishop(Color);
                 case PieceType.Rook:
                     return new Rook(Color);
+                case PieceType.Knook:
+                    return new Knook(Color);
                 default:
                     return new Queen(Color);
             }

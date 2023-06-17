@@ -4,6 +4,7 @@ using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.Singleton;
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -34,6 +35,10 @@ namespace ChessWPF.Game
             else if (piece.PieceType == PieceType.Queen)
             {
                 legalMovesAndProtectedSquares = GetQueenLegalMovesAndProtectedCells(piece, board);
+            }
+            else if (piece.PieceType == PieceType.Knook)
+            {
+                legalMovesAndProtectedSquares = GetKnookLegalMovesAndProtectedCells(piece, board);
             }
             else if (piece.PieceType == PieceType.King)
             {
@@ -631,12 +636,27 @@ namespace ChessWPF.Game
         {
             var bishopLegalMovesAndProtectedCells = GetBishopLegalMovesAndProtectedCells(queen, board);
             var rookLegalMovesAndProtectedCells = GetRookLegalMovesAndProtectedCells(queen, board);
-            var queenLegalMoves = new Dictionary<string, List<Cell>>();
-            queenLegalMoves.Add(LegalMovesAndProtectedCells.LegalMoves, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Union(bishopLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]).ToList());
-            queenLegalMoves.Add(LegalMovesAndProtectedCells.ProtectedCells, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells].Union(bishopLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells]).ToList());
+            var queenLegalMoves = new Dictionary<string, List<Cell>>
+            {
+                { LegalMovesAndProtectedCells.LegalMoves, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Union(bishopLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]).ToList() },
+                { LegalMovesAndProtectedCells.ProtectedCells, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells].Union(bishopLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells]).ToList() }
+            };
 
 
             return queenLegalMoves;
+        }
+
+        private static Dictionary<string, List<Cell>> GetKnookLegalMovesAndProtectedCells(Piece knook, Board board)
+        {
+            var rookLegalMovesAndProtectedCells = GetRookLegalMovesAndProtectedCells(knook, board);
+            var knightLegalMoves = GetKnightLegalMovesAndProtectedCells(knook, board);
+            var knookLegalMoves = new Dictionary<string, List<Cell>>
+            {
+                { LegalMovesAndProtectedCells.LegalMoves, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Union(knightLegalMoves[LegalMovesAndProtectedCells.LegalMoves]).ToList() },
+                { LegalMovesAndProtectedCells.ProtectedCells, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells].Union(knightLegalMoves[LegalMovesAndProtectedCells.ProtectedCells]).ToList() }
+            };
+
+            return knookLegalMoves;
         }
 
         private static Dictionary<string, List<Cell>> GetKingLegalMovesAndProtectedCells(Piece king, Board board)
