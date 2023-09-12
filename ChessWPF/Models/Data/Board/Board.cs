@@ -11,6 +11,13 @@ namespace ChessWPF.Models.Data.Board
     public class Board
     {
         private string gameResult;
+        private string fenAnnotation;
+        private bool gameHasStarted;
+        private bool gameHasEnded;
+        private int halfMoveCount;
+
+
+
         private Cell[,] cells;
         private PieceColor turnColor;
         private Stack<Move> moves;
@@ -18,8 +25,6 @@ namespace ChessWPF.Models.Data.Board
         private Move undoneMove;
         private Move promotionMove;
         private List<Cell> backupCells;
-        private bool gameHasStarted;
-        private bool gameHasEnded;
 
         public Board()
         {
@@ -33,6 +38,7 @@ namespace ChessWPF.Models.Data.Board
             CreateCells(Cells);
             BackupCells = new List<Cell>();
             SetupPieces();
+
             //SetupPiecesDemo();
             //SetupPiecesCheckBishopTest();
             //SetupPiecesCheckRookTest();
@@ -49,6 +55,12 @@ namespace ChessWPF.Models.Data.Board
             get => gameResult;
             set => gameResult = value;
         }
+
+        public string FenAnnotation
+        {
+            get => fenAnnotation;
+        }
+
         public bool GameHasStarted
         {
             get { return gameHasStarted; }
@@ -58,6 +70,11 @@ namespace ChessWPF.Models.Data.Board
         {
             get { return gameHasEnded; }
             set { gameHasEnded = value; }
+        }
+
+        public int HalfMoveCount
+        {
+            get { return halfMoveCount; }
         }
         public Cell[,] Cells
         {
@@ -122,6 +139,11 @@ namespace ChessWPF.Models.Data.Board
             }
         }
 
+        public void UpdatePgnAnnotation()
+        {
+            fenAnnotation = FenAnnotationWriter.WritePgnAnnotation(this);
+        }
+
         public Move MovePiece(Cell cell, Cell selectedCell)
         {
             var selectedPieceType = selectedCell.Piece.PieceType;
@@ -156,6 +178,7 @@ namespace ChessWPF.Models.Data.Board
                     }
                 }
             }
+
             return move;
         }
 
@@ -186,6 +209,18 @@ namespace ChessWPF.Models.Data.Board
 
 
             UndoneMove = move;
+            if (moves.Any())
+            {
+                var lastMove = moves.Peek();
+                if (lastMove.IsHalfMove())
+                {
+                    halfMoveCount = lastMove.CurrHalfMoveCount;
+                }
+            }
+            else
+            {
+                halfMoveCount = 0;
+            }
         }
 
         public void UndoPromotionMove()
@@ -305,7 +340,15 @@ namespace ChessWPF.Models.Data.Board
             {
                 selectedCell.Piece = null;
             }
-
+            if (move.IsHalfMove())
+            {
+                halfMoveCount++;
+            }
+            else
+            {
+                halfMoveCount = 0;
+            }
+            move.CurrHalfMoveCount = halfMoveCount;
             Moves.Push(move);
         }
 
@@ -459,6 +502,8 @@ namespace ChessWPF.Models.Data.Board
             }
             PromotionMove = move;
         }
+
+
 
         public void RestoreBackupCells()
         {
