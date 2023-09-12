@@ -141,7 +141,7 @@ namespace ChessWPF.Models.Data.Board
 
         public void UpdatePgnAnnotation()
         {
-            fenAnnotation = FenAnnotationWriter.WritePgnAnnotation(this);
+            fenAnnotation = FenAnnotationWriter.WriteFenAnnotation(this);
         }
 
         public Move MovePiece(Cell cell, Cell selectedCell)
@@ -320,14 +320,12 @@ namespace ChessWPF.Models.Data.Board
             }
             if (CheckForDraw())
             {
-                GameResult = "Draw!";
                 return true;
             }
             else if (Moves.Count > 9)
             {
                 if (CheckForThreefoldRepetition())
                 {
-                    GameResult = "Draw by threefold repetition!";
                     return true;
                 }
             }
@@ -726,14 +724,22 @@ namespace ChessWPF.Models.Data.Board
         private bool CheckForDraw()
         {
             var isGameDrawn = false;
-            if (Pieces.Sum(p => p.Value.Count) == 2)
+            if (HalfMoveCount >= 100)
             {
+                GameResult = "Draw! 100 moves were made with no pawn advances or piece captures!";
+                isGameDrawn = true;
+            }
+            else if (Pieces.Sum(p => p.Value.Count) == 2)
+            {
+                GameResult = "Draw!";
+
                 isGameDrawn = true;
             }
             else if (Pieces.Sum(p => p.Value.Count) == 3)
             {
                 if (Pieces.Any(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop || p.PieceType == PieceType.Knight)))
                 {
+                    GameResult = "Draw! Insufficient pieces to checkmate!";
                     isGameDrawn = true;
                 }
             }
@@ -746,6 +752,7 @@ namespace ChessWPF.Models.Data.Board
                         || !Pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell()
                         && !Pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).Cell.IsEvenCell())
                     {
+                        GameResult = "Draw! Insufficient pieces to checkmate!";
                         return true;
                     }
                 }
@@ -772,6 +779,7 @@ namespace ChessWPF.Models.Data.Board
                 && (movesAsArray[movesAsArray.Length - 6].Equals(movesAsArray[movesAsArray.Length - 10])
                 && movesAsArray[movesAsArray.Length - 6].IsOppositeMove(movesAsArray[movesAsArray.Length - 8])))
             {
+                GameResult = "Draw! Threefold repetition!";
                 movesAreRepeated = true;
             }
             return movesAreRepeated;
