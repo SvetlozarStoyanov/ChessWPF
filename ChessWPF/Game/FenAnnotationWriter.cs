@@ -8,7 +8,7 @@ namespace ChessWPF.Game
 {
     public static class FenAnnotationWriter
     {
-        public static string WritePgnAnnotation(Board board)
+        public static string WriteFenAnnotation(Board board)
         {
             var sb = new StringBuilder();
             for (int row = 0; row < board.Cells.GetLength(0); row++)
@@ -104,37 +104,46 @@ namespace ChessWPF.Game
             var hasBlackKingMoved = board.Moves.Any(m => m.CellOneBefore.Piece.PieceType == PieceType.King
                 && m.CellOneBefore.Piece.Color == PieceColor.Black);
 
-            if (!hasBlackKingMoved)
-            {
-                if (!board.Moves.Any(m =>
-                ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 7) ||
-                (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 7))))
-                {
-                    blackCastlingRights.Append('k');
-                }
-                if (!board.Moves.Any(m =>
-                ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 7) ||
-                (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 7))))
-                {
-                    blackCastlingRights.Append('q');
-                }
-            }
-
             if (!hasWhiteKingMoved)
             {
                 if (!board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 7) ||
-                (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 7))))
+                (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 7))) &&
+                (board.Cells[7, 7].Piece != null && board.Cells[7, 7].Piece.PieceType == PieceType.Rook &&
+                board.Cells[7, 7].Piece.Color == PieceColor.White))
                 {
                     whiteCastlingRights.Append('K');
                 }
                 if (!board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 0) ||
-                (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 0))))
+                (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 0))) &&
+                (board.Cells[7, 0].Piece != null && board.Cells[7, 0].Piece.PieceType == PieceType.Rook &&
+                board.Cells[7, 0].Piece.Color == PieceColor.White))
                 {
                     whiteCastlingRights.Append('Q');
                 }
             }
+
+            if (!hasBlackKingMoved)
+            {
+                if (!board.Moves.Any(m =>
+                ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 7) ||
+                (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 7))) &&
+                (board.Cells[0, 7].Piece != null && board.Cells[0, 7].Piece.PieceType == PieceType.Rook &&
+                board.Cells[0, 7].Piece.Color == PieceColor.Black))
+                {
+                    blackCastlingRights.Append('k');
+                }
+                if (!board.Moves.Any(m =>
+                ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 0) ||
+                (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 0))) &&
+                (board.Cells[0, 0].Piece != null && board.Cells[0, 0].Piece.PieceType == PieceType.Rook &&
+                board.Cells[0, 0].Piece.Color == PieceColor.Black))
+                {
+                    blackCastlingRights.Append('q');
+                }
+            }
+
             if (whiteCastlingRights.ToString() == "" && blackCastlingRights.ToString() == "")
             {
                 return "- ";
@@ -149,19 +158,19 @@ namespace ChessWPF.Game
             {
                 var columnAsLetter = (char)(97 + move.CellOneBefore.Col);
                 var row = move.CellOneBefore.Row == 1 ? 6 : 3;
-                return $"{columnAsLetter}{row}";
+                return $"{columnAsLetter}{row} ";
             }
-            return "-";
+            return "- ";
         }
 
         private static string AnnotateHalfMoveCount(Board board)
         {
-            return $" {(board.HalfMoveCount > 0 ? board.HalfMoveCount : 0)} ";
+            return $"{(board.HalfMoveCount > 0 ? board.HalfMoveCount : 0)} ";
         }
 
         private static string AnnotateFullMoveCount(Board board)
         {
-            return $"{(board.Moves.Any() ? (int)(board.Moves.Count / 2) : 0)}";
+            return $"{(board.Moves.Count < 2 ? 1 : board.Moves.Count(m => m.CellOneBefore.Piece.Color == PieceColor.Black) + 1)}";
         }
     }
 }
