@@ -1,14 +1,14 @@
-﻿using System.Reflection.Emit;
+﻿using ChessWPF.Models.Data.Pieces.Enums;
 
 namespace ChessWPF.Models.Data.Board
 {
     public class Move
     {
+        public int CurrHalfMoveCount { get; set; }
         public Cell CellOneBefore { get; set; }
         public Cell CellOneAfter { get; set; }
         public Cell CellTwoBefore { get; set; }
         public Cell CellTwoAfter { get; set; }
-
         public Cell? CellThreeBefore { get; set; }
         public Cell? CellThreeAfter { get; set; }
         public Cell? CellFourBefore { get; set; }
@@ -37,6 +37,17 @@ namespace ChessWPF.Models.Data.Board
                 return true;
             }
             return false;
+        }
+
+        public bool IsHalfMove()
+        {
+            if (this.CellOneBefore.Piece.PieceType == PieceType.Pawn ||
+                (this.CellTwoAfter.Piece != null && this.CellTwoBefore.Piece != null 
+                && this.CellTwoBefore.Piece.Color != this.CellOneBefore.Piece.Color))
+            {
+                return false;
+            }
+            return true;
         }
     }
 }
