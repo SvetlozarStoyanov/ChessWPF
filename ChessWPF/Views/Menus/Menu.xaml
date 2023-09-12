@@ -21,6 +21,8 @@
                 <MenuItem Header="Undo Move" Command="{Binding UndoMoveCommand}"></MenuItem>
             </Menu>
         </StackPanel>
-        <TextBlock Grid.Column="1" Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" FontSize="15"></TextBlock>
+        <TextBlock x:Name="gameStatusTextBlock" Grid.Column="1" Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" FontSize="15">
+            
+        </TextBlock>
     </Grid>
 </UserControl>
