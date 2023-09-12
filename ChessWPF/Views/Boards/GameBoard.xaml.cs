@@ -10,6 +10,7 @@ namespace ChessWPF.Views.Boards
         public GameBoard()
         {
             InitializeComponent();
+            fenTextBox.FocusVisualStyle = null;
         }
     }
 }

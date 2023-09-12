@@ -67,8 +67,9 @@
         <local:ChessBoard Grid.Row="2" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="8" DataContext="{Binding BoardViewModel}">
             
         </local:ChessBoard>
-        <TextBlock Grid.Row="11" Grid.Column="1" TextAlignment="Center" Grid.ColumnSpan="8" FontSize="18px" Text="{Binding BoardViewModel.FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
-            
-        </TextBlock>
+        <Border Grid.Row="11" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1">
+            <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="18px" Text="{Binding BoardViewModel.FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
+            </TextBox>
+        </Border>
     </Grid>
 </UserControl>
