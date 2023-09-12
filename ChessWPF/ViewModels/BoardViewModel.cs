@@ -1,13 +1,9 @@
 ﻿using ChessWPF.Commands;
-using ChessWPF.Constants;
-using ChessWPF.Game;
 using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.NetworkInformation;
 using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
@@ -27,8 +23,6 @@ namespace ChessWPF.ViewModels
             backupCellsToUpdate = new List<Cell>();
             EndGameCommand = new EndGameCommand(this);
         }
-
-
 
         public Board Board
         {
@@ -65,6 +59,17 @@ namespace ChessWPF.ViewModels
                 OnPropertyChanged(nameof(GameResult));
             }
         }
+
+        public string FenAnnotation
+        {
+            get => Board.FenAnnotation;
+            set
+            {
+                OnPropertyChanged(nameof(FenAnnotation));
+            }
+
+        }
+
         public bool GameHasEnded
         {
             get { return Board.GameHasEnded; }
@@ -108,6 +113,8 @@ namespace ChessWPF.ViewModels
 
             MarkWhichPiecesCanBeSelected();
             Board.CalculatePossibleMoves();
+            Board.UpdatePgnAnnotation();
+            FenAnnotation = Board.FenAnnotation;
         }
 
         public void ResetBoard()
@@ -153,6 +160,8 @@ namespace ChessWPF.ViewModels
             {
                 GameHasEnded = true;
             }
+            Board.UpdatePgnAnnotation();
+            FenAnnotation = Board.FenAnnotation;
         }
 
 
@@ -204,7 +213,7 @@ namespace ChessWPF.ViewModels
             }
         }
 
-       
+
 
         public void PromotePiece(PieceType pieceType)
         {
