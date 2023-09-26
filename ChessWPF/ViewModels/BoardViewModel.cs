@@ -113,7 +113,7 @@ namespace ChessWPF.ViewModels
 
             MarkWhichPiecesCanBeSelected();
             Board.CalculatePossibleMoves();
-            Board.UpdatePgnAnnotation();
+            Board.UpdateFenAnnotation();
             FenAnnotation = Board.FenAnnotation;
         }
 
@@ -160,7 +160,7 @@ namespace ChessWPF.ViewModels
             {
                 GameHasEnded = true;
             }
-            Board.UpdatePgnAnnotation();
+            Board.UpdateFenAnnotation();
             FenAnnotation = Board.FenAnnotation;
         }
 
@@ -214,7 +214,6 @@ namespace ChessWPF.ViewModels
         }
 
 
-
         public void PromotePiece(PieceType pieceType)
         {
             Board.PromotePiece(pieceType);
@@ -227,6 +226,14 @@ namespace ChessWPF.ViewModels
             Board.PromotionMove = null;
         }
 
+        public void EndGameByTimeOut(PieceColor color)
+        {
+            GameResult = $"{color.ToString()} wins by timeout!";
+            
+            this.GameHasEnded = true;
+            MakeAllPiecesUnselectable();
+        }
+
         private void ResetMatchCellViewModelsToCells()
         {
             for (int row = 0; row < board.Cells.GetLength(0); row++)
@@ -236,8 +243,6 @@ namespace ChessWPF.ViewModels
                     cellViewModels[row][col].Cell = board.Cells[row, col];
                     cellViewModels[row][col].UpdateCellImage();
                     cellViewModels[row][col].CanBeMovedTo = false;
-
-
                     cellViewModels[row][col].IsSelected = false;
                 }
             }
@@ -307,8 +312,6 @@ namespace ChessWPF.ViewModels
             }
         }
 
-
-
         private void MakeAllPiecesUnselectable()
         {
             foreach (var cellViewModelRow in CellViewModels)
@@ -353,6 +356,7 @@ namespace ChessWPF.ViewModels
             Board.RestoreAllBackupCells();
             CellViewModels[Board.PromotionMove.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].CanBeSelected = true;
         }
+
         private void UpdateCellImagesOfBackupCells()
         {
             var promotionMove = Board.PromotionMove;
