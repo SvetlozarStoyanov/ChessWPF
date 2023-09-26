@@ -1,9 +1,7 @@
-﻿using ChessWPF.Game;
-using ChessWPF.Models.Data.Board;
+﻿using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.ViewModels;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -16,14 +14,6 @@ namespace ChessWPF.Singleton
         private List<Cell> legalMoves = new List<Cell>();
         private CellViewModel selectedCell;
         private GameViewModel gameViewModel;
-
-        
-
-
-
-
-
-
 
         public BackgroundSingleton()
         {
@@ -71,6 +61,8 @@ namespace ChessWPF.Singleton
         public void StartGame()
         {
             BoardViewModel.StartGame();
+            GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StartClock();
+            GameViewModel.UpdateClocks();
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
         }
 
@@ -79,6 +71,9 @@ namespace ChessWPF.Singleton
             UnselectSelectedCell();
             BoardViewModel.ResetBoard();
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
+            GameViewModel.ResetClocks();
+            GameViewModel.UpdateClocks();
+            GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StartClock();
         }
 
         public void SelectCell(CellViewModel cellViewModel)
@@ -89,6 +84,7 @@ namespace ChessWPF.Singleton
 
         public void MovePiece(Cell cell)
         {
+            GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StopClock();
             ClearLegalMoves();
             BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             SelectedCell = null;
@@ -100,21 +96,30 @@ namespace ChessWPF.Singleton
             else
             {
                 MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
+
+                GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StartClock();
             }
         }
 
         public void UndoMove()
         {
+            if (BoardViewModel.Board.PromotionMove == null)
+            {
+                GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StopClock();
+            }
             if (SelectedCell != null)
             {
                 UnselectSelectedCell();
             }
             BoardViewModel.UndoMove();
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
+            GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StartClock();
+
         }
 
         public void SelectPieceForPromotion(CellViewModel cellViewModel)
         {
+            GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StopClock();
             BoardViewModel.PromotePiece(cellViewModel.Cell.Piece.PieceType);
             if (BoardViewModel.GameResult != null)
             {
@@ -124,7 +129,13 @@ namespace ChessWPF.Singleton
             else
             {
                 MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
+                GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StartClock();
             }
+        }
+
+        public void EndGameByTimeOut(PieceColor color)
+        {
+            GameViewModel.EndGameByTimeOut(color);
         }
 
         private void GetLegalMoves(Piece piece)
