@@ -15,9 +15,6 @@ namespace ChessWPF.Models.Data.Board
         private bool gameHasStarted;
         private bool gameHasEnded;
         private int halfMoveCount;
-
-
-
         private Cell[,] cells;
         private PieceColor turnColor;
         private Stack<Move> moves;
@@ -139,7 +136,7 @@ namespace ChessWPF.Models.Data.Board
             }
         }
 
-        public void UpdatePgnAnnotation()
+        public void UpdateFenAnnotation()
         {
             fenAnnotation = FenAnnotationWriter.WriteFenAnnotation(this);
         }
@@ -501,8 +498,6 @@ namespace ChessWPF.Models.Data.Board
             PromotionMove = move;
         }
 
-
-
         public void RestoreBackupCells()
         {
             foreach (var cell in BackupCells.Where(c => c.Row != 7 && c.Row != 0))
@@ -683,7 +678,6 @@ namespace ChessWPF.Models.Data.Board
 
             Cells[6, 6].Piece = new King(PieceColor.White, Cells[6, 6]);
             Cells[1, 4].Piece = new King(PieceColor.Black, Cells[1, 4]);
-
         }
 
         private void SetupPiecesKnightCheckTest()
