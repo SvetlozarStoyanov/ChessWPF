@@ -1,6 +1,4 @@
 ﻿using ChessWPF.Commands;
-using ChessWPF.Singleton;
-using System;
 using System.ComponentModel;
 using System.Windows.Input;
 
@@ -9,6 +7,7 @@ namespace ChessWPF.ViewModels
     public class MenuViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private string gameStatus;
+
         public MenuViewModel(BoardViewModel boardViewModel)
         {
             ResetBoardCommand = new ResetBoardCommand(boardViewModel);
