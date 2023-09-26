@@ -1,5 +1,4 @@
 ﻿using ChessWPF.ViewModels;
-using System;
 using System.ComponentModel;
 
 namespace ChessWPF.Commands
@@ -7,6 +6,7 @@ namespace ChessWPF.Commands
     public class EndGameCommand : CommandBase
     {
         private readonly BoardViewModel boardViewModel;
+
         public EndGameCommand(BoardViewModel boardViewModel)
         {
             this.boardViewModel = boardViewModel;
