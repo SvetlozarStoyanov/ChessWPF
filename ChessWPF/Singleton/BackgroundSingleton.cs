@@ -85,6 +85,7 @@ namespace ChessWPF.Singleton
         public void MovePiece(Cell cell)
         {
             GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].GameClock.StopClock();
+            GameViewModel.GameClocks[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
             ClearLegalMoves();
             BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             SelectedCell = null;
@@ -136,6 +137,8 @@ namespace ChessWPF.Singleton
         public void EndGameByTimeOut(PieceColor color)
         {
             GameViewModel.EndGameByTimeOut(color);
+            UnselectSelectedCell();
+            ClearLegalMoves();
         }
 
         private void GetLegalMoves(Piece piece)
