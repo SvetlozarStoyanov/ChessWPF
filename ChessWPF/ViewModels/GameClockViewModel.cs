@@ -8,7 +8,7 @@ namespace ChessWPF.ViewModels
     public class GameClockViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private GameClock gameClock;
-        private TimeSpan timeLeft;
+        private string timeLeft;
 
         public GameClockViewModel(PieceColor color)
         {
@@ -20,7 +20,7 @@ namespace ChessWPF.ViewModels
             get { return gameClock; }
         }
 
-        public TimeSpan TimeLeft
+        public string TimeLeft
         {
             get => timeLeft;
             set
@@ -30,10 +30,16 @@ namespace ChessWPF.ViewModels
             }
         }
 
-
         public void UpdateClock(TimeSpan timeLeft)
         {
-            this.TimeLeft = timeLeft;
+            if (timeLeft.TotalSeconds > 10)
+            {
+                this.TimeLeft = timeLeft.ToString(@"mm\:ss");
+            }
+            else
+            {
+                this.TimeLeft = timeLeft.ToString(@"mm\:ss\:f");
+            }
         }
 
         public void StartClock()
@@ -45,9 +51,15 @@ namespace ChessWPF.ViewModels
         {
             gameClock.StopClock();
         }
+
         public void ResetClock()
         {
             gameClock.ResetClock();
+        }
+
+        public void AddIncrement()
+        {
+            gameClock.AddIncrement();
         }
     }
 }
