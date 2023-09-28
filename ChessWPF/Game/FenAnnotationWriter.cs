@@ -70,6 +70,7 @@ namespace ChessWPF.Game
                             letter = 'k';
                             break;
                         case PieceType.Knook:
+                            letter = 'o';
                             break;
                     }
                     if (cell.Piece.Color == PieceColor.White)
