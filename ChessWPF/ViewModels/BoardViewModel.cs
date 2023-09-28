@@ -147,7 +147,7 @@ namespace ChessWPF.ViewModels
                 MakeAllPiecesUnselectable();
                 return;
             }
-            Board.ReverseTurnColor();
+            //Board.ReverseTurnColor();
             MarkWhichPiecesCanBeSelected();
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
@@ -160,7 +160,11 @@ namespace ChessWPF.ViewModels
             {
                 GameHasEnded = true;
             }
-            Board.UpdateFenAnnotation();
+            //Board.UpdateFenAnnotation();
+            //if (Board.Moves.Any())
+            //{
+            //    Board.Moves.Peek().FenAnnotation = Board.FenAnnotation;
+            //}
             FenAnnotation = Board.FenAnnotation;
         }
 
@@ -229,7 +233,7 @@ namespace ChessWPF.ViewModels
         public void EndGameByTimeOut(PieceColor color)
         {
             GameResult = $"{color.ToString()} wins by timeout!";
-            
+
             this.GameHasEnded = true;
             MakeAllPiecesUnselectable();
         }
