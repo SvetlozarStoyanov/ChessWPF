@@ -5,10 +5,11 @@ namespace ChessWPF.Models.Data.Board
     public class Move
     {
         public int CurrHalfMoveCount { get; set; }
-        public Cell CellOneBefore { get; set; }
-        public Cell CellOneAfter { get; set; }
-        public Cell CellTwoBefore { get; set; }
-        public Cell CellTwoAfter { get; set; }
+        public string FenAnnotation { get; set; } = null!;
+        public Cell CellOneBefore { get; set; } = null!;
+        public Cell CellOneAfter { get; set; } = null!;
+        public Cell CellTwoBefore { get; set; } = null!;
+        public Cell CellTwoAfter { get; set; } = null!;
         public Cell? CellThreeBefore { get; set; }
         public Cell? CellThreeAfter { get; set; }
         public Cell? CellFourBefore { get; set; }

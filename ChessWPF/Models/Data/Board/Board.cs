@@ -206,9 +206,11 @@ namespace ChessWPF.Models.Data.Board
 
 
             UndoneMove = move;
+            ReverseTurnColor();
             if (moves.Any())
             {
                 var lastMove = moves.Peek();
+                fenAnnotation = lastMove.FenAnnotation;
                 if (lastMove.IsHalfMove())
                 {
                     halfMoveCount = lastMove.CurrHalfMoveCount;
@@ -216,6 +218,7 @@ namespace ChessWPF.Models.Data.Board
             }
             else
             {
+                UpdateFenAnnotation();
                 halfMoveCount = 0;
             }
         }
@@ -344,7 +347,10 @@ namespace ChessWPF.Models.Data.Board
                 halfMoveCount = 0;
             }
             move.CurrHalfMoveCount = halfMoveCount;
+            this.ReverseTurnColor();
             Moves.Push(move);
+            UpdateFenAnnotation();
+            Moves.Peek().FenAnnotation = this.fenAnnotation;
         }
 
         public Move CreateMove(Cell cell, Cell selectedCell)

@@ -12,7 +12,7 @@ namespace ChessWPF.ViewModels
 
         public GameClockViewModel(PieceColor color)
         {
-            gameClock = new GameClock(3, 10, color);
+            gameClock = new GameClock(3, 300, color);
         }
 
         public GameClock GameClock
