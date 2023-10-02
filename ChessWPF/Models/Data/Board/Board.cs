@@ -271,33 +271,48 @@ namespace ChessWPF.Models.Data.Board
             {
                 validMovesToStopCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, king.Attackers.First(), this);
             }
-            foreach (var piece in Pieces[TurnColor])
+            if (king.Attackers.Count > 1)
             {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
-                if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
+                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king);
+                king.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+                foreach (var piece in Pieces[TurnColor].Where(p => p.PieceType != PieceType.King))
                 {
-                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
-                        .Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
+                    piece.LegalMoves = new List<Cell>();
+                    piece.ProtectedCells = new List<Cell>();
                 }
-                else if (king.Defenders.Any(d => d.Item1 == piece))
-                {
-                    if (king.IsInCheck)
-                    {
-                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
-                    }
-                    var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
-                    var movesToPreventPotentialCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, this);
-                    movesToPreventPotentialCheck.Remove(currDefenderAndPotentialAttacker.Item1.Cell);
-                    movesToPreventPotentialCheck.Add(currDefenderAndPotentialAttacker.Item2.Cell);
-                    if (king.Attackers.Count == 1 && king.Attackers.First().PieceType == PieceType.Knight)
-                    {
-                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
-                    }
-                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
-                }
-                piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
-                piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
             }
+            else
+            {
+
+                foreach (var piece in Pieces[TurnColor])
+                {
+                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
+                    if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
+                    {
+                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
+                            .Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
+                    }
+                    else if (king.Defenders.Any(d => d.Item1 == piece))
+                    {
+                        if (king.IsInCheck)
+                        {
+                            legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
+                        }
+                        var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
+                        var movesToPreventPotentialCheck = CheckDirectionFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, this);
+                        movesToPreventPotentialCheck.Remove(currDefenderAndPotentialAttacker.Item1.Cell);
+                        movesToPreventPotentialCheck.Add(currDefenderAndPotentialAttacker.Item2.Cell);
+                        if (king.Attackers.Count == 1 && king.Attackers.First().PieceType == PieceType.Knight)
+                        {
+                            legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
+                        }
+                        legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
+                    }
+                    piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+                    piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+                }
+            }
+            var test = 0;
         }
 
         public bool CheckForGameEnding()
