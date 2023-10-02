@@ -14,8 +14,8 @@ namespace ChessWPF.Game
         {
             var board = BackgroundSingleton.Instance.Board;
             var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.Black;
-            var defenders = new List<ValueTuple<Piece,Piece>>();
-            if (board.Pieces[oppositeColor].Any(p => p.PieceType == PieceType.Rook || p.PieceType == PieceType.Queen))
+            var defenders = new List<ValueTuple<Piece, Piece>>();
+            if (board.Pieces[oppositeColor].Any(p => p.PieceType == PieceType.Rook || p.PieceType == PieceType.Queen || p.PieceType == PieceType.Knook))
             {
                 defenders.AddRange(CheckRowsAndCols(king, board));
             }
@@ -32,7 +32,7 @@ namespace ChessWPF.Game
         {
             int increment = 1;
             var defenders = new List<ValueTuple<Piece, Piece>>();
-            var pinningPieceTypes = new PieceType[] { PieceType.Rook, PieceType.Queen };
+            var pinningPieceTypes = new PieceType[] { PieceType.Rook, PieceType.Queen, PieceType.Knook };
             var currCell = king.Cell;
             var defenderCell = king.Cell;
             while (IsCellValid(king.Cell.Row + increment, king.Cell.Col, board))
