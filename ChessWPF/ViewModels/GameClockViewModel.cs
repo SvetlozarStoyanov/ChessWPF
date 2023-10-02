@@ -7,19 +7,23 @@ namespace ChessWPF.ViewModels
 {
     public class GameClockViewModel : ViewModelBase, INotifyPropertyChanged
     {
-        private GameClock gameClock;
         private string timeLeft;
+        private int increment;
+        private TimeSpan timeElapsed;
+        private GameClock gameClock;
+
 
         public GameClockViewModel(PieceColor color)
         {
             gameClock = new GameClock(3, 300, color);
         }
 
-        public GameClock GameClock
-        {
-            get { return gameClock; }
-        }
 
+        public int Increment
+        {
+            get { return gameClock.Increment; }
+            set { gameClock.Increment = value; }
+        }
         public string TimeLeft
         {
             get => timeLeft;
@@ -28,6 +32,22 @@ namespace ChessWPF.ViewModels
                 timeLeft = value;
                 OnPropertyChanged(nameof(TimeLeft));
             }
+        }
+        public TimeSpan TimeElapsed
+        {
+            get
+            {
+                return gameClock.TimeElapsed;
+            }
+            set
+            {
+                gameClock.TimeElapsed = value;
+            }
+        }
+
+        public GameClock GameClock
+        {
+            get { return gameClock; }
         }
 
         public void UpdateClock(TimeSpan timeLeft)
@@ -57,9 +77,21 @@ namespace ChessWPF.ViewModels
             gameClock.ResetClock();
         }
 
+        public void AddTime(TimeSpan time)
+        {
+            gameClock.AddTime(time);
+        }
+
         public void AddIncrement()
         {
             gameClock.AddIncrement();
         }
+
+        public void RemoveIncrement()
+        {
+            gameClock.RemoveIncrement();
+        }
+
+
     }
 }
