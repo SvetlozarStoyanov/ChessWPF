@@ -1,5 +1,6 @@
 ﻿using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.Singleton;
+using Microsoft.Win32;
 using System;
 using System.Diagnostics;
 using System.Windows.Threading;
@@ -15,8 +16,7 @@ namespace ChessWPF.Models.Data.Clocks
         private Stopwatch watch;
         private TimeSpan timeLeft;
         private TimeSpan startingTime;
-
-
+        private TimeSpan timeElapsed;
 
         public GameClock(int increment, int startingTime, PieceColor color)
         {
@@ -54,9 +54,16 @@ namespace ChessWPF.Models.Data.Clocks
             private set { startingTime = value; }
         }
 
+        public TimeSpan TimeElapsed
+        {
+            get { return timeElapsed; }
+            set { timeElapsed = value; }
+        }
+
         public void StartClock()
         {
             timer.Start();
+            timeElapsed = TimeSpan.FromSeconds(0);
             watch.Start();
         }
 
@@ -65,6 +72,7 @@ namespace ChessWPF.Models.Data.Clocks
             watch.Stop();
             timer.Stop();
             timeLeft -= watch.Elapsed;
+            timeElapsed = watch.Elapsed;
             watch.Reset();
             BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
         }
@@ -77,9 +85,22 @@ namespace ChessWPF.Models.Data.Clocks
             timeLeft = startingTime;
         }
 
+
+        public void AddTime(TimeSpan time)
+        {
+            timeLeft += time;
+            BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
+        }
+
         public void AddIncrement()
         {
-            timeLeft += (TimeSpan.FromSeconds(increment));
+            timeLeft += TimeSpan.FromSeconds(increment);
+            BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
+        }
+
+        public void RemoveIncrement()
+        {
+            timeLeft -= TimeSpan.FromSeconds(increment);
             BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
         }
 
@@ -99,7 +120,7 @@ namespace ChessWPF.Models.Data.Clocks
             else
             {
                 BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft - watch.Elapsed);
-                
+
             }
         }
 
