@@ -8,8 +8,6 @@ namespace ChessWPF.ViewModels
     public class GameClockViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private string timeLeft;
-        private int increment;
-        private TimeSpan timeElapsed;
         private GameClock gameClock;
 
 
@@ -33,6 +31,13 @@ namespace ChessWPF.ViewModels
                 OnPropertyChanged(nameof(TimeLeft));
             }
         }
+
+        public PieceColor Color
+        {
+            get { return gameClock.Color; }
+            set { gameClock.Color = value; }
+        }
+
         public TimeSpan TimeElapsed
         {
             get
