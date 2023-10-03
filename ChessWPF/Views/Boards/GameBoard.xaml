@@ -18,7 +18,7 @@
     <Grid Name="gameBoard" >
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition />
+            <RowDefinition Height="90px" />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -60,12 +60,12 @@
         <TextBlock Grid.Row="10" Grid.Column="7" Text="G" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="10" Grid.Column="8" Text="H" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <Border Grid.Row="2" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="2" >
+        <Border Grid.Row="2" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="12" >
         </Border>
         <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="10" DataContext="{Binding MenuViewModel}">
             
         </View.Menus:Menu>
-        <View.Clocks:GameClock Grid.Row="1" Grid.Column="2" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[White]}">
+        <View.Clocks:GameClock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[White]}">
             
         </View.Clocks:GameClock>
         <View.Clocks:GameClock Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[Black]}">
