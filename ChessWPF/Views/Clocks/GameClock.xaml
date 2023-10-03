@@ -6,8 +6,15 @@
              xmlns:local="clr-namespace:ChessWPF.Views.Clocks"
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100">
-    <Grid Background="White">
-        <TextBlock Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
+    <Grid Background="White" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <TextBlock Grid.Row="0" FontSize="20px" Text="{Binding Color}" VerticalAlignment="Top" HorizontalAlignment="Center">
+            
+        </TextBlock>
+        <TextBlock Grid.Row="1" FontSize="25px" VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
 
         </TextBlock>
     </Grid>
