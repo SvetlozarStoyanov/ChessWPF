@@ -6,8 +6,8 @@
         xmlns:local="clr-namespace:ChessWPF"
         xmlns:Views.Boards="clr-namespace:ChessWPF.Views.Boards"
         mc:Ignorable="d"
-        Title="Chess" Height="800" Width="800"  WindowStartupLocation="CenterScreen" ResizeMode="CanMinimize">
-    <Grid >
+        Title="Chess" Height="800" Width="800" WindowState="Maximized"  WindowStartupLocation="CenterScreen" ResizeMode="NoResize">
+    <Grid>
         <Views.Boards:GameBoard DataContext="{Binding GameViewModel}">
 
         </Views.Boards:GameBoard>
