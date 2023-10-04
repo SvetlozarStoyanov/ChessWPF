@@ -1,4 +1,5 @@
-﻿using ChessWPF.Models.Data.Board;
+﻿using ChessWPF.Game;
+using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using System;
@@ -10,11 +11,18 @@ namespace ChessWPF.ViewModels
     public class GameViewModel : ViewModelBase
     {
 
+        private string moveNotation;
         private CellViewModel selectedCell;
         private BoardViewModel boardViewModel;
         private MenuViewModel menuViewModel;
         private List<Cell> legalMoves = new List<Cell>();
+        private Stack<string> moveLog;
         private Dictionary<string, GameClockViewModel> gameClocks;
+
+
+
+
+
 
         public GameViewModel(BoardViewModel boardViewModel,
             MenuViewModel menuViewModel,
@@ -24,6 +32,20 @@ namespace ChessWPF.ViewModels
             BoardViewModel = boardViewModel;
             MenuViewModel = menuViewModel;
             GameClocks = gameClocks;
+            moveLog = new Stack<string>();
+        }
+
+        public string MoveNotation
+        {
+            get
+            {
+                return moveNotation;
+            }
+            set
+            {
+                moveNotation = value;
+                OnPropertyChanged(nameof(MoveNotation));
+            }
         }
 
         public BoardViewModel BoardViewModel
@@ -42,22 +64,29 @@ namespace ChessWPF.ViewModels
             set { menuViewModel = value; }
         }
 
-        public Dictionary<string, GameClockViewModel> GameClocks
-        {
-            get { return gameClocks; }
-            private set { gameClocks = value; }
-        }
-
         public Board Board
         {
             get => BoardViewModel.Board;
             set => BoardViewModel.Board = value;
         }
+        public CellViewModel SelectedCell { get => selectedCell; set => selectedCell = value; }
+
         public List<Cell> LegalMoves
         {
             get { return legalMoves; }
         }
-        public CellViewModel SelectedCell { get => selectedCell; set => selectedCell = value; }
+
+        public Stack<string> MoveLog
+        {
+            get { return moveLog; }
+            set { moveLog = value; }
+        }
+
+        public Dictionary<string, GameClockViewModel> GameClocks
+        {
+            get { return gameClocks; }
+            private set { gameClocks = value; }
+        }
 
         public void StartGame()
         {
@@ -91,6 +120,11 @@ namespace ChessWPF.ViewModels
 
             GameClocks[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
             BoardViewModel.MovePiece(cell, SelectedCell.Cell);
+            if (!Board.Moves.Peek().IsPromotionMove)
+            {
+                moveLog.Push(MoveNotationWriter.AnnotateMove(Board.Moves.Peek(), Board.Pieces));
+                MoveNotation +=$"{moveLog.Peek()} ";
+            }
             //if (Board.PromotionMove == null)
             //{
             //}
@@ -103,7 +137,6 @@ namespace ChessWPF.ViewModels
             else
             {
                 MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-
                 GameClocks[BoardViewModel.Board.TurnColor.ToString()].StartClock();
             }
         }
@@ -171,7 +204,7 @@ namespace ChessWPF.ViewModels
 
         private void GetLegalMoves(Piece piece)
         {
-            var newLegalMoves = SelectedCell.Cell.Piece.LegalMoves;
+            var newLegalMoves = piece.LegalMoves;
             if (newLegalMoves != legalMoves)
             {
                 ClearLegalMoves();
