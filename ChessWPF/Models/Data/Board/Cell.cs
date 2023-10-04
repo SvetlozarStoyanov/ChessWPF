@@ -1,4 +1,5 @@
 ﻿using ChessWPF.Models.Data.Pieces;
+using System;
 using System.Collections.Generic;
 using System.Windows.Documents;
 
@@ -40,6 +41,16 @@ namespace ChessWPF.Models.Data.Board
                 return true;
             }
             return false;
+        }
+
+        public int RowDifference(Cell cell)
+        {
+            return Math.Abs(this.Col - cell.Col);
+        }
+
+        public int ColumnDifference(Cell cell)
+        {
+            return Math.Abs(this.Col - cell.Col);
         }
     }
 }
