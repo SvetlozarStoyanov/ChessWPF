@@ -15,18 +15,20 @@ namespace ChessWPF.Models.Data.Board
         private bool gameHasStarted;
         private bool gameHasEnded;
         private int halfMoveCount;
-        private Cell[,] cells;
         private PieceColor turnColor;
-        private Stack<Move> moves;
-        private Dictionary<PieceColor, List<Piece>> pieces;
         private Move undoneMove;
         private Move promotionMove;
+        private Stack<Move> moves;
+        private Stack<string> moveLog;
+        private Cell[,] cells;
         private List<Cell> backupCells;
-
+        private Dictionary<PieceColor, List<Piece>> pieces;
+        
         public Board()
         {
             Cells = new Cell[8, 8];
             Moves = new Stack<Move>();
+            moveLog = new Stack<string>();
             Pieces = new Dictionary<PieceColor, List<Piece>>
             {
                 { PieceColor.White, new List<Piece>() },
@@ -73,6 +75,18 @@ namespace ChessWPF.Models.Data.Board
         {
             get { return halfMoveCount; }
         }
+
+        public Move UndoneMove
+        {
+            get => undoneMove;
+            set => undoneMove = value;
+        }
+
+        public Move PromotionMove
+        {
+            get => promotionMove;
+            set => promotionMove = value;
+        }
         public Cell[,] Cells
         {
             get => cells;
@@ -88,6 +102,11 @@ namespace ChessWPF.Models.Data.Board
             get => moves;
             set => moves = value;
         }
+        public Stack<string> MoveLog
+        {
+            get { return moveLog; }
+            set { moveLog = value; }
+        }
 
         public Dictionary<PieceColor, List<Piece>> Pieces
         {
@@ -95,23 +114,12 @@ namespace ChessWPF.Models.Data.Board
             set => pieces = value;
         }
 
-        public Move UndoneMove
-        {
-            get => undoneMove;
-            set => undoneMove = value;
-        }
-
-        public Move PromotionMove
-        {
-            get => promotionMove;
-            set => promotionMove = value;
-        }
-
         public List<Cell> BackupCells
         {
             get => backupCells;
             set => backupCells = value;
         }
+
 
         public void CreateCells(Cell[,] cells)
         {
@@ -155,6 +163,7 @@ namespace ChessWPF.Models.Data.Board
                     && (move.CellTwoAfter.Row == 0 || move.CellTwoAfter.Row == 7))
                 {
                     var pawn = move.CellTwoAfter.Piece;
+                    move.IsPromotionMove = true;
                     CreatePromotionMove(move, pawn);
                 }
                 if (Moves.Count > 0)
