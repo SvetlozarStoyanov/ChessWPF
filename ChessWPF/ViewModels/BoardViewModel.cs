@@ -138,16 +138,13 @@ namespace ChessWPF.ViewModels
         {
             if (GameHasEnded)
             {
-                //MakeAllPiecesUnselectable();
                 return;
             }
-            //Board.CheckForGameEnding();
             if (Board.BackupCells.Count > 0)
             {
                 MakeAllPiecesUnselectable();
                 return;
             }
-            //Board.ReverseTurnColor();
             MarkWhichPiecesCanBeSelected();
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
@@ -160,11 +157,6 @@ namespace ChessWPF.ViewModels
             {
                 GameHasEnded = true;
             }
-            //Board.UpdateFenAnnotation();
-            //if (Board.Moves.Any())
-            //{
-            //    Board.Moves.Peek().FenAnnotation = Board.FenAnnotation;
-            //}
             FenAnnotation = Board.FenAnnotation;
         }
 
