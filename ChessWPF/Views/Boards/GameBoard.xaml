@@ -11,6 +11,7 @@
              d:DataContext="{d:DesignInstance Type=viewmodels:BoardViewModel}"
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="800"
+            
              >
 
 
@@ -41,39 +42,28 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
+            <ColumnDefinition Width="300px"/>
+            <ColumnDefinition/>
+
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="8" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="7" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="6" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="5" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="4" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="3" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="0" Text="2" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="9" Grid.Column="0" Text="1" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
-        <TextBlock Grid.Row="10" Grid.Column="1" Text="A" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="2" Text="B" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="3" Text="C" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="4" Text="D" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="5" Text="E" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="6" Text="F" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="7" Text="G" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="10" Grid.Column="8" Text="H" FontSize="16" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-
-        <Border Grid.Row="2" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="12" >
-        </Border>
+       
         <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="10" DataContext="{Binding MenuViewModel}">
             
         </View.Menus:Menu>
-        <View.Clocks:GameClock Grid.Row="1" Grid.Column="1" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[White]}">
+        <View.Clocks:GameClock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[White]}">
             
         </View.Clocks:GameClock>
         <View.Clocks:GameClock Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[Black]}">
 
         </View.Clocks:GameClock>
-        <local:ChessBoard Grid.Row="2" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="8" DataContext="{Binding BoardViewModel}">
+        <local:ChessBoard Grid.Row="2" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}">
             
         </local:ChessBoard>
+        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="10" Grid.RowSpan="6" BorderBrush="Black" BorderThickness="4">
+            <TextBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True" Background="White" FontSize="16" Text="{Binding MoveNotation,UpdateSourceTrigger=PropertyChanged}">
+                
+            </TextBox>
+        </Border>
         <Border Grid.Row="11" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1">
             <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="18px" Text="{Binding BoardViewModel.FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
