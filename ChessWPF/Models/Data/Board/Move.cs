@@ -6,6 +6,7 @@ namespace ChessWPF.Models.Data.Board
     {
         public int CurrHalfMoveCount { get; set; }
         public string FenAnnotation { get; set; } = null!;
+        public string Annotation { get; set; } = null!;
         public bool IsPromotionMove { get; set; } = false;
         public Cell CellOneBefore { get; set; } = null!;
         public Cell CellOneAfter { get; set; } = null!;
