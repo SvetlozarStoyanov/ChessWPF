@@ -7,15 +7,16 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100">
     <Grid Background="White" VerticalAlignment="Top">
-        <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
-            <RowDefinition></RowDefinition>
-        </Grid.RowDefinitions>
-        <TextBlock Grid.Row="0" FontSize="20px" Text="{Binding Color}" VerticalAlignment="Top" HorizontalAlignment="Center">
-            
-        </TextBlock>
-        <TextBlock Grid.Row="1" FontSize="25px" VerticalAlignment="Top" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
 
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition/>
+            <ColumnDefinition/>
+        </Grid.ColumnDefinitions>
+        <TextBlock Grid.Column="0" FontSize="30px" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
+
+        </TextBlock>
+        <TextBlock Grid.Column="1" FontSize="35px" Text="{Binding Color}" VerticalAlignment="Center" HorizontalAlignment="Center">
+            
         </TextBlock>
     </Grid>
 </UserControl>
