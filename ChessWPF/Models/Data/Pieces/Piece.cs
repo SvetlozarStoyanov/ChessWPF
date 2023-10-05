@@ -23,5 +23,11 @@ namespace ChessWPF.Models.Data.Pieces
 
         public List<Cell> LegalMoves { get; set; }
         public List<Cell> ProtectedCells { get; set; }
+
+        public override bool Equals(object? obj)
+        {
+            var otherPiece = obj as Piece;
+            return otherPiece.Cell.HasEqualRowAndCol(this.Cell) && otherPiece.PieceType == this.PieceType;
+        }
     }
 }
