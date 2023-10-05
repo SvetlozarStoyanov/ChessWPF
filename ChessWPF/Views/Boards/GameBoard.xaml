@@ -19,7 +19,6 @@
     <Grid Name="gameBoard" >
         <Grid.RowDefinitions>
             <RowDefinition />
-            <RowDefinition Height="90px" />
             <RowDefinition />
             <RowDefinition />
             <RowDefinition />
@@ -50,21 +49,21 @@
         <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="10" DataContext="{Binding MenuViewModel}">
             
         </View.Menus:Menu>
-        <View.Clocks:GameClock Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[White]}">
-            
-        </View.Clocks:GameClock>
-        <View.Clocks:GameClock Grid.Row="1" Grid.Column="6" Grid.ColumnSpan="3" DataContext="{Binding GameClocks[Black]}">
-
-        </View.Clocks:GameClock>
-        <local:ChessBoard Grid.Row="2" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}">
+        <local:ChessBoard Grid.Row="1" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}">
             
         </local:ChessBoard>
-        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="3" Grid.Column="10" Grid.RowSpan="6" BorderBrush="Black" BorderThickness="4">
-            <TextBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" AcceptsReturn="True" Background="White" FontSize="16" Text="{Binding MoveNotation,UpdateSourceTrigger=PropertyChanged}">
-                
+        <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="1" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClocks[Black]}">
+
+        </View.Clocks:GameClock>
+        <View.Clocks:GameClock VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClocks[White]}">
+            
+        </View.Clocks:GameClock>
+        <Border VerticalAlignment="Stretch" HorizontalAlignment="Stretch" Grid.Row="2" Grid.Column="10" Grid.RowSpan="6" BorderBrush="Black" BorderThickness="4">
+            <TextBox VerticalAlignment="Stretch" HorizontalAlignment="Stretch" TextWrapping="Wrap" 
+                     AcceptsReturn="True" Background="White" FontSize="16" Text="{Binding MoveNotation,UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
         </Border>
-        <Border Grid.Row="11" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1">
+        <Border Grid.Row="10" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1">
             <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="18px" Text="{Binding BoardViewModel.FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
         </Border>
