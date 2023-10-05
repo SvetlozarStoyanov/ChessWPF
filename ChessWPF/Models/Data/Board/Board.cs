@@ -19,16 +19,14 @@ namespace ChessWPF.Models.Data.Board
         private Move undoneMove;
         private Move promotionMove;
         private Stack<Move> moves;
-        private Stack<string> moveLog;
         private Cell[,] cells;
         private List<Cell> backupCells;
         private Dictionary<PieceColor, List<Piece>> pieces;
-        
+
         public Board()
         {
             Cells = new Cell[8, 8];
             Moves = new Stack<Move>();
-            moveLog = new Stack<string>();
             Pieces = new Dictionary<PieceColor, List<Piece>>
             {
                 { PieceColor.White, new List<Piece>() },
@@ -37,7 +35,7 @@ namespace ChessWPF.Models.Data.Board
             CreateCells(Cells);
             BackupCells = new List<Cell>();
             SetupPieces();
-
+            //SetupPiecesAnnotationTest();
             //SetupPiecesDemo();
             //SetupPiecesCheckBishopTest();
             //SetupPiecesCheckRookTest();
@@ -101,11 +99,6 @@ namespace ChessWPF.Models.Data.Board
         {
             get => moves;
             set => moves = value;
-        }
-        public Stack<string> MoveLog
-        {
-            get { return moveLog; }
-            set { moveLog = value; }
         }
 
         public Dictionary<PieceColor, List<Piece>> Pieces
@@ -184,7 +177,10 @@ namespace ChessWPF.Models.Data.Board
                     }
                 }
             }
-
+            if (!move.IsPromotionMove)
+            {
+                move.Annotation = MoveNotationWriter.AnnotateMove(move, pieces);
+            }
             return move;
         }
 
@@ -227,8 +223,8 @@ namespace ChessWPF.Models.Data.Board
             }
             else
             {
-                UpdateFenAnnotation();
                 halfMoveCount = 0;
+                UpdateFenAnnotation();
             }
         }
 
@@ -251,6 +247,7 @@ namespace ChessWPF.Models.Data.Board
             cell.Piece = PieceConstructor.ConstructPieceByType(pieceType, TurnColor, cell);
             promotionMove.CellTwoAfter.Piece = cell.Piece;
             promotionMove.CellTwoAfter.Piece.Cell = cell;
+            promotionMove.Annotation = MoveNotationWriter.AnnotateMove(promotionMove, pieces);
             Cells[cell.Row, cell.Col].Piece = cell.Piece;
             Cells[cell.Row, cell.Col].Piece.Cell = cell;
         }
@@ -273,6 +270,10 @@ namespace ChessWPF.Models.Data.Board
                 {
                     king.Attackers.Add(piece);
                     king.IsInCheck = true;
+                    if (moves.Any())
+                    {
+                        moves.Peek().Annotation += "+";
+                    }
                 }
             }
             var validMovesToStopCheck = new List<Cell>();
@@ -292,7 +293,6 @@ namespace ChessWPF.Models.Data.Board
             }
             else
             {
-
                 foreach (var piece in Pieces[TurnColor])
                 {
                     var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
@@ -321,7 +321,6 @@ namespace ChessWPF.Models.Data.Board
                     piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
                 }
             }
-            var test = 0;
         }
 
         public bool CheckForGameEnding()
@@ -333,6 +332,7 @@ namespace ChessWPF.Models.Data.Board
                 if (king.Attackers.Count > 0)
                 {
                     GameResult = $"{oppositeColor} wins by checkmate!";
+                    moves.Peek().Annotation = moves.Peek().Annotation.Replace("+", "#");
                     return true;
                 }
                 else
@@ -743,6 +743,32 @@ namespace ChessWPF.Models.Data.Board
 
             Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
             Cells[0, 4].Piece = new King(PieceColor.Black, Cells[0, 4]);
+        }
+
+        private void SetupPiecesAnnotationTest()
+        {
+            Cells[4, 5].Piece = new Pawn(PieceColor.Black, Cells[4, 5]);
+
+
+            Cells[3, 4].Piece = new Bishop(PieceColor.White, Cells[3, 4]);
+            Cells[3, 6].Piece = new Bishop(PieceColor.White, Cells[3, 6]);
+            Cells[5, 4].Piece = new Bishop(PieceColor.White, Cells[5, 4]);
+            Cells[5, 6].Piece = new Bishop(PieceColor.White, Cells[5, 6]);
+
+            Cells[2, 4].Piece = new Knight(PieceColor.White, Cells[2, 4]);
+            Cells[2, 6].Piece = new Knight(PieceColor.White, Cells[2, 6]);
+            Cells[6, 4].Piece = new Knight(PieceColor.White, Cells[6, 4]);
+            Cells[6, 6].Piece = new Knight(PieceColor.White, Cells[6, 6]);
+
+            //Cells[7, 5].Piece = new Rook(PieceColor.White, Cells[7, 5]);
+            //Cells[1, 5].Piece = new Rook(PieceColor.White, Cells[1, 5]);
+
+
+            //Cells[4, 1].Piece = new Rook(PieceColor.White, Cells[4, 1]);
+            //Cells[4, 7].Piece = new Rook(PieceColor.White, Cells[4, 7]);
+
+            Cells[7, 0].Piece = new King(PieceColor.White, Cells[7, 0]);
+            Cells[0, 0].Piece = new King(PieceColor.Black, Cells[0, 0]);
         }
 
         private bool CheckForDraw()
