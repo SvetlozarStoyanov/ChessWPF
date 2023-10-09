@@ -149,13 +149,18 @@ namespace ChessWPF.ViewModels
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
             Board.CalculatePossibleMoves();
-            if ((Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King) as King).IsInCheck)
-            {
-                CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = true;
-            }
+            MakeAllPiecesUnselectable();
             if (Board.CheckForGameEnding())
             {
                 GameHasEnded = true;
+            }
+            else
+            {
+                MarkWhichPiecesCanBeSelected();
+            }
+            if ((Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King) as King).IsInCheck)
+            {
+                CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = true;
             }
             FenAnnotation = Board.FenAnnotation;
         }
