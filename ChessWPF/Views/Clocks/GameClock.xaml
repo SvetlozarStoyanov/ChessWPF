@@ -5,17 +5,19 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Clocks"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="100">
+             d:DesignHeight="200" d:DesignWidth="100"
+             Loaded="GameClock_Loaded">
+    
     <Grid Background="White" VerticalAlignment="Top">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" FontSize="30px" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock Grid.Column="0" FontSize="{DynamicResource ClockTimeFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
 
         </TextBlock>
-        <TextBlock Grid.Column="1" FontSize="35px" Text="{Binding Color}" VerticalAlignment="Center" HorizontalAlignment="Center">
+        <TextBlock Grid.Column="1" FontSize="{DynamicResource ClockColorFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Color}">
             
         </TextBlock>
     </Grid>
