@@ -1,4 +1,5 @@
-﻿using ChessWPF.Game;
+﻿using ChessWPF.Commands;
+using ChessWPF.Game;
 using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
@@ -6,19 +7,21 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
 {
     public class GameViewModel : ViewModelBase
     {
-
         private string moveNotation;
+        private bool canCopyMoveNotation;
+
+
         private CellViewModel selectedCell;
         private BoardViewModel boardViewModel;
         private MenuViewModel menuViewModel;
         private List<Cell> legalMoves = new List<Cell>();
         private Dictionary<string, GameClockViewModel> gameClocks;
-
 
         public GameViewModel(BoardViewModel boardViewModel,
             MenuViewModel menuViewModel,
@@ -40,6 +43,20 @@ namespace ChessWPF.ViewModels
             {
                 moveNotation = value;
                 OnPropertyChanged(nameof(MoveNotation));
+            }
+        }
+
+
+        public bool CanCopyMoveNotation
+        {
+            get
+            {
+                return canCopyMoveNotation;
+            }
+            set
+            {
+                canCopyMoveNotation = value;
+                OnPropertyChanged(nameof(CanCopyMoveNotation));
             }
         }
 
@@ -65,6 +82,7 @@ namespace ChessWPF.ViewModels
             set => BoardViewModel.Board = value;
         }
         public CellViewModel SelectedCell { get => selectedCell; set => selectedCell = value; }
+
 
         public List<Cell> LegalMoves
         {
@@ -133,7 +151,7 @@ namespace ChessWPF.ViewModels
             {
                 GameClocks[BoardViewModel.Board.TurnColor.ToString()].StopClock();
                 GameClocks[BoardViewModel.Board.TurnColor.ToString()].AddTime(GameClocks[BoardViewModel.Board.TurnColor.ToString()].TimeElapsed);
-            RemoveFromMoveAnnotation();
+                RemoveFromMoveAnnotation();
             }
 
             if (SelectedCell != null)
@@ -232,9 +250,11 @@ namespace ChessWPF.ViewModels
         {
             var sb = new StringBuilder(MoveNotation);
             sb.Append($"{(move.CellOneBefore.Piece.Color == PieceColor.White ?
-                ($"{Board.Moves.Count(m => m.CellOneBefore.Piece.Color == PieceColor.White) + 1 / 2}.") 
+                ($"{Board.Moves.Count(m => m.CellOneBefore.Piece.Color == PieceColor.White) + 1 / 2}.")
                 : string.Empty)}{move.Annotation} ");
             MoveNotation = sb.ToString();
+            CanCopyMoveNotation = true;
+
         }
 
         private void RemoveFromMoveAnnotation()
@@ -246,6 +266,13 @@ namespace ChessWPF.ViewModels
                 ResetMoveAnnotation();
                 return;
             }
+            if (MoveNotation.Contains('-'))
+            {
+                sb = sb.Remove(lastSpaceIndex, sb.Length - lastSpaceIndex);
+                MoveNotation = sb.Append(" ").ToString();
+            }
+            lastSpaceIndex = MoveNotation.TrimEnd().LastIndexOf(" ");
+
             sb = sb.Remove(lastSpaceIndex, sb.Length - lastSpaceIndex);
             MoveNotation = sb.Append(" ").ToString();
         }
@@ -253,6 +280,8 @@ namespace ChessWPF.ViewModels
         private void ResetMoveAnnotation()
         {
             MoveNotation = string.Empty;
+            CanCopyMoveNotation = false;
+
         }
     }
 }
