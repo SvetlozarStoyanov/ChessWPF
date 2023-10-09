@@ -25,6 +25,8 @@ namespace ChessWPF.Views.Boards
         {
             InitializeComponent();
             //btnGameEnd.IsEnabled = false;
+            fenTextBox.FocusVisualStyle = null;
+
         }
 
         private void btnGameEnd_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -33,6 +35,13 @@ namespace ChessWPF.Views.Boards
             {
                 MessageBox.Show(BackgroundSingleton.Instance.BoardViewModel.GameResult, "Game over!");
             }
+        }
+
+        private void ChessBoard_Loaded(object sender, RoutedEventArgs e)
+        {
+            double controlsize = ((SystemParameters.PrimaryScreenWidth / 10) / 3 * 2) / 5 * 0.7;
+            Application.Current.Resources.Remove("FenFontSize");
+            Application.Current.Resources.Add("FenFontSize", controlsize);
         }
     }
 }
