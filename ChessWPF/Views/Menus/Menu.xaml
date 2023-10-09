@@ -5,7 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Menus"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
+             d:DesignHeight="450" d:DesignWidth="800"
+             Loaded="Menu_Loaded">
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition></RowDefinition>
@@ -13,16 +14,19 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"></ColumnDefinition>
             <ColumnDefinition Width="2.7*"></ColumnDefinition>
-            <ColumnDefinition Width="1*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <StackPanel>
-            <Menu>
-                <MenuItem Header="New Game" Command="{Binding ResetBoardCommand}"></MenuItem>
-                <MenuItem Header="Undo Move" Command="{Binding UndoMoveCommand}"></MenuItem>
+        <StackPanel >
+            <Menu Background="LightGray">
+
+                <MenuItem Header="New Game"  FontSize="{DynamicResource MenuFontSize}" Command="{Binding ResetBoardCommand}"></MenuItem>
+                <MenuItem Header="Undo Move"  FontSize="{DynamicResource MenuFontSize}" Command="{Binding UndoMoveCommand}"></MenuItem>
             </Menu>
         </StackPanel>
-        <TextBlock x:Name="gameStatusTextBlock" Grid.Column="1" Text="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" FontSize="15">
-            
-        </TextBlock>
+        <StackPanel Grid.Column="1" >
+            <Menu Background="LightGray">
+                <MenuItem x:Name="gameStatusMenuItem" IsEnabled="False" Header="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" FontSize="{DynamicResource MenuFontSize}" />
+            </Menu>
+
+        </StackPanel>
     </Grid>
 </UserControl>
