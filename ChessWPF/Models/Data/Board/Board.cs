@@ -333,23 +333,36 @@ namespace ChessWPF.Models.Data.Board
                 {
                     GameResult = $"{oppositeColor} wins by checkmate!";
                     moves.Peek().Annotation = moves.Peek().Annotation.Replace("+", "#");
+                    if (oppositeColor == PieceColor.White)
+                    {
+                        moves.Peek().Annotation += " 1-0";
+                    }
+                    else
+                    {
+                        moves.Peek().Annotation += " 0-1";
+                    }
                     return true;
                 }
                 else
                 {
                     GameResult = "Stalemate!";
+                    moves.Peek().Annotation += " 1/2-1/2";
                     return true;
 
                 }
             }
             if (CheckForDraw())
             {
+                GameResult = "Draw!";
+                moves.Peek().Annotation += " 1/2-1/2";
                 return true;
             }
-            else if (Moves.Count > 9)
+            else if (Moves.Count > 7)
             {
                 if (CheckForThreefoldRepetition())
                 {
+                    GameResult = "Draw! Threefold repetition!";
+                    moves.Peek().Annotation += " 1/2-1/2";
                     return true;
                 }
             }
@@ -820,16 +833,16 @@ namespace ChessWPF.Models.Data.Board
                 && movesAsArray[movesAsArray.Length - 1].IsOppositeMove(movesAsArray[movesAsArray.Length - 3]))
                 && (movesAsArray[movesAsArray.Length - 3].Equals(movesAsArray[movesAsArray.Length - 7])
                 && movesAsArray[movesAsArray.Length - 3].IsOppositeMove(movesAsArray[movesAsArray.Length - 5])
-                && (movesAsArray[movesAsArray.Length - 5].Equals(movesAsArray[movesAsArray.Length - 9])
-                && movesAsArray[movesAsArray.Length - 5].IsOppositeMove(movesAsArray[movesAsArray.Length - 7]))
                 && (movesAsArray[movesAsArray.Length - 2].Equals(movesAsArray[movesAsArray.Length - 6])
                 && movesAsArray[movesAsArray.Length - 2].IsOppositeMove(movesAsArray[movesAsArray.Length - 4]))
                 && (movesAsArray[movesAsArray.Length - 4].Equals(movesAsArray[movesAsArray.Length - 8])
                 && movesAsArray[movesAsArray.Length - 4].IsOppositeMove(movesAsArray[movesAsArray.Length - 6])))
-                && (movesAsArray[movesAsArray.Length - 6].Equals(movesAsArray[movesAsArray.Length - 10])
-                && movesAsArray[movesAsArray.Length - 6].IsOppositeMove(movesAsArray[movesAsArray.Length - 8])))
+                )
+                //&& (movesAsArray[movesAsArray.Length - 5].Equals(movesAsArray[movesAsArray.Length - 9])
+                //&& movesAsArray[movesAsArray.Length - 5].IsOppositeMove(movesAsArray[movesAsArray.Length - 7]))
+                //&& (movesAsArray[movesAsArray.Length - 6].Equals(movesAsArray[movesAsArray.Length - 10])
+                //&& movesAsArray[movesAsArray.Length - 6].IsOppositeMove(movesAsArray[movesAsArray.Length - 8])) 
             {
-                GameResult = "Draw! Threefold repetition!";
                 movesAreRepeated = true;
             }
             return movesAreRepeated;
