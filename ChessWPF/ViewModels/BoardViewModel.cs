@@ -2,6 +2,7 @@
 using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -214,7 +215,6 @@ namespace ChessWPF.ViewModels
             }
         }
 
-
         public void PromotePiece(PieceType pieceType)
         {
             Board.PromotePiece(pieceType);
@@ -251,12 +251,12 @@ namespace ChessWPF.ViewModels
 
         private void MarkWhichPiecesCanBeSelected()
         {
-            Board.Pieces[PieceColor.White] = new List<Piece>();
-            Board.Pieces[PieceColor.Black] = new List<Piece>();
+            //Board.Pieces[PieceColor.White] = new List<Piece>();
+            //Board.Pieces[PieceColor.Black] = new List<Piece>();
             var oppositeColor = Board.TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             for (int row = 0; row < CellViewModels.Length; row++)
             {
-                for (int col = 0; col < CellViewModels.Length; col++)
+                for (int col = 0; col < CellViewModels[row].Length; col++)
                 {
                     CellViewModels[row][col].Cell = Board.Cells[row, col];
                     var currCellViewModel = CellViewModels[row][col];
@@ -271,12 +271,12 @@ namespace ChessWPF.ViewModels
                     }
                     else if (Board.Cells[row, col].Piece.Color == Board.TurnColor)
                     {
-                        Board.Pieces[Board.TurnColor].Add(Board.Cells[row, col].Piece);
+                        //Board.Pieces[Board.TurnColor].Add(Board.Cells[row, col].Piece);
                         currCellViewModel.CanBeSelected = true;
                     }
                     else
                     {
-                        Board.Pieces[oppositeColor].Add(Board.Cells[row, col].Piece);
+                        //Board.Pieces[oppositeColor].Add(Board.Cells[row, col].Piece);
                         currCellViewModel.CanBeSelected = false;
                     }
                     //currCellViewModel.UpdateCellImage();
@@ -285,7 +285,14 @@ namespace ChessWPF.ViewModels
             }
             if (Board.UndoneMove != null)
             {
-                UpdateCellImagesOfMove(Board.UndoneMove);
+                if (Board.UndoneMove.IsPromotionMove)
+                {
+                    UpdateCellViewModelOfUndoneMoveCells(Board.UndoneMove);
+                }
+                else
+                {
+                    UpdateCellViewModelOfUndoneMoveCells(Board.UndoneMove);
+                }
                 Board.UndoneMove = null;
             }
             if (backupCellsToUpdate.Count > 0)
@@ -295,7 +302,69 @@ namespace ChessWPF.ViewModels
             else if (Board.Moves.Count > 0)
             {
                 var lastMove = Board.Moves.Peek();
-                UpdateCellImagesOfMove(lastMove);
+                UpdateCellViewModelOfMoveCells(lastMove);
+                //UpdateCellImagesOfMove(lastMove);
+            }
+        }
+
+        private void UpdateCellViewModelOfMoveCells(Move move)
+        {
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell = Board.Cells[move.CellOneBefore.Row, move.CellOneBefore.Col];
+            //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell.Piece = Board.Pieces[move.CellOneBefore.Piece.Color].First(p => p.Equals(move.CellOneBefore.Piece));
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].Cell = Board.Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col];
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateCellImage();
+            if (move.CellThreeBefore != null)
+            {
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].Cell = Board.Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col];
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].UpdateCellImage();
+            }
+            if (move.CellFourBefore != null)
+            {
+                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].Cell = Board.Cells[move.CellFourBefore.Row, move.CellFourBefore.Col];
+                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].UpdateCellImage();
+            }
+        }
+
+        private void UpdateCellViewModelOfUndoneMoveCells(Move move)
+        {
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell = Board.Cells[move.CellOneBefore.Row, move.CellOneBefore.Col];
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell.Piece = Board.Pieces[move.CellOneBefore.Piece.Color].First(p => p.Equals(move.CellOneBefore.Piece));
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].Cell = Board.Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col];
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateCellImage();
+            if (move.CellThreeBefore != null)
+            {
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].Cell = Board.Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col];
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].Cell.Piece = Board.Pieces[move.CellThreeBefore.Piece.Color].First(p => p.Equals(move.CellThreeBefore.Piece));
+
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].UpdateCellImage();
+            }
+            if (move.CellFourBefore != null)
+            {
+                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].Cell = Board.Cells[move.CellFourBefore.Row, move.CellFourBefore.Col];
+                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].UpdateCellImage();
+            }
+        }
+
+        private void UpdateCellViewModelOfUndonePromotionMoveCells(Move move)
+        {
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell = Board.Cells[move.CellOneBefore.Row, move.CellOneBefore.Col];
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell.Piece = Board.Pieces[move.CellOneBefore.Piece.Color].First(p => p.Equals(move.CellOneBefore.Piece));
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].Cell = Board.Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col];
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateCellImage();
+            if (move.CellThreeBefore != null)
+            {
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].Cell = Board.Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col];
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].Cell.Piece = Board.Pieces[move.CellThreeBefore.Piece.Color].First(p => p.Equals(move.CellThreeBefore.Piece));
+
+                CellViewModels[move.CellThreeBefore.Row][move.CellThreeBefore.Col].UpdateCellImage();
+            }
+            if (move.CellFourBefore != null)
+            {
+                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].Cell = Board.Cells[move.CellFourBefore.Row, move.CellFourBefore.Col];
+                CellViewModels[move.CellFourBefore.Row][move.CellFourBefore.Col].UpdateCellImage();
             }
         }
 
@@ -363,9 +432,15 @@ namespace ChessWPF.ViewModels
             var promotionMove = Board.PromotionMove;
             CellViewModels[promotionMove.CellOneBefore.Row][promotionMove.CellOneBefore.Col].UpdateCellImage();
 
-            foreach (var backupCell in backupCellsToUpdate)
+            foreach (var backupCell in backupCellsToUpdate.Where(c => !c.HasEqualRowAndCol(promotionMove.CellOneBefore)))
             {
                 CellViewModels[backupCell.Row][backupCell.Col].CanBeSelectedForPromotion = false;
+                CellViewModels[backupCell.Row][backupCell.Col].Cell = Board.Cells[backupCell.Row, backupCell.Col];
+                if (Board.Cells[backupCell.Row, backupCell.Col].Piece != null)
+                {
+                    CellViewModels[backupCell.Row][backupCell.Col].Cell.Piece = Board.Pieces[Board.Cells[backupCell.Row,backupCell.Col].Piece.Color]
+                        .First(p => p.Cell.HasEqualRowAndCol(Board.Cells[backupCell.Row, backupCell.Col]));
+                }
                 CellViewModels[backupCell.Row][backupCell.Col].UpdateCellImage();
             }
             backupCellsToUpdate.Clear();
