@@ -146,9 +146,11 @@ namespace ChessWPF.Models.Data.Board
         {
             var selectedPieceType = selectedCell.Piece.PieceType;
             Move move = CreateMove(cell, selectedCell);
-            if (move.CellTwoAfter.Piece.PieceType == PieceType.King && Math.Abs(move.CellOneBefore.Col - move.CellTwoAfter.Col) == 2)
+            if (move.CellTwoAfter.Piece.PieceType == PieceType.King
+                && Math.Abs(move.CellOneBefore.Col - move.CellTwoAfter.Col) == 2)
             {
                 move = MoveRookInCastlingMove(move);
+                Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].Piece = move.CellThreeAfter.Piece;
             }
             else if (selectedPieceType == PieceType.Pawn)
             {
@@ -188,17 +190,40 @@ namespace ChessWPF.Models.Data.Board
         {
             Move move = Moves.Pop();
             Cell cellOneBefore = move.CellOneBefore;
+            if (move.IsPromotionMove)
+            {
+                pieces[move.CellOneBefore.Piece.Color].Add(move.CellOneBefore.Piece);
+                pieces[move.CellOneBefore.Piece.Color].Remove(pieces[move.CellOneBefore.Piece.Color]
+                    .First(p => p.Cell.HasEqualRowAndCol(move.CellTwoBefore)));
+            }
+            else
+            {
+                pieces[cellOneBefore.Piece.Color].First(piece => piece.Equals(move.CellTwoAfter.Piece)).Cell = cellOneBefore;
+            }
             Cells[cellOneBefore.Row, cellOneBefore.Col] = cellOneBefore;
             Cells[cellOneBefore.Row, cellOneBefore.Col].Piece = cellOneBefore.Piece;
-
             Cell cellTwoBefore = move.CellTwoBefore;
             Cells[cellTwoBefore.Row, cellTwoBefore.Col] = cellTwoBefore;
             Cells[cellTwoBefore.Row, cellTwoBefore.Col].Piece = cellTwoBefore.Piece;
+
+            if (move.CellTwoBefore.Piece != null)
+            {
+                pieces[move.CellTwoBefore.Piece.Color].Add(move.CellTwoBefore.Piece);
+                //pieces[cellTwoBefore.Piece.Color].First(piece => piece.Equals(move.CellTwoBefore.Piece)).Cell = cellTwoBefore;
+            }
 
             if (move.CellThreeBefore != null)
             {
                 Cell cellThreeBefore = move.CellThreeBefore;
                 Cells[cellThreeBefore.Row, cellThreeBefore.Col] = cellThreeBefore;
+                if (move.CellThreeBefore.Piece != null && move.CellFourBefore == null)
+                {
+                    pieces[move.CellThreeBefore.Piece.Color].Add(move.CellThreeBefore.Piece);
+                }
+                else
+                {
+                    pieces[move.CellThreeBefore.Piece.Color].First(p => p.Equals(move.CellFourAfter.Piece)).Cell = cellThreeBefore;
+                }
                 Cells[cellThreeBefore.Row, cellThreeBefore.Col].Piece = cellThreeBefore.Piece;
             }
 
@@ -207,7 +232,9 @@ namespace ChessWPF.Models.Data.Board
                 Cell cellFourBefore = move.CellFourBefore;
                 Cells[cellFourBefore.Row, cellFourBefore.Col] = cellFourBefore;
                 Cells[cellFourBefore.Row, cellFourBefore.Col].Piece = cellFourBefore.Piece;
+                //pieces[move.CellFourAfter.Piece.Color].First(piece => piece.Equals(move.CellFourAfter.Piece)).Cell = cellFourBefore;
             }
+
 
 
             UndoneMove = move;
@@ -232,24 +259,68 @@ namespace ChessWPF.Models.Data.Board
         {
             Cells[PromotionMove.CellOneBefore.Row, PromotionMove.CellOneBefore.Col] = PromotionMove.CellOneBefore;
             Cells[PromotionMove.CellOneBefore.Row, PromotionMove.CellOneBefore.Col].Piece = PromotionMove.CellOneBefore.Piece;
-
             Cells[PromotionMove.CellTwoBefore.Row, PromotionMove.CellTwoBefore.Col] = PromotionMove.CellTwoBefore;
             if (PromotionMove.CellTwoBefore.Piece != null)
             {
                 Cells[PromotionMove.CellTwoBefore.Row, PromotionMove.CellTwoBefore.Col].Piece = PromotionMove.CellTwoBefore.Piece;
             }
 
+            pieces[promotionMove.CellOneBefore.Piece.Color].Remove(pieces[promotionMove.CellOneBefore.Piece.Color].First(p => p.Cell.HasEqualRowAndCol(promotionMove.CellTwoBefore)));
+            pieces[promotionMove.CellOneBefore.Piece.Color].Add(promotionMove.CellOneBefore.Piece);
         }
 
         public void PromotePiece(PieceType pieceType)
         {
             var cell = promotionMove.CellTwoAfter;
             cell.Piece = PieceConstructor.ConstructPieceByType(pieceType, TurnColor, cell);
+            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             promotionMove.CellTwoAfter.Piece = cell.Piece;
             promotionMove.CellTwoAfter.Piece.Cell = cell;
             promotionMove.Annotation = MoveNotationWriter.AnnotateMove(promotionMove, pieces);
             Cells[cell.Row, cell.Col].Piece = cell.Piece;
             Cells[cell.Row, cell.Col].Piece.Cell = cell;
+            Cells[promotionMove.CellOneBefore.Row, promotionMove.CellOneBefore.Col].Piece = null;
+            //pieces[cell.Piece.Color].Remove(pieces[cell.Piece.Color].First(p => p.Equals(promotionMove.CellOneBefore.Piece)));
+            pieces[cell.Piece.Color].Remove(pieces[cell.Piece.Color].First(p => p.Cell.HasEqualRowAndCol(cell)));
+            var oppositeColorPieceToRemove = pieces[oppositeColor].FirstOrDefault(p => p.Cell.HasEqualRowAndCol(cell));
+            if (oppositeColorPieceToRemove != null)
+            {
+                pieces[oppositeColor].Remove(oppositeColorPieceToRemove);
+            }
+
+            pieces[cell.Piece.Color].Add(cell.Piece);
+        }
+
+        public void FinishMove(Move move, Cell selectedCell)
+        {
+            if (selectedCell != null)
+            {
+                if (selectedCell.Piece != null && (move.CellTwoBefore.Piece != null || move.CellThreeBefore != null && move.CellFourBefore == null))
+                {
+                    if (move.CellThreeBefore != null && move.CellFourBefore == null)
+                    {
+                        pieces[move.CellThreeBefore.Piece.Color].Remove(pieces[move.CellThreeBefore.Piece.Color].First(p => p.Equals(move.CellThreeBefore.Piece)));
+                    }
+                    else
+                    {
+                        pieces[move.CellTwoBefore.Piece.Color].Remove(pieces[move.CellTwoBefore.Piece.Color].First(p => p.Equals(move.CellTwoBefore.Piece)));
+                    }
+                }
+                selectedCell.Piece = null;
+            }
+            if (move.IsHalfMove())
+            {
+                halfMoveCount++;
+            }
+            else
+            {
+                halfMoveCount = 0;
+            }
+            move.CurrHalfMoveCount = halfMoveCount;
+            this.ReverseTurnColor();
+            Moves.Push(move);
+            UpdateFenAnnotation();
+            Moves.Peek().FenAnnotation = this.fenAnnotation;
         }
 
         public void CalculatePossibleMoves()
@@ -295,6 +366,10 @@ namespace ChessWPF.Models.Data.Board
             {
                 foreach (var piece in Pieces[TurnColor])
                 {
+                    if (piece.PieceType == PieceType.Queen)
+                    {
+
+                    }
                     var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
                     if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
                     {
@@ -369,52 +444,6 @@ namespace ChessWPF.Models.Data.Board
             return false;
         }
 
-        public void FinishMove(Move move, Cell selectedCell)
-        {
-            if (selectedCell != null)
-            {
-                selectedCell.Piece = null;
-            }
-            if (move.IsHalfMove())
-            {
-                halfMoveCount++;
-            }
-            else
-            {
-                halfMoveCount = 0;
-            }
-            move.CurrHalfMoveCount = halfMoveCount;
-            this.ReverseTurnColor();
-            Moves.Push(move);
-            UpdateFenAnnotation();
-            Moves.Peek().FenAnnotation = this.fenAnnotation;
-        }
-
-        public Move CreateMove(Cell cell, Cell selectedCell)
-        {
-            Move move = new Move();
-            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            move.CellOneBefore = new Cell(selectedCell.Row, selectedCell.Col);
-            move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Piece.PieceType, TurnColor, move.CellOneBefore);
-            move.CellTwoBefore = new Cell(cell.Row, cell.Col, cell.Piece);
-            if (cell.Piece != null)
-            {
-                move.CellTwoBefore.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, oppositeColor, move.CellTwoBefore);
-            }
-
-            Cells[cell.Row, cell.Col].Piece = selectedCell.Piece;
-
-            Cells[cell.Row, cell.Col].Piece.Cell = new Cell(cell.Row, cell.Col, Cells[cell.Row, cell.Col].Piece);
-
-            move.CellOneAfter = new Cell(selectedCell.Row, selectedCell.Col, null);
-
-            move.CellTwoAfter = new Cell(cell.Row, cell.Col);
-            move.CellTwoAfter.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, TurnColor, move.CellTwoAfter);
-            selectedCell.Piece = null;
-
-            return move;
-        }
-
         public Move EnPassantMove(Move move)
         {
             var pawn = move.CellTwoAfter.Piece;
@@ -434,50 +463,7 @@ namespace ChessWPF.Models.Data.Board
             return move;
         }
 
-        public Move MoveRookInCastlingMove(Move move)
-        {
-            var king = move.CellTwoAfter.Piece;
-            var colDiff = move.CellOneBefore.Col - move.CellTwoBefore.Col;
-            var cell = new Cell(0, 0);
-            var selectedCell = new Cell(-1, -1);
-            var rookMove = new Move();
-            switch (king.Color)
-            {
-                case PieceColor.White:
-                    if (colDiff < 0)
-                    {
-                        cell = Cells[king.Cell.Row, king.Cell.Col - 1];
-                        selectedCell = Cells[king.Cell.Row, king.Cell.Col + 1];
-                        rookMove = CreateMove(cell, selectedCell);
-                    }
-                    if (colDiff > 0)
-                    {
-                        cell = Cells[king.Cell.Row, king.Cell.Col + 1];
-                        selectedCell = Cells[king.Cell.Row, king.Cell.Col - 2];
-                        rookMove = CreateMove(cell, selectedCell);
-                    }
-                    break;
-                case PieceColor.Black:
-                    if (colDiff < 0)
-                    {
-                        cell = Cells[king.Cell.Row, king.Cell.Col - 1];
-                        selectedCell = Cells[king.Cell.Row, king.Cell.Col + 1];
-                        rookMove = CreateMove(cell, selectedCell);
-                    }
-                    if (colDiff > 0)
-                    {
-                        cell = Cells[king.Cell.Row, king.Cell.Col + 1];
-                        selectedCell = Cells[king.Cell.Row, king.Cell.Col - 2];
-                        rookMove = CreateMove(cell, selectedCell);
-                    }
-                    break;
-            }
-            move.CellThreeBefore = rookMove.CellOneBefore;
-            move.CellThreeAfter = rookMove.CellOneAfter;
-            move.CellFourBefore = rookMove.CellTwoBefore;
-            move.CellFourAfter = rookMove.CellTwoAfter;
-            return move;
-        }
+
 
         public void CreatePromotionMove(Move move, Piece pawn)
         {
@@ -586,34 +572,63 @@ namespace ChessWPF.Models.Data.Board
 
         private void SetupKings()
         {
-            Cells[0, 4].Piece = new King(PieceColor.Black, Cells[0, 4]);
+            var blackKing = new King(PieceColor.Black, Cells[0, 4]);
+            var whiteKing = new King(PieceColor.White, Cells[7, 4]);
+            Cells[0, 4].Piece = blackKing;
+            Cells[7, 4].Piece = whiteKing;
 
-            Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
+            pieces[whiteKing.Color].Add(whiteKing);
+            pieces[blackKing.Color].Add(blackKing);
         }
 
         private void SetupQueens()
         {
-            Cells[0, 3].Piece = new Queen(PieceColor.Black, Cells[0, 3]);
+            var blackQueen = new Queen(PieceColor.Black, Cells[0, 3]);
+            var whiteQueen = new Queen(PieceColor.White, Cells[7, 3]);
+            Cells[0, 3].Piece = blackQueen;
+            Cells[7, 3].Piece = whiteQueen;
 
-            Cells[7, 3].Piece = new Queen(PieceColor.White, Cells[7, 3]);
+            pieces[whiteQueen.Color].Add(whiteQueen);
+            pieces[blackQueen.Color].Add(blackQueen);
         }
 
         private void SetupBishops()
         {
-            Cells[0, 2].Piece = new Bishop(PieceColor.Black, Cells[0, 2]);
-            Cells[0, 5].Piece = new Bishop(PieceColor.Black, Cells[0, 5]);
+            var blackBishopOne = new Bishop(PieceColor.Black, Cells[0, 2]);
+            var blackBishopTwo = new Bishop(PieceColor.Black, Cells[0, 5]);
 
-            Cells[7, 2].Piece = new Bishop(PieceColor.White, Cells[7, 2]);
-            Cells[7, 5].Piece = new Bishop(PieceColor.White, Cells[7, 5]);
+            var whiteBishopOne = new Bishop(PieceColor.White, Cells[7, 2]);
+            var whiteBishopTwo = new Bishop(PieceColor.White, Cells[7, 5]);
+
+            Cells[0, 2].Piece = blackBishopOne;
+            Cells[0, 5].Piece = blackBishopTwo;
+
+            Cells[7, 2].Piece = whiteBishopOne;
+            Cells[7, 5].Piece = whiteBishopTwo;
+
+            pieces[blackBishopOne.Color].Add(blackBishopOne);
+            pieces[blackBishopTwo.Color].Add(blackBishopTwo);
+            pieces[whiteBishopTwo.Color].Add(whiteBishopTwo);
+            pieces[whiteBishopOne.Color].Add(whiteBishopOne);
         }
 
         private void SetupKnights()
         {
-            Cells[0, 1].Piece = new Knight(PieceColor.Black, Cells[0, 1]);
-            Cells[0, 6].Piece = new Knight(PieceColor.Black, Cells[0, 6]);
+            var blackKnightOne = new Knight(PieceColor.Black, Cells[0, 1]);
+            var blackKnightTwo = new Knight(PieceColor.Black, Cells[0, 6]);
 
-            Cells[7, 1].Piece = new Knight(PieceColor.White, Cells[7, 1]);
-            Cells[7, 6].Piece = new Knight(PieceColor.White, Cells[7, 6]);
+            var whiteKnightOne = new Knight(PieceColor.White, Cells[7, 1]);
+            var whiteKnightTwo = new Knight(PieceColor.White, Cells[7, 6]);
+
+            Cells[0, 1].Piece = blackKnightOne;
+            Cells[0, 6].Piece = blackKnightTwo;
+            Cells[7, 1].Piece = whiteKnightOne;
+            Cells[7, 6].Piece = whiteKnightTwo;
+
+            pieces[blackKnightOne.Color].Add(blackKnightOne);
+            pieces[blackKnightTwo.Color].Add(blackKnightTwo);
+            pieces[whiteKnightOne.Color].Add(whiteKnightOne);
+            pieces[whiteKnightTwo.Color].Add(whiteKnightTwo);
         }
 
         private void SetupPawns()
@@ -621,22 +636,37 @@ namespace ChessWPF.Models.Data.Board
             int row = 1;
             for (int col = 0; col < Cells.GetLength(0); col++)
             {
-                Cells[row, col].Piece = new Pawn(PieceColor.Black, Cells[row, col]);
+                var pawn = new Pawn(PieceColor.Black, Cells[row, col]);
+                Cells[row, col].Piece = pawn;
+                Pieces[PieceColor.Black].Add(pawn);
             }
             row = 6;
             for (int col = 0; col < Cells.GetLength(0); col++)
             {
-                Cells[row, col].Piece = new Pawn(PieceColor.White, Cells[row, col]);
+                var pawn = new Pawn(PieceColor.White, Cells[row, col]);
+                Cells[row, col].Piece = pawn;
+                Pieces[PieceColor.White].Add(pawn);
             }
         }
 
         private void SetupRooks()
         {
-            Cells[0, 0].Piece = new Rook(PieceColor.Black, Cells[0, 0]);
-            Cells[0, 7].Piece = new Rook(PieceColor.Black, Cells[0, 7]);
+            var blackRookOne = new Rook(PieceColor.Black, Cells[0, 0]);
+            var blackRookTwo = new Rook(PieceColor.Black, Cells[0, 7]);
 
-            Cells[7, 7].Piece = new Rook(PieceColor.White, Cells[7, 7]);
-            Cells[7, 0].Piece = new Rook(PieceColor.White, Cells[7, 0]);
+            var whiteRookOne = new Rook(PieceColor.White, Cells[7, 0]);
+            var whiteRookTwo = new Rook(PieceColor.White, Cells[7, 7]);
+
+            Cells[0, 0].Piece = blackRookOne;
+            Cells[0, 7].Piece = blackRookTwo;
+
+            Cells[7, 0].Piece = whiteRookOne;
+            Cells[7, 7].Piece = whiteRookTwo;
+
+            pieces[blackRookOne.Color].Add(blackRookOne);
+            pieces[blackRookTwo.Color].Add(blackRookTwo);
+            pieces[whiteRookOne.Color].Add(whiteRookOne);
+            pieces[whiteRookTwo.Color].Add(whiteRookTwo);
         }
 
         private void SetupPiecesDemo()
@@ -784,6 +814,76 @@ namespace ChessWPF.Models.Data.Board
             Cells[0, 0].Piece = new King(PieceColor.Black, Cells[0, 0]);
         }
 
+        private Move CreateMove(Cell cell, Cell selectedCell)
+        {
+            Move move = new Move();
+            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+            move.CellOneBefore = new Cell(selectedCell.Row, selectedCell.Col);
+            move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Piece.PieceType, TurnColor, move.CellOneBefore);
+            move.CellTwoBefore = new Cell(cell.Row, cell.Col, cell.Piece);
+            if (cell.Piece != null)
+            {
+                move.CellTwoBefore.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, oppositeColor, move.CellTwoBefore);
+            }
+
+            Cells[cell.Row, cell.Col].Piece = selectedCell.Piece;
+
+            Cells[cell.Row, cell.Col].Piece.Cell = new Cell(cell.Row, cell.Col, Cells[cell.Row, cell.Col].Piece);
+
+            move.CellOneAfter = new Cell(selectedCell.Row, selectedCell.Col, null);
+
+            move.CellTwoAfter = new Cell(cell.Row, cell.Col);
+            move.CellTwoAfter.Piece = PieceConstructor.ConstructPieceByType(cell.Piece.PieceType, TurnColor, move.CellTwoAfter);
+            //selectedCell.Piece = null;
+
+            return move;
+        }
+
+        private Move MoveRookInCastlingMove(Move move)
+        {
+            var king = move.CellTwoAfter.Piece;
+            var colDiff = move.CellOneBefore.Col - move.CellTwoBefore.Col;
+            var cell = new Cell(0, 0);
+            var selectedCell = new Cell(-1, -1);
+            var rookMove = new Move();
+            switch (king.Color)
+            {
+                case PieceColor.White:
+                    if (colDiff < 0)
+                    {
+                        cell = Cells[king.Cell.Row, king.Cell.Col - 1];
+                        selectedCell = Cells[king.Cell.Row, king.Cell.Col + 1];
+                        rookMove = CreateMove(cell, selectedCell);
+                    }
+                    if (colDiff > 0)
+                    {
+                        cell = Cells[king.Cell.Row, king.Cell.Col + 1];
+                        selectedCell = Cells[king.Cell.Row, king.Cell.Col - 2];
+                        rookMove = CreateMove(cell, selectedCell);
+                    }
+                    break;
+                case PieceColor.Black:
+                    if (colDiff < 0)
+                    {
+                        cell = Cells[king.Cell.Row, king.Cell.Col - 1];
+                        selectedCell = Cells[king.Cell.Row, king.Cell.Col + 1];
+                        rookMove = CreateMove(cell, selectedCell);
+                    }
+                    if (colDiff > 0)
+                    {
+                        cell = Cells[king.Cell.Row, king.Cell.Col + 1];
+                        selectedCell = Cells[king.Cell.Row, king.Cell.Col - 2];
+                        rookMove = CreateMove(cell, selectedCell);
+                    }
+                    break;
+            }
+            move.CellThreeBefore = rookMove.CellOneBefore;
+            move.CellThreeAfter = rookMove.CellOneAfter;
+            move.CellFourBefore = rookMove.CellTwoBefore;
+            move.CellFourAfter = rookMove.CellTwoAfter;
+            return move;
+        }
+
         private bool CheckForDraw()
         {
             var isGameDrawn = false;
@@ -838,10 +938,10 @@ namespace ChessWPF.Models.Data.Board
                 && (movesAsArray[movesAsArray.Length - 4].Equals(movesAsArray[movesAsArray.Length - 8])
                 && movesAsArray[movesAsArray.Length - 4].IsOppositeMove(movesAsArray[movesAsArray.Length - 6])))
                 )
-                //&& (movesAsArray[movesAsArray.Length - 5].Equals(movesAsArray[movesAsArray.Length - 9])
-                //&& movesAsArray[movesAsArray.Length - 5].IsOppositeMove(movesAsArray[movesAsArray.Length - 7]))
-                //&& (movesAsArray[movesAsArray.Length - 6].Equals(movesAsArray[movesAsArray.Length - 10])
-                //&& movesAsArray[movesAsArray.Length - 6].IsOppositeMove(movesAsArray[movesAsArray.Length - 8])) 
+            //&& (movesAsArray[movesAsArray.Length - 5].Equals(movesAsArray[movesAsArray.Length - 9])
+            //&& movesAsArray[movesAsArray.Length - 5].IsOppositeMove(movesAsArray[movesAsArray.Length - 7]))
+            //&& (movesAsArray[movesAsArray.Length - 6].Equals(movesAsArray[movesAsArray.Length - 10])
+            //&& movesAsArray[movesAsArray.Length - 6].IsOppositeMove(movesAsArray[movesAsArray.Length - 8])) 
             {
                 movesAreRepeated = true;
             }
