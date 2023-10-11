@@ -10,6 +10,7 @@ namespace ChessWPF.Game
 {
     public static class MoveNotationWriter
     {
+
         public static string AnnotateMove(Move move, Dictionary<PieceColor, List<Piece>> pieces)
         {
             var sb = new StringBuilder();
@@ -100,11 +101,11 @@ namespace ChessWPF.Game
 
         private static string AnnotateCastling(Move move)
         {
-            if (move.CellOneBefore.ColumnDifference(move.CellTwoBefore) == 2)
+            if (move.CellOneBefore.ColumnDifference(move.CellThreeBefore) == 3)
             {
                 return "O-O";
             }
-            if (move.CellOneBefore.ColumnDifference(move.CellTwoBefore) == 3)
+            if (move.CellOneBefore.ColumnDifference(move.CellThreeBefore) == 4)
             {
                 return "O-O-O";
             }
