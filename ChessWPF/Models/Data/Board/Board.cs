@@ -8,7 +8,7 @@ using System.Linq;
 
 namespace ChessWPF.Models.Data.Board
 {
-    public class Board
+    public sealed class Board
     {
         private string gameResult;
         private string fenAnnotation;
@@ -281,7 +281,8 @@ namespace ChessWPF.Models.Data.Board
             Cells[cell.Row, cell.Col].Piece.Cell = cell;
             Cells[promotionMove.CellOneBefore.Row, promotionMove.CellOneBefore.Col].Piece = null;
             //pieces[cell.Piece.Color].Remove(pieces[cell.Piece.Color].First(p => p.Equals(promotionMove.CellOneBefore.Piece)));
-            pieces[cell.Piece.Color].Remove(pieces[cell.Piece.Color].First(p => p.Cell.HasEqualRowAndCol(cell)));
+            //pieces[TurnColor].Remove(pieces[TurnColor].First(p => p.Cell.HasEqualRowAndCol(promotionMove.CellOneBefore)));
+            pieces[TurnColor].Remove(pieces[TurnColor].First(p => p.Cell.HasEqualRowAndCol(cell)));
             var oppositeColorPieceToRemove = pieces[oppositeColor].FirstOrDefault(p => p.Cell.HasEqualRowAndCol(cell));
             if (oppositeColorPieceToRemove != null)
             {
@@ -341,11 +342,11 @@ namespace ChessWPF.Models.Data.Board
                 {
                     king.Attackers.Add(piece);
                     king.IsInCheck = true;
-                    if (moves.Any())
-                    {
-                        moves.Peek().Annotation += "+";
-                    }
                 }
+            }
+            if (king.IsInCheck)
+            {
+                moves.Peek().Annotation += "+";
             }
             var validMovesToStopCheck = new List<Cell>();
             if (king.Attackers.Count == 1)
@@ -529,7 +530,7 @@ namespace ChessWPF.Models.Data.Board
 
         public void RestoreBackupCells()
         {
-            foreach (var cell in BackupCells.Where(c => c.Row != 7 && c.Row != 0))
+            foreach (var cell in BackupCells.Where(c => c.Row != 7 && c.Row != 0 && !c.HasEqualRowAndCol(promotionMove.CellOneBefore)))
             {
                 Cells[cell.Row, cell.Col] = cell;
                 if (cell.Piece != null)
@@ -543,6 +544,7 @@ namespace ChessWPF.Models.Data.Board
             }
             BackupCells.Clear();
         }
+
         public void RestoreAllBackupCells()
         {
             foreach (var cell in BackupCells)
