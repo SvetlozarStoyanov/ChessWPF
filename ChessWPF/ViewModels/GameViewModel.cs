@@ -1,13 +1,10 @@
-﻿using ChessWPF.Commands;
-using ChessWPF.Game;
-using ChessWPF.Models.Data.Board;
+﻿using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
-using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using System.Windows.Input;
+using System.Text.RegularExpressions;
 
 namespace ChessWPF.ViewModels
 {
@@ -15,7 +12,8 @@ namespace ChessWPF.ViewModels
     {
         private string moveNotation;
         private bool canCopyMoveNotation;
-
+        private const string regexPattern = @"[0-9]{1}[\/]{0,1}[0-9]{0,1}-[0-9]{1}[\/]{0,1}[0-9]{0,1}";
+        private Regex regex = new Regex(regexPattern);
 
         private CellViewModel selectedCell;
         private BoardViewModel boardViewModel;
@@ -266,7 +264,9 @@ namespace ChessWPF.ViewModels
                 ResetMoveAnnotation();
                 return;
             }
-            if (MoveNotation.Contains('-'))
+            var temp = MoveNotation.Substring(lastSpaceIndex, sb.Length - lastSpaceIndex);
+            var match = regex.Match(temp);
+            if (match.Success)
             {
                 sb = sb.Remove(lastSpaceIndex, sb.Length - lastSpaceIndex);
                 MoveNotation = sb.Append(" ").ToString();
