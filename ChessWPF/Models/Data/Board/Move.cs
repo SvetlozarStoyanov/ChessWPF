@@ -2,7 +2,7 @@
 
 namespace ChessWPF.Models.Data.Board
 {
-    public class Move
+    public sealed class Move
     {
         public int CurrHalfMoveCount { get; set; }
         public string FenAnnotation { get; set; } = null!;

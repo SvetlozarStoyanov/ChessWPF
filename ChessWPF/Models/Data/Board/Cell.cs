@@ -1,11 +1,9 @@
 ﻿using ChessWPF.Models.Data.Pieces;
 using System;
-using System.Collections.Generic;
-using System.Windows.Documents;
 
 namespace ChessWPF.Models.Data.Board
 {
-    public class Cell
+    public sealed class Cell
     {
         public Cell(int row, int col)
         {

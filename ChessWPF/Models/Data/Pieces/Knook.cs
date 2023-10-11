@@ -3,7 +3,7 @@ using ChessWPF.Models.Data.Pieces.Enums;
 
 namespace ChessWPF.Models.Data.Pieces
 {
-    public class Knook : Piece
+    public sealed class Knook : Piece
     {
         public Knook(PieceColor color) : base(PieceType.Knook, color)
         {

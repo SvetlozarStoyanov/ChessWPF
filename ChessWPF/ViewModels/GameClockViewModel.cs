@@ -5,7 +5,7 @@ using System.ComponentModel;
 
 namespace ChessWPF.ViewModels
 {
-    public class GameClockViewModel : ViewModelBase, INotifyPropertyChanged
+    public sealed class GameClockViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private string timeLeft;
         private GameClock gameClock;

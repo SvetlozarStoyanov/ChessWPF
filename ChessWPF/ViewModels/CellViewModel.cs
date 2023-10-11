@@ -7,7 +7,7 @@ using System.Windows.Media.Imaging;
 
 namespace ChessWPF.ViewModels
 {
-    public class CellViewModel : ViewModelBase
+    public sealed class CellViewModel : ViewModelBase
     {
         private Cell cell;
 

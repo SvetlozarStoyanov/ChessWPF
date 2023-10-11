@@ -5,7 +5,7 @@ using System.Collections.Generic;
 
 namespace ChessWPF.Models.Data.Pieces
 {
-    public class King : Piece
+    public sealed class King : Piece
     {
         public King(PieceColor color) : base(PieceType.King, color)
         {

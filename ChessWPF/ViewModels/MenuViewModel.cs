@@ -4,7 +4,7 @@ using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
 {
-    public class MenuViewModel : ViewModelBase, INotifyPropertyChanged
+    public sealed class MenuViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private string gameStatus;
 

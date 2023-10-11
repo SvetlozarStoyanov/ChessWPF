@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace ChessWPF.ViewModels
 {
-    public class MainViewModel : ViewModelBase
+    public sealed class MainViewModel : ViewModelBase
     {
         public GameViewModel GameViewModel { get; set; }
         public MainViewModel()

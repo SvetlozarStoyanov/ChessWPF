@@ -7,7 +7,7 @@ using System.Windows.Threading;
 
 namespace ChessWPF.Models.Data.Clocks
 {
-    public class GameClock
+    public sealed class GameClock
     {
         private int increment;
         private PieceColor color;
