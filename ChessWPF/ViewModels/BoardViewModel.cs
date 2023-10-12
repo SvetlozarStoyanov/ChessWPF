@@ -172,7 +172,7 @@ namespace ChessWPF.ViewModels
             if (Board.PromotionMove != null)
             {
                 MakeAllPiecesUnselectable();
-                MarkCellsForPromotion();
+                UpdateCellViewModelsForPromotion();
             }
             if (Board.BackupCells.Count == 0)
             {
@@ -357,11 +357,13 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        private void MarkCellsForPromotion()
+        private void UpdateCellViewModelsForPromotion()
         {
             CellViewModels[Board.PromotionMove.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].UpdateCellImage();
+            CellViewModels[Board.PromotionMove.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].CanBeSelected = false;
             foreach (var cell in Board.BackupCells)
             {
+                CellViewModels[cell.Row][cell.Col].Cell = Board.Cells[cell.Row, cell.Col];
                 CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = true;
                 cellViewModels[cell.Row][cell.Col].IsInCheck = false;
                 CellViewModels[cell.Row][cell.Col].UpdateCellImage();
