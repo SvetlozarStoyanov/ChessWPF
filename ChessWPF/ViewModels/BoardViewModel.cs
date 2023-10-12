@@ -420,11 +420,18 @@ namespace ChessWPF.ViewModels
             backupCellsToUpdate.Clear();
         }
 
-        private void UpdateCellViewModelsOfBackupCellsOnUndoMove(Move move)
+        private void MakeCellViewModelsOfLastMoveUnselectable()
         {
-            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].CanBeSelectedForPromotion = false;
-            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell.Piece = null;
-            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
+            var lastMove = Board.Moves.Peek();
+            CellViewModels[lastMove.CellOneBefore.Row][lastMove.CellOneBefore.Col].CanBeSelected = false;
+            if (lastMove.CellThreeBefore != null)
+            {
+                CellViewModels[lastMove.CellThreeBefore.Row][lastMove.CellThreeBefore.Col].CanBeSelected = false;
+            }
+            if (lastMove.CellFourBefore != null)
+        {
+                CellViewModels[lastMove.CellFourBefore.Row][lastMove.CellFourBefore.Col].CanBeSelected = false;
+            }
         }
     }
 }
