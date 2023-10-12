@@ -114,6 +114,8 @@ namespace ChessWPF.ViewModels
 
             MarkWhichPiecesCanBeSelected();
             Board.CalculatePossibleMoves();
+            MarkWhichPiecesCanBeSelected();
+            UpdateCellViewModels();
             Board.UpdateFenAnnotation();
             FenAnnotation = Board.FenAnnotation;
         }
@@ -146,7 +148,7 @@ namespace ChessWPF.ViewModels
                 MakeAllPiecesUnselectable();
                 return;
             }
-            MarkWhichPiecesCanBeSelected();
+            UpdateCellViewModels();
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
             Board.CalculatePossibleMoves();
@@ -158,10 +160,7 @@ namespace ChessWPF.ViewModels
             else
             {
                 MarkWhichPiecesCanBeSelected();
-            }
-            if ((Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King) as King).IsInCheck)
-            {
-                CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = true;
+                //UpdateCellViewModels();
             }
             FenAnnotation = Board.FenAnnotation;
         }
@@ -189,6 +188,7 @@ namespace ChessWPF.ViewModels
                 RestoreAllBackupCells();
                 Board.UndoPromotionMove();
                 MarkWhichPiecesCanBeSelected();
+                UpdateCellViewModels();
                 Board.CalculatePossibleMoves();
                 var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
 
@@ -273,7 +273,10 @@ namespace ChessWPF.ViewModels
                     currCellViewModel.IsInCheck = false;
                 }
             }
+        }
 
+        private void UpdateCellViewModels()
+        {
             if (Board.UndoneMove != null)
             {
                 if (Board.UndoneMove.IsPromotionMove)
