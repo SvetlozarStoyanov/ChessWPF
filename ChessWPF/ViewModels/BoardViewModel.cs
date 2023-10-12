@@ -22,7 +22,6 @@ namespace ChessWPF.ViewModels
             MatchCellViewModelsToCells();
             Board.TurnColor = PieceColor.White;
             backupCellsToUpdate = new List<Cell>();
-            EndGameCommand = new EndGameCommand(this);
         }
 
         public Board Board
@@ -91,7 +90,6 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public ICommand EndGameCommand { get; set; }
 
         public void MatchCellViewModelsToCells()
         {
