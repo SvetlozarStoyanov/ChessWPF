@@ -345,11 +345,14 @@ namespace ChessWPF.ViewModels
 
         private void MakeAllPiecesUnselectable()
         {
-            foreach (var cellViewModelRow in CellViewModels)
+            var oppositeColor = Board.TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+            foreach (var pieceCell in Board.Pieces[Board.TurnColor].Select(p => p.Cell))
             {
-                foreach (var cellViewModel in cellViewModelRow)
+                CellViewModels[pieceCell.Row][pieceCell.Col].CanBeSelected = false;
+            }
+            foreach (var pieceCell in Board.Pieces[oppositeColor].Select(p => p.Cell))
                 {
-                    cellViewModel.CanBeSelected = false;
+                CellViewModels[pieceCell.Row][pieceCell.Col].CanBeSelected = false;
                 }
             }
         }
