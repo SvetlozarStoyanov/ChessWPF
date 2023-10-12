@@ -112,7 +112,6 @@ namespace ChessWPF.ViewModels
         {
             Board.TurnColor = PieceColor.White;
 
-            MarkWhichPiecesCanBeSelected();
             Board.CalculatePossibleMoves();
             MarkWhichPiecesCanBeSelected();
             UpdateCellViewModels();
@@ -135,8 +134,6 @@ namespace ChessWPF.ViewModels
             StartGame();
         }
 
-
-
         public void PrepareForNextTurn()
         {
             if (GameHasEnded)
@@ -152,19 +149,27 @@ namespace ChessWPF.ViewModels
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
             Board.CalculatePossibleMoves();
-            MakeAllPiecesUnselectable();
+            if ((Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King) as King).IsInCheck)
+            {
+                CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = true;
+            }
+            if (Board.Moves.Any())
+            {
+                MakeCellViewModelsOfLastMoveUnselectable();
+            }
             if (Board.CheckForGameEnding())
             {
-                GameHasEnded = true;
+                MakeAllPiecesUnselectable();
+                GameResult = Board.GameResult;
             }
             else
             {
                 MarkWhichPiecesCanBeSelected();
                 //UpdateCellViewModels();
             }
+            
             FenAnnotation = Board.FenAnnotation;
         }
-
 
         public void MovePiece(Cell cell, Cell selectedCell)
         {
@@ -204,7 +209,10 @@ namespace ChessWPF.ViewModels
             {
                 if (move.IsPromotionMove)
                 {
-                    UpdateCellViewModelsOfBackupCellsOnUndoMove(move);
+                    //UpdateCellViewModelsOfBackupCellsOnUndoMove(move);
+                    //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].CanBeSelectedForPromotion = false;
+                    //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell.Piece = null;
+                    //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
                 }
                 Board.UndoMove();
                 if (!Board.Moves.Any())
@@ -250,6 +258,7 @@ namespace ChessWPF.ViewModels
                     cellViewModels[row][col].Cell = board.Cells[row, col];
                     cellViewModels[row][col].UpdateCellImage();
                     cellViewModels[row][col].CanBeMovedTo = false;
+                    cellViewModels[row][col].CanBeSelected = false;
                     cellViewModels[row][col].IsSelected = false;
                     cellViewModels[row][col].IsInCheck = false;
                 }
@@ -279,14 +288,7 @@ namespace ChessWPF.ViewModels
         {
             if (Board.UndoneMove != null)
             {
-                if (Board.UndoneMove.IsPromotionMove)
-                {
-                    UpdateCellViewModelOfUndoneMoveCells(Board.UndoneMove);
-                }
-                else
-                {
-                    UpdateCellViewModelOfUndoneMoveCells(Board.UndoneMove);
-                }
+                UpdateCellViewModelOfUndoneMoveCells(Board.UndoneMove);
                 Board.UndoneMove = null;
             }
             if (backupCellsToUpdate.Count > 0)
@@ -351,9 +353,8 @@ namespace ChessWPF.ViewModels
                 CellViewModels[pieceCell.Row][pieceCell.Col].CanBeSelected = false;
             }
             foreach (var pieceCell in Board.Pieces[oppositeColor].Select(p => p.Cell))
-                {
+            {
                 CellViewModels[pieceCell.Row][pieceCell.Col].CanBeSelected = false;
-                }
             }
         }
 
@@ -429,7 +430,7 @@ namespace ChessWPF.ViewModels
                 CellViewModels[lastMove.CellThreeBefore.Row][lastMove.CellThreeBefore.Col].CanBeSelected = false;
             }
             if (lastMove.CellFourBefore != null)
-        {
+            {
                 CellViewModels[lastMove.CellFourBefore.Row][lastMove.CellFourBefore.Col].CanBeSelected = false;
             }
         }
