@@ -16,7 +16,7 @@ namespace ChessWPF.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            return boardViewModel.Board.Moves.Count > 0;
+            return boardViewModel.Board.Moves.Count > 0 || boardViewModel.PromotionIsUnderway;
         }
 
         public override void Execute(object? parameter)
@@ -26,7 +26,7 @@ namespace ChessWPF.Commands
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(BoardViewModel.GameHasStarted))
+            if (e.PropertyName == nameof(BoardViewModel.GameHasStarted) || e.PropertyName == nameof(BoardViewModel.PromotionIsUnderway))
             {
                 OnCanExecuteChanged();
             }
