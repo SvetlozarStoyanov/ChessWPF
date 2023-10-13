@@ -13,7 +13,7 @@ namespace ChessWPF.Game
         public static List<ValueTuple<Piece, Piece>> FindDefenders(King king, PieceColor turnColor)
         {
             var board = BackgroundSingleton.Instance.Board;
-            var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.Black;
+            var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             var defenders = new List<ValueTuple<Piece, Piece>>();
             if (board.Pieces[oppositeColor].Any(p => p.PieceType == PieceType.Rook || p.PieceType == PieceType.Queen || p.PieceType == PieceType.Knook))
             {
