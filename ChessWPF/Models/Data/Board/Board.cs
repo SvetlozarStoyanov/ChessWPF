@@ -34,6 +34,7 @@ namespace ChessWPF.Models.Data.Board
             };
             CreateCells(Cells);
             BackupCells = new List<Cell>();
+
             SetupPieces();
             //SetupPiecesAnnotationTest();
             //SetupPiecesDemo();
@@ -44,8 +45,9 @@ namespace ChessWPF.Models.Data.Board
             //SetupPiecesStalemateTest();
             //SetupPiecesKnightCheckTest();
             //SetupPiecesKnookTest();
-        }
 
+            AddPiecesFromSetup();
+        }
 
         public string GameResult
         {
@@ -342,7 +344,7 @@ namespace ChessWPF.Models.Data.Board
                     king.IsInCheck = true;
                 }
             }
-            if (king.IsInCheck)
+            if (king.IsInCheck && moves.Any())
             {
                 moves.Peek().Annotation += "+";
             }
@@ -484,63 +486,32 @@ namespace ChessWPF.Models.Data.Board
 
         private void SetupKings()
         {
-            var blackKing = new King(PieceColor.Black, Cells[0, 4]);
-            var whiteKing = new King(PieceColor.White, Cells[7, 4]);
-            Cells[0, 4].Piece = blackKing;
-            Cells[7, 4].Piece = whiteKing;
-
-            pieces[whiteKing.Color].Add(whiteKing);
-            pieces[blackKing.Color].Add(blackKing);
+            Cells[0, 4].Piece = new King(PieceColor.Black, Cells[0, 4]);
+            Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
         }
 
         private void SetupQueens()
         {
-            var blackQueen = new Queen(PieceColor.Black, Cells[0, 3]);
-            var whiteQueen = new Queen(PieceColor.White, Cells[7, 3]);
-            Cells[0, 3].Piece = blackQueen;
-            Cells[7, 3].Piece = whiteQueen;
-
-            pieces[whiteQueen.Color].Add(whiteQueen);
-            pieces[blackQueen.Color].Add(blackQueen);
+            Cells[0, 3].Piece = new Queen(PieceColor.Black, Cells[0, 3]);
+            Cells[7, 3].Piece = new Queen(PieceColor.White, Cells[7, 3]);
         }
 
         private void SetupBishops()
         {
-            var blackBishopOne = new Bishop(PieceColor.Black, Cells[0, 2]);
-            var blackBishopTwo = new Bishop(PieceColor.Black, Cells[0, 5]);
+            Cells[0, 2].Piece = new Bishop(PieceColor.Black, Cells[0, 2]);
+            Cells[0, 5].Piece = new Bishop(PieceColor.Black, Cells[0, 5]);
 
-            var whiteBishopOne = new Bishop(PieceColor.White, Cells[7, 2]);
-            var whiteBishopTwo = new Bishop(PieceColor.White, Cells[7, 5]);
-
-            Cells[0, 2].Piece = blackBishopOne;
-            Cells[0, 5].Piece = blackBishopTwo;
-
-            Cells[7, 2].Piece = whiteBishopOne;
-            Cells[7, 5].Piece = whiteBishopTwo;
-
-            pieces[blackBishopOne.Color].Add(blackBishopOne);
-            pieces[blackBishopTwo.Color].Add(blackBishopTwo);
-            pieces[whiteBishopTwo.Color].Add(whiteBishopTwo);
-            pieces[whiteBishopOne.Color].Add(whiteBishopOne);
+            Cells[7, 2].Piece = new Bishop(PieceColor.White, Cells[7, 2]);
+            Cells[7, 5].Piece = new Bishop(PieceColor.White, Cells[7, 5]);
         }
 
         private void SetupKnights()
         {
-            var blackKnightOne = new Knight(PieceColor.Black, Cells[0, 1]);
-            var blackKnightTwo = new Knight(PieceColor.Black, Cells[0, 6]);
+            Cells[0, 1].Piece = new Knight(PieceColor.Black, Cells[0, 1]);
+            Cells[0, 6].Piece = new Knight(PieceColor.Black, Cells[0, 6]);
 
-            var whiteKnightOne = new Knight(PieceColor.White, Cells[7, 1]);
-            var whiteKnightTwo = new Knight(PieceColor.White, Cells[7, 6]);
-
-            Cells[0, 1].Piece = blackKnightOne;
-            Cells[0, 6].Piece = blackKnightTwo;
-            Cells[7, 1].Piece = whiteKnightOne;
-            Cells[7, 6].Piece = whiteKnightTwo;
-
-            pieces[blackKnightOne.Color].Add(blackKnightOne);
-            pieces[blackKnightTwo.Color].Add(blackKnightTwo);
-            pieces[whiteKnightOne.Color].Add(whiteKnightOne);
-            pieces[whiteKnightTwo.Color].Add(whiteKnightTwo);
+            Cells[7, 1].Piece = new Knight(PieceColor.White, Cells[7, 1]);
+            Cells[7, 6].Piece = new Knight(PieceColor.White, Cells[7, 6]);
         }
 
         private void SetupPawns()
@@ -548,37 +519,22 @@ namespace ChessWPF.Models.Data.Board
             int row = 1;
             for (int col = 0; col < Cells.GetLength(0); col++)
             {
-                var pawn = new Pawn(PieceColor.Black, Cells[row, col]);
-                Cells[row, col].Piece = pawn;
-                Pieces[PieceColor.Black].Add(pawn);
+                Cells[row, col].Piece = new Pawn(PieceColor.Black, Cells[row, col]);
             }
             row = 6;
             for (int col = 0; col < Cells.GetLength(0); col++)
             {
-                var pawn = new Pawn(PieceColor.White, Cells[row, col]);
-                Cells[row, col].Piece = pawn;
-                Pieces[PieceColor.White].Add(pawn);
+                Cells[row, col].Piece = new Pawn(PieceColor.White, Cells[row, col]);
             }
         }
 
         private void SetupRooks()
         {
-            var blackRookOne = new Rook(PieceColor.Black, Cells[0, 0]);
-            var blackRookTwo = new Rook(PieceColor.Black, Cells[0, 7]);
+            Cells[0, 0].Piece = new Rook(PieceColor.Black, Cells[0, 0]);
+            Cells[0, 7].Piece = new Rook(PieceColor.Black, Cells[0, 7]);
 
-            var whiteRookOne = new Rook(PieceColor.White, Cells[7, 0]);
-            var whiteRookTwo = new Rook(PieceColor.White, Cells[7, 7]);
-
-            Cells[0, 0].Piece = blackRookOne;
-            Cells[0, 7].Piece = blackRookTwo;
-
-            Cells[7, 0].Piece = whiteRookOne;
-            Cells[7, 7].Piece = whiteRookTwo;
-
-            pieces[blackRookOne.Color].Add(blackRookOne);
-            pieces[blackRookTwo.Color].Add(blackRookTwo);
-            pieces[whiteRookOne.Color].Add(whiteRookOne);
-            pieces[whiteRookTwo.Color].Add(whiteRookTwo);
+            Cells[7, 0].Piece = new Rook(PieceColor.White, Cells[7, 0]);
+            Cells[7, 7].Piece = new Rook(PieceColor.White, Cells[7, 7]);
         }
 
         private void SetupPiecesDemo()
@@ -673,6 +629,7 @@ namespace ChessWPF.Models.Data.Board
             Cells[3, 5].Piece = new Pawn(PieceColor.Black, Cells[3, 5]);
 
             Cells[7, 4].Piece = new King(PieceColor.White, Cells[7, 4]);
+
             Cells[2, 5].Piece = new King(PieceColor.Black, Cells[2, 5]);
         }
 
@@ -724,6 +681,16 @@ namespace ChessWPF.Models.Data.Board
 
             Cells[7, 0].Piece = new King(PieceColor.White, Cells[7, 0]);
             Cells[0, 0].Piece = new King(PieceColor.Black, Cells[0, 0]);
+        }
+
+        private void AddPiecesFromSetup()
+        {
+            var flattenedCells = Cells.Cast<Cell>().ToArray();
+            foreach (var cell in flattenedCells.Where(c => c.Piece != null))
+            {
+                pieces[cell.Piece.Color].Add(cell.Piece);
+            }
+
         }
 
         private Move CreateMove(Cell cell, Cell selectedCell)
