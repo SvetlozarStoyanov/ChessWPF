@@ -21,7 +21,6 @@ namespace ChessWPF.Commands
 
         public override void Execute(object? parameter)
         {
-            cellViewModel.IsSelected = true;
             BackgroundSingleton.Instance.SelectCell(cellViewModel);
         }
 
