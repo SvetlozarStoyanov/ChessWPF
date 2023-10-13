@@ -114,7 +114,14 @@ namespace ChessWPF.ViewModels
 
         public void SelectCell(CellViewModel cellViewModel)
         {
+            if (SelectedCell != null && cellViewModel.Cell.HasEqualRowAndCol(SelectedCell.Cell))
+            {
+                BoardViewModel.CellViewModels[SelectedCell.Cell.Row][SelectedCell.Cell.Col].IsSelected = false;
+                UnselectSelectedCell();
+                return;
+            }
             SelectedCell = BoardViewModel.CellViewModels[cellViewModel.Cell.Row][cellViewModel.Cell.Col];
+            SelectedCell.IsSelected = true;
             GetLegalMoves(SelectedCell.Cell.Piece);
         }
 
@@ -272,6 +279,12 @@ namespace ChessWPF.ViewModels
                 MoveNotation = sb.Append(" ").ToString();
             }
             lastSpaceIndex = MoveNotation.TrimEnd().LastIndexOf(" ");
+
+            if (lastSpaceIndex == -1)
+            {
+                ResetMoveAnnotation();
+                return;
+            }
 
             sb = sb.Remove(lastSpaceIndex, sb.Length - lastSpaceIndex);
             MoveNotation = sb.Append(" ").ToString();
