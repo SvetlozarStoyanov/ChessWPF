@@ -11,6 +11,7 @@ namespace ChessWPF.ViewModels
 {
     public sealed class BoardViewModel : ViewModelBase
     {
+        private bool promotionIsUnderway;
         private Board board;
         private CellViewModel[][] cellViewModels;
         private List<Cell> backupCellsToUpdate;
@@ -22,6 +23,17 @@ namespace ChessWPF.ViewModels
             MatchCellViewModelsToCells();
             Board.TurnColor = PieceColor.White;
             backupCellsToUpdate = new List<Cell>();
+            PromotionIsUnderway = false;
+        }
+
+        public bool PromotionIsUnderway
+        {
+            get { return promotionIsUnderway; }
+            set
+            {
+                promotionIsUnderway = value;
+                OnPropertyChanged(nameof(PromotionIsUnderway));
+            }
         }
 
         public Board Board
@@ -90,7 +102,6 @@ namespace ChessWPF.ViewModels
             }
         }
 
-
         public void MatchCellViewModelsToCells()
         {
             for (int row = 0; row < board.Cells.GetLength(0); row++)
@@ -106,6 +117,7 @@ namespace ChessWPF.ViewModels
                 }
             }
         }
+
         public void StartGame()
         {
             Board.TurnColor = PieceColor.White;
@@ -123,6 +135,7 @@ namespace ChessWPF.ViewModels
             {
                 RestoreAllBackupCells();
                 UpdateCellViewModelsOfBackupCells();
+                PromotionIsUnderway = false;
             }
             Board = new Board();
             GameHasStarted = false;
@@ -138,11 +151,12 @@ namespace ChessWPF.ViewModels
             {
                 return;
             }
-            if (Board.BackupCells.Count > 0)
-            {
-                MakeAllPiecesUnselectable();
-                return;
-            }
+            //if (Board.BackupCells.Count > 0)
+            //{
+            //    MakeAllPiecesUnselectable();
+            //    return;
+            //}
+            
             UpdateCellViewModels();
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
@@ -165,7 +179,7 @@ namespace ChessWPF.ViewModels
                 MarkWhichPiecesCanBeSelected();
                 //UpdateCellViewModels();
             }
-            
+
             FenAnnotation = Board.FenAnnotation;
         }
 
@@ -176,6 +190,7 @@ namespace ChessWPF.ViewModels
             {
                 MakeAllPiecesUnselectable();
                 UpdateCellViewModelsForPromotion();
+                PromotionIsUnderway = true;
             }
             if (Board.BackupCells.Count == 0)
             {
@@ -185,7 +200,6 @@ namespace ChessWPF.ViewModels
 
         public void UndoMove()
         {
-            var move = Board.Moves.Peek();
             if (Board.PromotionMove != null)
             {
                 RestoreAllBackupCells();
@@ -202,16 +216,10 @@ namespace ChessWPF.ViewModels
                 UpdateCellViewModelsOfBackupCells();
 
                 Board.PromotionMove = null;
+                PromotionIsUnderway = false;
             }
             else
             {
-                if (move.IsPromotionMove)
-                {
-                    //UpdateCellViewModelsOfBackupCellsOnUndoMove(move);
-                    //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].CanBeSelectedForPromotion = false;
-                    //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].Cell.Piece = null;
-                    //CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateCellImage();
-                }
                 Board.UndoMove();
                 if (!Board.Moves.Any())
                 {
@@ -237,6 +245,7 @@ namespace ChessWPF.ViewModels
             CellViewModels[Board.PromotionMove.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].Cell.Piece = null;
             FinishMove(Board.PromotionMove, null);
             Board.PromotionMove = null;
+            PromotionIsUnderway = false;
         }
 
         public void EndGameByTimeOut(PieceColor color)
@@ -297,6 +306,11 @@ namespace ChessWPF.ViewModels
             {
                 var lastMove = Board.Moves.Peek();
                 UpdateCellViewModelOfMoveCells(lastMove);
+            }
+            var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
+            if (king.IsInCheck)
+            {
+                CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = true;
             }
         }
 
