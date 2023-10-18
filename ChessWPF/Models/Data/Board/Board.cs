@@ -33,6 +33,7 @@ namespace ChessWPF.Models.Data.Board
             };
             CreateCells(Cells);
             BackupCells = new List<Cell>();
+            TurnColor = PieceColor.White;
 
             SetupPieces();
             //SetupPiecesAnnotationTest();
