@@ -16,7 +16,6 @@ namespace ChessWPF.Models.Data.Board
         private bool gameHasEnded;
         private int halfMoveCount;
         private PieceColor turnColor;
-        private Move undoneMove;
         private Move promotionMove;
         private Stack<Move> moves;
         private Cell[,] cells;
@@ -75,12 +74,6 @@ namespace ChessWPF.Models.Data.Board
         public int HalfMoveCount
         {
             get { return halfMoveCount; }
-        }
-
-        public Move UndoneMove
-        {
-            get => undoneMove;
-            set => undoneMove = value;
         }
 
         public Move PromotionMove
@@ -237,7 +230,7 @@ namespace ChessWPF.Models.Data.Board
                 //pieces[move.CellFourAfter.Piece.Color].First(piece => piece.Equals(move.CellFourAfter.Piece)).Cell = cellFourBefore;
             }
 
-            UndoneMove = move;
+
             ReverseTurnColor();
             if (moves.Any())
             {
