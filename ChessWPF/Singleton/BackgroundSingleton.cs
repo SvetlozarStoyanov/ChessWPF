@@ -1,9 +1,6 @@
 ﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.ViewModels;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace ChessWPF.Singleton
 {
@@ -39,16 +36,9 @@ namespace ChessWPF.Singleton
             set { gameViewModel = value; }
         }
 
-        public BoardViewModel BoardViewModel
-        {
-            get { return GameViewModel.BoardViewModel; }
-            set { GameViewModel.BoardViewModel = value; }
-        }
-
         public Board Board 
         { 
             get => GameViewModel.BoardViewModel.Board;
-            set => GameViewModel.BoardViewModel.Board = value;
         }
 
         public CellViewModel SelectedCell
@@ -91,6 +81,5 @@ namespace ChessWPF.Singleton
         {
             GameViewModel.EndGameByTimeOut(color);
         }
-
     }
 }
