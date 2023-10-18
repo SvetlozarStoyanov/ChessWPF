@@ -62,52 +62,55 @@ namespace ChessWPF.Models.Data.Board
 
         public bool GameHasStarted
         {
-            get { return gameHasStarted; }
+            get => gameHasStarted;
             set { gameHasStarted = value; }
         }
 
         public bool GameHasEnded
         {
-            get { return gameHasEnded; }
+            get => gameHasEnded;
             set { gameHasEnded = value; }
         }
 
         public int HalfMoveCount
         {
-            get { return halfMoveCount; }
+            get => halfMoveCount;
         }
 
         public Move PromotionMove
         {
             get => promotionMove;
-            set => promotionMove = value;
+            private set => promotionMove = value;
         }
+
         public Cell[,] Cells
         {
             get => cells;
             set => cells = value;
         }
+
         public PieceColor TurnColor
         {
             get => turnColor;
-            set => turnColor = value;
+            private set => turnColor = value;
         }
+
         public Stack<Move> Moves
         {
             get => moves;
-            set => moves = value;
-        }
-
-        public Dictionary<PieceColor, List<Piece>> Pieces
-        {
-            get => pieces;
-            set => pieces = value;
+            private set => moves = value;
         }
 
         public List<Cell> BackupCells
         {
             get => backupCells;
             set => backupCells = value;
+        }
+
+        public Dictionary<PieceColor, List<Piece>> Pieces
+        {
+            get => pieces;
+            set => pieces = value;
         }
 
         public void CreateCells(Cell[,] cells)
