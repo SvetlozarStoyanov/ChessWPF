@@ -18,7 +18,7 @@ namespace ChessWPF.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            if (boardViewModel.GameHasStarted || boardViewModel.GameHasEnded)
+            if (boardViewModel.GameHasStarted || boardViewModel.GameHasEnded || boardViewModel.PromotionIsUnderway)
             {
                 return true;
             }
@@ -32,7 +32,7 @@ namespace ChessWPF.Commands
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(BoardViewModel.GameHasStarted) || e.PropertyName == nameof(BoardViewModel.GameHasEnded))
+            if (e.PropertyName == nameof(BoardViewModel.GameHasStarted) || e.PropertyName == nameof(BoardViewModel.GameHasEnded) || e.PropertyName == nameof(BoardViewModel.PromotionIsUnderway))
             {
                 OnCanExecuteChanged();
             }
