@@ -44,7 +44,6 @@ namespace ChessWPF.ViewModels
             }
         }
 
-
         public bool CanCopyMoveNotation
         {
             get
@@ -77,7 +76,6 @@ namespace ChessWPF.ViewModels
         public Board Board
         {
             get => BoardViewModel.Board;
-            set => BoardViewModel.Board = value;
         }
         public CellViewModel SelectedCell { get => selectedCell; set => selectedCell = value; }
 
@@ -259,7 +257,6 @@ namespace ChessWPF.ViewModels
                 : string.Empty)}{move.Annotation} ");
             MoveNotation = sb.ToString();
             CanCopyMoveNotation = true;
-
         }
 
         private void RemoveFromMoveAnnotation()
@@ -285,7 +282,6 @@ namespace ChessWPF.ViewModels
                 ResetMoveAnnotation();
                 return;
             }
-
             sb = sb.Remove(lastSpaceIndex, sb.Length - lastSpaceIndex);
             MoveNotation = sb.Append(" ").ToString();
         }
@@ -294,7 +290,6 @@ namespace ChessWPF.ViewModels
         {
             MoveNotation = string.Empty;
             CanCopyMoveNotation = false;
-
         }
     }
 }
