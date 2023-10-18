@@ -332,6 +332,7 @@ namespace ChessWPF.Models.Data.Board
             var king = (King)Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
             var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             king.Attackers.Clear();
+            king.IsInCheck = false;
             king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor);
             (Cells[king.Cell.Row, king.Cell.Col].Piece as King).IsInCheck = false;
 
@@ -340,6 +341,7 @@ namespace ChessWPF.Models.Data.Board
                 var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
                 piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                 piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+                Cells[piece.Cell.Row, piece.Cell.Col].Piece = piece;
                 var checkedKingCell = piece.LegalMoves.FirstOrDefault(c => c.Piece != null && c.Piece.PieceType == PieceType.King);
                 if (checkedKingCell != null)
                 {
@@ -394,6 +396,7 @@ namespace ChessWPF.Models.Data.Board
                     }
                     piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                     piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+                    Cells[piece.Cell.Row, piece.Cell.Col].Piece = piece;
                 }
             }
         }
@@ -608,6 +611,7 @@ namespace ChessWPF.Models.Data.Board
 
 
             Cells[2, 7].Piece = new King(PieceColor.White, Cells[2, 7]);
+            //Cells[0, 0].Piece = new King(PieceColor.White, Cells[0, 0]);
             Cells[1, 5].Piece = new King(PieceColor.Black, Cells[1, 5]);
         }
 
@@ -701,6 +705,7 @@ namespace ChessWPF.Models.Data.Board
             Move move = new Move();
             var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             move.CellOneBefore = new Cell(selectedCell.Row, selectedCell.Col);
+
             move.CellOneBefore.Piece = PieceConstructor.ConstructPieceByType(selectedCell.Piece.PieceType, TurnColor, move.CellOneBefore);
             move.CellTwoBefore = new Cell(cell.Row, cell.Col, cell.Piece);
             if (cell.Piece != null)
