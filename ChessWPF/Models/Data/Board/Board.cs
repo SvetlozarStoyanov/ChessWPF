@@ -264,6 +264,8 @@ namespace ChessWPF.Models.Data.Board
 
             pieces[promotionMove.CellOneBefore.Piece.Color].Remove(pieces[promotionMove.CellOneBefore.Piece.Color].First(p => p.Cell.HasEqualRowAndCol(promotionMove.CellTwoBefore)));
             pieces[promotionMove.CellOneBefore.Piece.Color].Add(promotionMove.CellOneBefore.Piece);
+
+            PromotionMove = null;
         }
 
         public void PromotePiece(PieceType pieceType)
@@ -313,6 +315,10 @@ namespace ChessWPF.Models.Data.Board
             else
             {
                 halfMoveCount = 0;
+            }
+            if (PromotionMove != null)
+            {
+                PromotionMove = null;
             }
             move.CurrHalfMoveCount = halfMoveCount;
             this.ReverseTurnColor();
