@@ -1,4 +1,5 @@
-﻿using ChessWPF.Models.Data.Board;
+﻿using ChessWPF.HelperClasses.CustomEventArgs;
+using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using System.Collections.Generic;
@@ -23,20 +24,19 @@ namespace ChessWPF.ViewModels
 
         public GameViewModel(BoardViewModel boardViewModel,
             MenuViewModel menuViewModel,
-            Dictionary<string, GameClockViewModel> gameClocks
+            Dictionary<string, GameClockViewModel> gameClockViewModels
             )
         {
             BoardViewModel = boardViewModel;
             MenuViewModel = menuViewModel;
-            GameClocks = gameClocks;
+            SetupGameClockViewModels(gameClockViewModels);
         }
+
+      
 
         public string MoveNotation
         {
-            get
-            {
-                return moveNotation;
-            }
+            get=> moveNotation;
             set
             {
                 moveNotation = value;
@@ -46,10 +46,7 @@ namespace ChessWPF.ViewModels
 
         public bool CanCopyMoveNotation
         {
-            get
-            {
-                return canCopyMoveNotation;
-            }
+            get => canCopyMoveNotation;
             set
             {
                 canCopyMoveNotation = value;
@@ -59,42 +56,43 @@ namespace ChessWPF.ViewModels
 
         public BoardViewModel BoardViewModel
         {
-            get { return boardViewModel; }
-            set
-            {
-                boardViewModel = value;
-                //OnPropertyChanged(nameof(BoardViewModel));
-            }
+            get => boardViewModel;
+            set => boardViewModel = value;
         }
 
         public MenuViewModel MenuViewModel
         {
-            get { return menuViewModel; }
-            set { menuViewModel = value; }
+            get => menuViewModel;
+            set => menuViewModel = value;
         }
 
         public Board Board
         {
             get => BoardViewModel.Board;
         }
-        public CellViewModel SelectedCell { get => selectedCell; set => selectedCell = value; }
+
+        public CellViewModel SelectedCell 
+        { 
+            get => selectedCell;
+            set => selectedCell = value;
+        }
 
 
         public List<Cell> LegalMoves
         {
-            get { return legalMoves; }
+            get => legalMoves;
         }
 
-        public Dictionary<string, GameClockViewModel> GameClocks
+        public Dictionary<string, GameClockViewModel> GameClockViewModels
         {
-            get { return gameClocks; }
-            private set { gameClocks = value; }
+            get => gameClocks;
+            private set => gameClocks = value;
         }
 
         public void StartGame()
         {
             BoardViewModel.StartGame();
-            GameClocks[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
             UpdateClocks();
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
         }
@@ -107,7 +105,7 @@ namespace ChessWPF.ViewModels
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
             ResetClocks();
             UpdateClocks();
-            GameClocks[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
         }
 
         public void SelectCell(CellViewModel cellViewModel)
@@ -123,13 +121,12 @@ namespace ChessWPF.ViewModels
             GetLegalMoves(SelectedCell.Cell.Piece);
         }
 
-
         public void MovePiece(Cell cell)
         {
-            GameClocks[BoardViewModel.Board.TurnColor.ToString()].StopClock();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
             ClearLegalMoves();
 
-            GameClocks[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
             BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             if (Board.Moves.Any() && !Board.Moves.Peek().IsPromotionMove && Board.PromotionMove == null)
             {
@@ -144,7 +141,7 @@ namespace ChessWPF.ViewModels
             else
             {
                 MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-                GameClocks[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
             }
         }
 
@@ -152,8 +149,8 @@ namespace ChessWPF.ViewModels
         {
             if (BoardViewModel.Board.PromotionMove == null)
             {
-                GameClocks[BoardViewModel.Board.TurnColor.ToString()].StopClock();
-                GameClocks[BoardViewModel.Board.TurnColor.ToString()].AddTime(GameClocks[BoardViewModel.Board.TurnColor.ToString()].TimeElapsed);
+                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
+                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddTime(GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].TimeElapsed);
                 RemoveFromMoveAnnotation();
             }
 
@@ -163,12 +160,12 @@ namespace ChessWPF.ViewModels
             }
             BoardViewModel.UndoMove();
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-            GameClocks[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
         }
 
         public void SelectPieceForPromotion(CellViewModel cellViewModel)
         {
-            GameClocks[BoardViewModel.Board.TurnColor.ToString()].StopClock();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
             BoardViewModel.PromotePiece(cellViewModel.Cell.Piece.PieceType);
             AddToMoveAnnotation(Board.Moves.Peek());
             if (BoardViewModel.GameResult != null)
@@ -179,7 +176,7 @@ namespace ChessWPF.ViewModels
             else
             {
                 MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-                GameClocks[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
             }
         }
 
@@ -290,6 +287,21 @@ namespace ChessWPF.ViewModels
         {
             MoveNotation = string.Empty;
             CanCopyMoveNotation = false;
+        }
+
+        private void OnTimeOut(object source, TimeOutEventArgs args)
+        {
+            var oppositeColor = args.Color == PieceColor.White ? PieceColor.Black : PieceColor.White;
+            EndGameByTimeOut(oppositeColor);
+        }
+
+        private void SetupGameClockViewModels(Dictionary<string, GameClockViewModel> gameClockViewModels)
+        {
+            GameClockViewModels = gameClockViewModels;
+            foreach (var clock in gameClockViewModels)
+            {
+                clock.Value.TimeOut += OnTimeOut;
+            }
         }
     }
 }
