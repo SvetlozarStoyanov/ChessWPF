@@ -54,10 +54,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="HelperClasses\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <Compile Update="Views\Clocks\GameClock.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
