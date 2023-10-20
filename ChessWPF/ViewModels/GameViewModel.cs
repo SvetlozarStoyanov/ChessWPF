@@ -32,11 +32,9 @@ namespace ChessWPF.ViewModels
             SetupGameClockViewModels(gameClockViewModels);
         }
 
-      
-
         public string MoveNotation
         {
-            get=> moveNotation;
+            get => moveNotation;
             set
             {
                 moveNotation = value;
@@ -71,8 +69,8 @@ namespace ChessWPF.ViewModels
             get => BoardViewModel.Board;
         }
 
-        public CellViewModel SelectedCell 
-        { 
+        public CellViewModel SelectedCell
+        {
             get => selectedCell;
             set => selectedCell = value;
         }
@@ -124,12 +122,13 @@ namespace ChessWPF.ViewModels
         public void MovePiece(Cell cell)
         {
             GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
+
+            BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             ClearLegalMoves();
 
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
-            BoardViewModel.MovePiece(cell, SelectedCell.Cell);
             if (Board.Moves.Any() && !Board.Moves.Peek().IsPromotionMove && Board.PromotionMove == null)
             {
+                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
                 AddToMoveAnnotation(Board.Moves.Peek());
             }
             SelectedCell = null;
@@ -166,6 +165,7 @@ namespace ChessWPF.ViewModels
         public void SelectPieceForPromotion(CellViewModel cellViewModel)
         {
             GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
+            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
             BoardViewModel.PromotePiece(cellViewModel.Cell.Piece.PieceType);
             AddToMoveAnnotation(Board.Moves.Peek());
             if (BoardViewModel.GameResult != null)
