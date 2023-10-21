@@ -29,32 +29,14 @@ namespace ChessWPF.ViewModels
             //IsSelected = false;
             //CanBeSelectedForPromotion = false;
         }
+        public delegate void SelectEventHandler(object sender, SelectCellViewModelEventArgs args);
+        public event SelectEventHandler Select;
 
-        public Cell Cell
-        {
-            get
-            {
-                return cell;
-            }
-            set
-            {
-                cell = value;
-                OnPropertyChanged(nameof(Cell));
-            }
-        }
+        public delegate void MovedToEventHandler(object sender, MovedToCellViewModelEventArgs args);
+        public event MovedToEventHandler MovedTo;
 
-        public BitmapImage CellImage
-        {
-            get
-            {
-                return cellImage;
-            }
-            set
-            {
-                cellImage = value;
-                OnPropertyChanged(nameof(CellImage));
-            }
-        }
+        public delegate void PromotedToEventHandler(object sender, PromotePieceEventArgs args);
+        public event PromotedToEventHandler PromotedTo;
 
         public bool CanBeMovedTo
         {
@@ -131,6 +113,27 @@ namespace ChessWPF.ViewModels
         public ICommand PromoteCommand { get; set; }
         public ICommand CheckCommand { get; set; }
 
+        public void SelectCell()
+        {
+            OnSelect();
+        }
+
+        public void MoveToCell()
+        {
+            OnMovedTo();
+        }
+
+        public void OnPromotedTo()
+        {
+            PromotedTo(this, new PromotePieceEventArgs(this.Cell.Piece.PieceType));
+        }
+
+        private void OnMovedTo()
+        {
+            this.CanBeMovedTo = false;
+            MovedTo(this, new MovedToCellViewModelEventArgs(this.Cell));
+        }
+
         public void UpdateCellImage()
         {
             if (cell.Piece != null)
@@ -145,12 +148,17 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        //public void UpdateCanBeSelected()
-        //{
-        //    if (cell.Piece != null)
-        //        CanBeSelected = true;
-        //    else
-        //        CanBeSelected = false;
-        //}
+        private void OnSelect()
+        {
+            if (!this.IsSelected)
+            {
+                IsSelected = true;
+            }
+            else
+            {
+                IsSelected = false;
+            }
+            Select(this, new SelectCellViewModelEventArgs(this));
+        }
     }
 }
