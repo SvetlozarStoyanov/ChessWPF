@@ -27,7 +27,7 @@ namespace ChessWPF.ViewModels
             Dictionary<string, GameClockViewModel> gameClockViewModels
             )
         {
-            BoardViewModel = boardViewModel;
+            SetupBoardViewModel(boardViewModel);
             MenuViewModel = menuViewModel;
             SetupGameClockViewModels(gameClockViewModels);
         }
@@ -71,8 +71,7 @@ namespace ChessWPF.ViewModels
 
         public CellViewModel? SelectedCell
         {
-            get => selectedCell;
-            set => selectedCell = value;
+            get => BoardViewModel.SelectedCell;
         }
 
 
