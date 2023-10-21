@@ -16,8 +16,7 @@ namespace ChessWPF.ViewModels
         private Board board;
         private CellViewModel[][] cellViewModels;
         private List<Cell> backupCellsToUpdate;
-        private Move promotionMove;
-        private Move undoneMove;
+        private List<Cell> legalMoves;
 
         public BoardViewModel()
         {
@@ -108,7 +107,7 @@ namespace ChessWPF.ViewModels
         public List<Cell> LegalMoves
         {
             get => legalMoves;
-            set => legalMoves = value;
+            private set => legalMoves = value;
         }
 
         public void MatchCellViewModelsToCells()
