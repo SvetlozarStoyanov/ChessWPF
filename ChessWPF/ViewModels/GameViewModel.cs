@@ -196,7 +196,7 @@ namespace ChessWPF.ViewModels
         }
 
         private void SetupBoardViewModel(BoardViewModel boardViewModel)
-            {
+        {
             BoardViewModel = boardViewModel;
             BoardViewModel.MovedPiece += MovePiece;
             BoardViewModel.UndoLastMove += UndoMove;
