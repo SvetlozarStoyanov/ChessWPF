@@ -271,6 +271,75 @@ namespace ChessWPF.ViewModels
             MakeAllPiecesUnselectable();
         }
 
+        public List<Cell> GetLegalMoves(Piece piece)
+        {
+            var newLegalMoves = new List<Cell>(piece.LegalMoves);
+            return newLegalMoves;
+        }
+
+        public void ShowLegalMoves()
+        {
+            foreach (var cell in legalMoves)
+            {
+                CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
+            }
+        }
+
+        public void ClearLegalMoves()
+        {
+            foreach (var cell in LegalMoves)
+            {
+                CellViewModels[cell.Row][cell.Col].CanBeMovedTo = false;
+            }
+            LegalMoves.Clear();
+        }
+
+        public void UnselectSelectedCell()
+        {
+            SelectedCell = null;
+        }
+
+        public void OnMoveUndo()
+        {
+            UndoLastMove(this, EventArgs.Empty);
+        }
+
+        public void OnReset()
+        {
+            Reset(this, EventArgs.Empty);
+        }
+
+        public void OnPromote(PieceType pieceType)
+        {
+            Promote(this, new PromotePieceEventArgs(pieceType));
+        }
+
+        private void OnCellViewModelSelect(object sender, SelectCellViewModelEventArgs args)
+        {
+            ClearLegalMoves();
+            var cellViewModel = args.CellViewModel;
+            if (SelectedCell == null || !SelectedCell.Cell.HasEqualRowAndCol(args.CellViewModel.Cell))
+            {
+                SelectedCell = cellViewModel;
+                LegalMoves = GetLegalMoves(cellViewModel.Cell.Piece);
+                ShowLegalMoves();
+            }
+            else
+            {
+                UnselectSelectedCell();
+            }
+        }
+
+        private void OnCellViewModelMovedTo(object sender, MovedToCellViewModelEventArgs args)
+        {
+            MovedPiece(sender, args);
+        }
+
+        private void OnCellViewModelPromotedTo(object sender, PromotePieceEventArgs args)
+        {
+            OnPromote(args.PieceType);
+        }
+
         private void ResetMatchCellViewModelsToCells()
         {
             for (int row = 0; row < board.Cells.GetLength(0); row++)
