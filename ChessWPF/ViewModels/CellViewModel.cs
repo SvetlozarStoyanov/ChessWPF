@@ -9,17 +9,14 @@ namespace ChessWPF.ViewModels
 {
     public sealed class CellViewModel : ViewModelBase
     {
-        private Cell cell;
 
-        private BitmapImage cellImage;
         private bool canBeMovedTo;
         private bool isSelected;
         private bool canBeSelected;
         private bool canBeSelectedForPromotion;
         private bool isInCheck;
-
-
-
+        private Cell cell = null!;
+        private BitmapImage? cellImage;
 
         public CellViewModel(Cell cell)
         {
@@ -71,7 +68,7 @@ namespace ChessWPF.ViewModels
 
         public bool IsSelected
         {
-            get { return isSelected; }
+            get => isSelected;
             set
             {
                 isSelected = value;
@@ -81,7 +78,7 @@ namespace ChessWPF.ViewModels
 
         public bool CanBeSelected
         {
-            get { return canBeSelected; }
+            get => canBeSelected;
             set
             {
                 canBeSelected = value;
@@ -91,7 +88,7 @@ namespace ChessWPF.ViewModels
 
         public bool CanBeSelectedForPromotion
         {
-            get { return canBeSelectedForPromotion; }
+            get => canBeSelectedForPromotion;
             set
             {
                 canBeSelectedForPromotion = value;
@@ -101,11 +98,31 @@ namespace ChessWPF.ViewModels
 
         public bool IsInCheck
         {
-            get { return isInCheck; }
+            get => isInCheck;
             set
             {
                 isInCheck = value;
                 OnPropertyChanged(nameof(IsInCheck));
+            }
+        }
+
+        public BitmapImage? CellImage
+        {
+            get => cellImage;
+            set
+            {
+                cellImage = value;
+                OnPropertyChanged(nameof(CellImage));
+            }
+        }
+
+        public Cell Cell
+        {
+            get => cell;
+            set
+            {
+                cell = value;
+                OnPropertyChanged(nameof(Cell));
             }
         }
 
