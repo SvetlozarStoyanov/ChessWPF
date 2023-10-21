@@ -111,7 +111,6 @@ namespace ChessWPF.ViewModels
         private void OnClockTick(object source, ClockTickEventArgs args)
         {
             UpdateClock(args.TimeLeft);
-            
         }
 
         private void OnTimeOut(object source, TimeOutEventArgs args)

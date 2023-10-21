@@ -20,7 +20,7 @@ namespace ChessWPF.ViewModels
             };
             GameViewModel = new GameViewModel(boardViewModel, menuViewModel, gameClocks);
             BackgroundSingleton.Instance.GameViewModel = GameViewModel;
-            BackgroundSingleton.Instance.StartGame();
+            GameViewModel.StartGame();
         }
     }
 }
