@@ -1,4 +1,5 @@
 ﻿using ChessWPF.Commands;
+using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Board;
 using System;
 using System.Windows.Input;
