@@ -1,3 +1,4 @@
+﻿using ChessWPF.HelperClasses.CustomEventArgs;
 ﻿using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
@@ -9,6 +10,9 @@ namespace ChessWPF.ViewModels
     public sealed class BoardViewModel : ViewModelBase
     {
         private bool promotionIsUnderway;
+        private Move promotionMove;
+        private Move undoneMove;
+        private CellViewModel? selectedCell;
         private Board board;
         private CellViewModel[][] cellViewModels;
         private List<Cell> backupCellsToUpdate;
@@ -32,26 +36,6 @@ namespace ChessWPF.ViewModels
             {
                 promotionIsUnderway = value;
                 OnPropertyChanged(nameof(PromotionIsUnderway));
-            }
-        }
-
-        public Board Board
-        {
-            get => board;
-            private set
-            {
-                board = value;
-                OnPropertyChanged(nameof(Board));
-            }
-        }
-
-        public CellViewModel[][] CellViewModels
-        {
-            get => cellViewModels;
-            set
-            {
-                cellViewModels = value;
-                OnPropertyChanged(nameof(CellViewModels));
             }
         }
 
@@ -93,6 +77,38 @@ namespace ChessWPF.ViewModels
                 Board.GameHasStarted = value;
                 OnPropertyChanged(nameof(GameHasStarted));
             }
+        }
+
+        public CellViewModel? SelectedCell
+        {
+            get => selectedCell;
+            set => selectedCell = value;
+        }
+
+        public Board Board
+        {
+            get => board;
+            private set
+            {
+                board = value;
+                OnPropertyChanged(nameof(Board));
+            }
+        }
+
+        public CellViewModel[][] CellViewModels
+        {
+            get => cellViewModels;
+            set
+            {
+                cellViewModels = value;
+                OnPropertyChanged(nameof(CellViewModels));
+            }
+        }
+
+        public List<Cell> LegalMoves
+        {
+            get => legalMoves;
+            set => legalMoves = value;
         }
 
         public void MatchCellViewModelsToCells()
