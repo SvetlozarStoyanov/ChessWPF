@@ -107,19 +107,6 @@ namespace ChessWPF.ViewModels
 
         public void SelectCell(CellViewModel cellViewModel)
         {
-            if (SelectedCell != null && cellViewModel.Cell.HasEqualRowAndCol(SelectedCell.Cell))
-            {
-                BoardViewModel.CellViewModels[SelectedCell.Cell.Row][SelectedCell.Cell.Col].IsSelected = false;
-                UnselectSelectedCell();
-                return;
-            }
-            SelectedCell = BoardViewModel.CellViewModels[cellViewModel.Cell.Row][cellViewModel.Cell.Col];
-            SelectedCell.IsSelected = true;
-            GetLegalMoves(SelectedCell.Cell.Piece);
-        }
-
-        public void MovePiece(Cell cell)
-        {
             GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
 
             BoardViewModel.MovePiece(cell, SelectedCell.Cell);
@@ -179,6 +166,20 @@ namespace ChessWPF.ViewModels
             }
         }
 
+
+        public void EndGameByTimeOut(PieceColor color)
+        {
+            MenuViewModel.UpdateGameStatus($"{color.ToString()} wins by timeout!");
+            if (BoardViewModel.Board.PromotionMove != null)
+            {
+                BoardViewModel.UndoMove();
+            }
+            BoardViewModel.EndGameByTimeOut(color);
+            BoardViewModel.ClearLegalMoves();
+
+            BoardViewModel.UnselectSelectedCell();
+        }
+
         public void ResetClocks()
         {
             foreach (var clock in gameClocks)
@@ -195,56 +196,14 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public void EndGameByTimeOut(PieceColor color)
-        {
-            MenuViewModel.UpdateGameStatus($"{color.ToString()} wins by timeout!");
-            if (BoardViewModel.Board.PromotionMove != null)
+        private void SetupBoardViewModel(BoardViewModel boardViewModel)
             {
-                BoardViewModel.UndoMove();
-            }
-            BoardViewModel.EndGameByTimeOut(color);
-            UnselectSelectedCell();
-            ClearLegalMoves();
+            BoardViewModel = boardViewModel;
+            BoardViewModel.MovedPiece += MovePiece;
+            BoardViewModel.UndoLastMove += UndoMove;
+            BoardViewModel.Reset += ResetBoard;
+            BoardViewModel.Promote += SelectPieceForPromotion;
         }
-
-        private void GetLegalMoves(Piece piece)
-        {
-            var newLegalMoves = piece.LegalMoves;
-            if (newLegalMoves != legalMoves)
-            {
-                ClearLegalMoves();
-                ShowNewLegalMoves(newLegalMoves);
-            }
-        }
-
-        private void ShowNewLegalMoves(List<Cell> newLegalMoves)
-        {
-            legalMoves = newLegalMoves;
-
-            foreach (var cell in newLegalMoves)
-            {
-                BoardViewModel.CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
-            }
-        }
-
-        private void ClearLegalMoves()
-        {
-            foreach (var cell in legalMoves)
-            {
-                BoardViewModel.CellViewModels[cell.Row][cell.Col].CanBeMovedTo = false;
-            }
-            legalMoves = new List<Cell>();
-        }
-
-        private void UnselectSelectedCell()
-        {
-            SelectedCell = null;
-            if (LegalMoves.Any())
-            {
-                ClearLegalMoves();
-            }
-        }
-
         private void AddToMoveAnnotation(Move move)
         {
             var sb = new StringBuilder(MoveNotation);
