@@ -1,5 +1,4 @@
-﻿using ChessWPF.Singleton;
-using ChessWPF.ViewModels;
+﻿using ChessWPF.ViewModels;
 using System.ComponentModel;
 
 namespace ChessWPF.Commands
@@ -16,13 +15,13 @@ namespace ChessWPF.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            return cellViewModel.CanBeMovedTo && BackgroundSingleton.Instance.SelectedCell != null;
+            return cellViewModel.CanBeMovedTo;
 
         }
 
         public override void Execute(object? parameter)
         {
-            BackgroundSingleton.Instance.MovePiece(cellViewModel.Cell);
+            cellViewModel.MoveToCell();
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)

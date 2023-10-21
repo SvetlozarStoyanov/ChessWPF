@@ -1,5 +1,4 @@
-﻿using ChessWPF.Singleton;
-using ChessWPF.ViewModels;
+﻿using ChessWPF.ViewModels;
 using System.ComponentModel;
 
 namespace ChessWPF.Commands
@@ -21,7 +20,7 @@ namespace ChessWPF.Commands
 
         public override void Execute(object? parameter)
         {
-            BackgroundSingleton.Instance.SelectCell(cellViewModel);
+            cellViewModel.SelectCell();
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
