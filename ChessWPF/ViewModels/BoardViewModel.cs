@@ -93,7 +93,7 @@ namespace ChessWPF.ViewModels
         public CellViewModel? SelectedCell
         {
             get => selectedCell;
-            set => selectedCell = value;
+            private set => selectedCell = value;
         }
 
         public Board Board
@@ -130,9 +130,13 @@ namespace ChessWPF.ViewModels
                 for (int col = 0; col < board.Cells.GetLength(1); col++)
                 {
                     CellViewModels[row][col] = new CellViewModel(board.Cells[row, col]);
+                    var cellViewModel = CellViewModels[row][col];
+                    cellViewModel.Select += OnCellViewModelSelect;
+                    cellViewModel.MovedTo += OnCellViewModelMovedTo;
+                    cellViewModel.PromotedTo += OnCellViewModelPromotedTo;
                     if (Board.Cells[row, col].Piece != null)
                     {
-                        CellViewModels[row][col].UpdateCellImage();
+                        cellViewModel.UpdateCellImage();
                     }
                 }
             }
