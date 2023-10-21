@@ -40,46 +40,5 @@ namespace ChessWPF.Singleton
         { 
             get => GameViewModel.BoardViewModel.Board;
         }
-
-        public CellViewModel SelectedCell
-        {
-            get => GameViewModel.SelectedCell;
-            set => GameViewModel.SelectedCell = value;
-        }
-
-        public void StartGame()
-        {
-            GameViewModel.StartGame();
-        }
-
-        public void ResetBoard()
-        {
-            GameViewModel.ResetBoard();
-        }
-
-        public void SelectCell(CellViewModel cellViewModel)
-        {
-            GameViewModel.SelectCell(cellViewModel);
-        }
-
-        public void MovePiece(Cell cell)
-        {
-            GameViewModel.MovePiece(cell);
-        }
-
-        public void UndoMove()
-        {
-            GameViewModel.UndoMove();
-        }
-
-        public void SelectPieceForPromotion(CellViewModel cellViewModel)
-        {
-            GameViewModel.SelectPieceForPromotion(cellViewModel);
-        }
-
-        public void EndGameByTimeOut(PieceColor color)
-        {
-            GameViewModel.EndGameByTimeOut(color);
-        }
     }
 }
