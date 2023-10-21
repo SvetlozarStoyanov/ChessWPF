@@ -28,6 +28,18 @@ namespace ChessWPF.ViewModels
             PromotionIsUnderway = false;
         }
 
+        public delegate void MoveEventHandler(object sender, MovedToCellViewModelEventArgs args);
+        public event MoveEventHandler MovedPiece;
+
+        public delegate void UndoMoveEventHandler(object sender, EventArgs args);
+        public event UndoMoveEventHandler UndoLastMove;
+
+        public delegate void ResetBoardEventHandler(object sender, EventArgs args);
+        public event ResetBoardEventHandler Reset;
+
+        public delegate void PromotePieceEventHandler(object sender, PromotePieceEventArgs args);
+        public event PromotePieceEventHandler Promote;
+
         public bool PromotionIsUnderway
         {
             get => promotionIsUnderway;
