@@ -1,7 +1,8 @@
 ﻿using ChessWPF.HelperClasses.CustomEventArgs;
-﻿using ChessWPF.Models.Data.Board;
+using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -25,6 +26,7 @@ namespace ChessWPF.ViewModels
             MatchCellViewModelsToCells();
             //Board.TurnColor = PieceColor.White;
             backupCellsToUpdate = new List<Cell>();
+            LegalMoves = new List<Cell>();
             PromotionIsUnderway = false;
         }
 
