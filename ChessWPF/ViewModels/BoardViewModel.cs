@@ -196,9 +196,9 @@ namespace ChessWPF.ViewModels
             FenAnnotation = Board.FenAnnotation;
         }
 
-        public void MovePiece(Cell cell, Cell selectedCell)
+        public void MovePiece(Cell cell)
         {
-            var move = Board.MovePiece(cell, selectedCell);
+            var move = Board.MovePiece(cell, SelectedCell.Cell);
             if (Board.PromotionMove != null)
             {
                 promotionMove = Board.PromotionMove;
@@ -209,7 +209,7 @@ namespace ChessWPF.ViewModels
             }
             if (Board.BackupCells.Count == 0)
             {
-                FinishMove(move, selectedCell);
+                FinishMove(move, SelectedCell.Cell);
             }
         }
 
@@ -469,5 +469,6 @@ namespace ChessWPF.ViewModels
                 CellViewModels[lastMove.CellFourBefore.Row][lastMove.CellFourBefore.Col].CanBeSelected = false;
             }
         }
+
     }
 }
