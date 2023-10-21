@@ -69,7 +69,7 @@ namespace ChessWPF.ViewModels
             get => BoardViewModel.Board;
         }
 
-        public CellViewModel SelectedCell
+        public CellViewModel? SelectedCell
         {
             get => selectedCell;
             set => selectedCell = value;
