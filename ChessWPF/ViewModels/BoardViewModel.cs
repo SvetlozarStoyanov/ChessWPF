@@ -298,6 +298,33 @@ namespace ChessWPF.ViewModels
         {
             Promote(this, new PromotePieceEventArgs(pieceType));
         }
+        private void UnselectSelectedCell()
+        {
+            SelectedCell = null;
+        }
+
+        private List<Cell> GetLegalMoves(Piece piece)
+        {
+            var newLegalMoves = new List<Cell>(piece.LegalMoves);
+            return newLegalMoves;
+        }
+
+        private void ShowLegalMoves()
+        {
+            foreach (var cell in legalMoves)
+            {
+                CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
+            }
+        }
+
+        private void ClearLegalMoves()
+        {
+            foreach (var cell in LegalMoves)
+            {
+                CellViewModels[cell.Row][cell.Col].CanBeMovedTo = false;
+            }
+            LegalMoves.Clear();
+        }
 
         private void OnCellViewModelSelect(object sender, SelectCellViewModelEventArgs args)
         {
