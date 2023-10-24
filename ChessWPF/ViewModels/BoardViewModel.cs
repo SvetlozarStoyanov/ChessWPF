@@ -138,9 +138,7 @@ namespace ChessWPF.ViewModels
 
         public void StartGame()
         {
-            Board.CalculatePossibleMoves();
-            MarkWhichPiecesCanBeSelected();
-            UpdateCellViewModels();
+            PrepareForNextTurn();
             Board.UpdateFenAnnotation();
             FenAnnotation = Board.FenAnnotation;
         }
