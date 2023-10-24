@@ -1,7 +1,9 @@
 ﻿using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
+using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChessWPF.Game
 {
@@ -14,19 +16,19 @@ namespace ChessWPF.Game
             var colDiff = attacker.Cell.Col - king.Cell.Col;
             switch (attacker.PieceType)
             {
-                case Models.Data.Pieces.Enums.PieceType.Pawn:
+                case PieceType.Pawn:
+                    validMovesToStopCheck.AddRange(GetLegalMovesToStopCheckForPawn(king, attacker, board));
+                    break;
+                case PieceType.Knight:
                     validMovesToStopCheck.Add(attacker.Cell);
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Knight:
-                    validMovesToStopCheck.Add(attacker.Cell);
-                    break;
-                case Models.Data.Pieces.Enums.PieceType.Bishop:
+                case PieceType.Bishop:
                     validMovesToStopCheck.AddRange(GetLegalMovesToStopCheckForBishop(king, attacker, board, rowDiff, colDiff));
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Rook:
+                case PieceType.Rook:
                     validMovesToStopCheck.AddRange(GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff));
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Queen:
+                case PieceType.Queen:
                     if (rowDiff != 0 && colDiff != 0)
                     {
                         validMovesToStopCheck = GetLegalMovesToStopCheckForBishop(king, attacker, board, rowDiff, colDiff);
@@ -36,7 +38,7 @@ namespace ChessWPF.Game
                         validMovesToStopCheck = GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff);
                     }
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Knook:
+                case PieceType.Knook:
                     if (king.Cell.Row == attacker.Cell.Row || king.Cell.Col == attacker.Cell.Col)
                     {
                         validMovesToStopCheck = GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff);
@@ -44,6 +46,34 @@ namespace ChessWPF.Game
                     else
                     {
                         validMovesToStopCheck.Add(attacker.Cell);
+                    }
+                    break;
+            }
+            return validMovesToStopCheck;
+        }
+
+        private static List<Cell> GetLegalMovesToStopCheckForPawn(King king, Piece pawn, Board board)
+        {
+            var validMovesToStopCheck = new List<Cell>();
+            validMovesToStopCheck.Add(pawn.Cell);
+            var enPassantMoveToStopCheck = new Cell(-1, -1);
+            switch (king.Color)
+            {
+                case PieceColor.White:
+                    enPassantMoveToStopCheck = board.Pieces[king.Color].Where(p => p.PieceType == PieceType.Pawn)
+                        .Select(p => p.LegalMoves.Where(lm => lm.Row - pawn.Cell.Col == -1).FirstOrDefault())
+                        .FirstOrDefault();
+                    if (enPassantMoveToStopCheck != null)
+                    {
+                        validMovesToStopCheck.Add(enPassantMoveToStopCheck);
+                    }
+                    break;
+                case PieceColor.Black:
+                    enPassantMoveToStopCheck = board.Pieces[king.Color].Where(p => p.PieceType == PieceType.Pawn)
+                        .Select(p => p.LegalMoves.Where(lm => lm.Row - pawn.Cell.Col == 1).FirstOrDefault()).FirstOrDefault();
+                    if (enPassantMoveToStopCheck != null)
+                    {
+                        validMovesToStopCheck.Add(enPassantMoveToStopCheck);
                     }
                     break;
             }
