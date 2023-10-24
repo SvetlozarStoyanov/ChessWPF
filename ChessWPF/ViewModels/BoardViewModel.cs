@@ -145,6 +145,7 @@ namespace ChessWPF.ViewModels
 
         public void ResetBoard()
         {
+            UnselectSelectedCell();
             if (Board.BackupCells.Count > 0)
             {
                 RestoreAllBackupCells();
@@ -161,11 +162,7 @@ namespace ChessWPF.ViewModels
 
         public void PrepareForNextTurn()
         {
-            if (GameHasEnded)
-            {
-                return;
-            }
-
+            ClearLegalMoves();
             UpdateCellViewModels();
             var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
             CellViewModels[king.Cell.Row][king.Cell.Col].IsInCheck = false;
@@ -194,6 +191,7 @@ namespace ChessWPF.ViewModels
             if (Board.PromotionMove != null)
             {
                 promotionMove = Board.PromotionMove;
+                ClearLegalMoves();
                 MakeAllPiecesUnselectable();
                 UpdateCellViewModelsForPromotion();
                 PromotionIsUnderway = true;
@@ -203,6 +201,7 @@ namespace ChessWPF.ViewModels
             {
                 FinishMove(move, SelectedCell.Cell);
             }
+            UnselectSelectedCell();
         }
 
         public void UndoMove()
@@ -239,6 +238,7 @@ namespace ChessWPF.ViewModels
                 }
                 PrepareForNextTurn();
             }
+            UnselectSelectedCell();
         }
 
         public void PromotePiece(PieceType pieceType)
@@ -257,6 +257,12 @@ namespace ChessWPF.ViewModels
 
         public void EndGameByTimeOut(PieceColor color)
         {
+            UnselectSelectedCell();
+            ClearLegalMoves();
+            if (Board.PromotionMove != null)
+            {
+                UndoMove();
+            }
             GameResult = $"{color.ToString()} wins by timeout!";
 
             this.GameHasEnded = true;
