@@ -52,12 +52,12 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public string GameResult
+        public string? GameResult
         {
             get => Board.GameResult;
             set
             {
-                Board.GameResult = value;
+                Board.GameResult = value!;
                 OnPropertyChanged(nameof(GameResult));
             }
         }
@@ -108,20 +108,21 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public CellViewModel[][] CellViewModels
-        {
-            get => cellViewModels;
-            set
-            {
-                cellViewModels = value;
-                OnPropertyChanged(nameof(CellViewModels));
-            }
-        }
 
         public List<Cell> LegalMoves
         {
             get => legalMoves;
             private set => legalMoves = value;
+        }
+
+        public CellViewModel[][] CellViewModels
+        {
+            get => cellViewModels;
+            private set
+            {
+                cellViewModels = value;
+                OnPropertyChanged(nameof(CellViewModels));
+            }
         }
 
         public void MatchCellViewModelsToCells()
@@ -174,7 +175,6 @@ namespace ChessWPF.ViewModels
 
             if (Board.CheckForGameEnding())
             {
-                MakeAllPiecesUnselectable();
                 GameResult = Board.GameResult;
             }
             else
@@ -264,7 +264,6 @@ namespace ChessWPF.ViewModels
                 UndoMove();
             }
             GameResult = $"{color.ToString()} wins by timeout!";
-
             this.GameHasEnded = true;
             MakeAllPiecesUnselectable();
         }
@@ -277,12 +276,9 @@ namespace ChessWPF.ViewModels
 
             this.GameHasEnded = true;
             MakeAllPiecesUnselectable();
-            }
-
-        public void UnselectSelectedCell()
-        {
-            SelectedCell = null;
         }
+
+      
 
         public void OnMoveUndo()
         {
@@ -298,6 +294,7 @@ namespace ChessWPF.ViewModels
         {
             Promote(this, new PromotePieceEventArgs(pieceType));
         }
+
         private void UnselectSelectedCell()
         {
             SelectedCell = null;
@@ -373,8 +370,8 @@ namespace ChessWPF.ViewModels
                 {
                     ResetMatchCellViewModelToCell(row, col);
                 }
-                }
             }
+        }
 
         private void ResetMatchCellViewModelToCell(int row, int col)
         {
@@ -569,6 +566,5 @@ namespace ChessWPF.ViewModels
                 CellViewModels[lastMove.CellFourBefore.Row][lastMove.CellFourBefore.Col].CanBeSelected = false;
             }
         }
-
     }
 }
