@@ -76,9 +76,17 @@ namespace ChessWPF.ViewModels
         public void StartGame()
         {
             BoardViewModel.StartGame();
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
             UpdateClocks();
-            MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
+            if (BoardViewModel.GameResult != null)
+            {
+                BoardViewModel.EndGame();
+                MenuViewModel.UpdateGameStatus(BoardViewModel.GameResult);
+        }
+            else
+            {
+                MenuViewModel.UpdateGameStatus($"{Board.TurnColor} to play");
+                GameClockViewModels[Board.TurnColor.ToString()].StartClock();
+            }
         }
 
         public void ResetBoard(object sender, EventArgs args)
