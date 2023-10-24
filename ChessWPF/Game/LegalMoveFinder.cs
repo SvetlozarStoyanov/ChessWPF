@@ -49,7 +49,7 @@ namespace ChessWPF.Game
 
         private static Dictionary<string, List<Cell>> GetPawnLegalMovesAndProtectedCells(Piece pawn, Board board)
         {
-            var turnColor = board.Moves.Count % 2 == 0 ? PieceColor.White : PieceColor.Black;
+            var turnColor = board.TurnColor;
             var legalMovesAndProtectedCells = new Dictionary<string, List<Cell>>();
             var legalMoves = new List<Cell>();
 
@@ -641,7 +641,6 @@ namespace ChessWPF.Game
                 { LegalMovesAndProtectedCells.LegalMoves, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Union(bishopLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]).ToList() },
                 { LegalMovesAndProtectedCells.ProtectedCells, rookLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells].Union(bishopLegalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells]).ToList() }
             };
-
 
             return queenLegalMoves;
         }
