@@ -18,7 +18,6 @@ namespace ChessWPF.ViewModels
         private Regex regex = new Regex(regexPattern);
         private BoardViewModel boardViewModel;
         private MenuViewModel menuViewModel;
-        private List<Cell> legalMoves = new List<Cell>();
         private Dictionary<string, GameClockViewModel> gameClocks;
 
         public GameViewModel(BoardViewModel boardViewModel,
@@ -66,17 +65,6 @@ namespace ChessWPF.ViewModels
         public Board Board
         {
             get => BoardViewModel.Board;
-        }
-
-        public CellViewModel? SelectedCell
-        {
-            get => BoardViewModel.SelectedCell;
-        }
-
-
-        public List<Cell> LegalMoves
-        {
-            get => legalMoves;
         }
 
         public Dictionary<string, GameClockViewModel> GameClockViewModels
