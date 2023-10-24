@@ -81,7 +81,7 @@ namespace ChessWPF.ViewModels
             {
                 BoardViewModel.EndGame();
                 MenuViewModel.UpdateGameStatus(BoardViewModel.GameResult);
-        }
+            }
             else
             {
                 MenuViewModel.UpdateGameStatus($"{Board.TurnColor} to play");
@@ -99,17 +99,15 @@ namespace ChessWPF.ViewModels
 
         public void MovePiece(object sender, MovedToCellViewModelEventArgs args)
         {
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
-
+            GameClockViewModels[Board.TurnColor.ToString()].StopClock();
+            var currTurnColor = Board.TurnColor;
             BoardViewModel.MovePiece(args.Cell);
-            BoardViewModel.ClearLegalMoves();
 
             if (Board.Moves.Any() && !Board.Moves.Peek().IsPromotionMove && Board.PromotionMove == null)
             {
-                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
+                GameClockViewModels[currTurnColor.ToString()].AddIncrement();
                 AddToMoveAnnotation(Board.Moves.Peek());
             }
-            BoardViewModel.UnselectSelectedCell();
             if (BoardViewModel.GameResult != null)
             {
                 BoardViewModel.EndGame();
@@ -117,8 +115,8 @@ namespace ChessWPF.ViewModels
             }
             else
             {
-                MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+                MenuViewModel.UpdateGameStatus($"{Board.TurnColor} to play");
+                GameClockViewModels[Board.TurnColor.ToString()].StartClock();
             }
         }
 
@@ -126,20 +124,20 @@ namespace ChessWPF.ViewModels
         {
             if (BoardViewModel.Board.PromotionMove == null)
             {
-                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
-                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddTime(GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].TimeElapsed);
+                GameClockViewModels[Board.TurnColor.ToString()].StopClock();
+                GameClockViewModels[Board.TurnColor.ToString()].AddTime(GameClockViewModels[Board.TurnColor.ToString()].TimeElapsed);
                 RemoveFromMoveAnnotation();
             }
 
             BoardViewModel.UndoMove();
-            MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+            MenuViewModel.UpdateGameStatus($"{Board.TurnColor} to play");
+            GameClockViewModels[Board.TurnColor.ToString()].StartClock();
         }
 
         public void SelectPieceForPromotion(object sender, PromotePieceEventArgs args)
         {
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StopClock();
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].AddIncrement();
+            GameClockViewModels[Board.TurnColor.ToString()].StopClock();
+            GameClockViewModels[Board.TurnColor.ToString()].AddIncrement();
             BoardViewModel.PromotePiece(args.PieceType);
             AddToMoveAnnotation(Board.Moves.Peek());
             if (BoardViewModel.GameResult != null)
@@ -149,11 +147,10 @@ namespace ChessWPF.ViewModels
             }
             else
             {
-                MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
-                GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+                MenuViewModel.UpdateGameStatus($"{Board.TurnColor} to play");
+                GameClockViewModels[Board.TurnColor.ToString()].StartClock();
             }
         }
-
 
         public void EndGameByTimeOut(PieceColor color)
         {
@@ -185,6 +182,7 @@ namespace ChessWPF.ViewModels
             BoardViewModel.Reset += ResetBoard;
             BoardViewModel.Promote += SelectPieceForPromotion;
         }
+
         private void AddToMoveAnnotation(Move move)
         {
             var sb = new StringBuilder(MoveNotation);
