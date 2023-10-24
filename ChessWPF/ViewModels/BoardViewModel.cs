@@ -131,15 +131,7 @@ namespace ChessWPF.ViewModels
                 CellViewModels[row] = new CellViewModel[8];
                 for (int col = 0; col < board.Cells.GetLength(1); col++)
                 {
-                    CellViewModels[row][col] = new CellViewModel(board.Cells[row, col]);
-                    var cellViewModel = CellViewModels[row][col];
-                    cellViewModel.Select += OnCellViewModelSelect;
-                    cellViewModel.MovedTo += OnCellViewModelMovedTo;
-                    cellViewModel.PromotedTo += OnCellViewModelPromotedTo;
-                    if (Board.Cells[row, col].Piece != null)
-                    {
-                        cellViewModel.UpdateCellImage();
-                    }
+                    MatchCellViewModelToCell(row, col);
                 }
             }
         }
@@ -342,20 +334,39 @@ namespace ChessWPF.ViewModels
             OnPromote(args.PieceType);
         }
 
+        private void MatchCellViewModelToCell(int row, int col)
+        {
+            CellViewModels[row][col] = new CellViewModel(board.Cells[row, col]);
+            var cellViewModel = CellViewModels[row][col];
+            cellViewModel.Select += OnCellViewModelSelect;
+            cellViewModel.MovedTo += OnCellViewModelMovedTo;
+            cellViewModel.PromotedTo += OnCellViewModelPromotedTo;
+            if (Board.Cells[row, col].Piece != null)
+            {
+                cellViewModel.UpdateCellImage();
+            }
+        }
+
         private void ResetMatchCellViewModelsToCells()
         {
-            for (int row = 0; row < board.Cells.GetLength(0); row++)
+            for (int row = 0; row < Board.Cells.GetLength(0); row++)
             {
-                for (int col = 0; col < board.Cells.GetLength(1); col++)
+                for (int col = 0; col < Board.Cells.GetLength(1); col++)
                 {
-                    cellViewModels[row][col].Cell = board.Cells[row, col];
-                    cellViewModels[row][col].UpdateCellImage();
-                    cellViewModels[row][col].CanBeMovedTo = false;
-                    cellViewModels[row][col].CanBeSelected = false;
-                    cellViewModels[row][col].IsSelected = false;
-                    cellViewModels[row][col].IsInCheck = false;
+                    ResetMatchCellViewModelToCell(row, col);
+                }
                 }
             }
+
+        private void ResetMatchCellViewModelToCell(int row, int col)
+        {
+            var cellViewModel = CellViewModels[row][col];
+            cellViewModel.Cell = board.Cells[row, col];
+            cellViewModel.UpdateCellImage();
+            cellViewModel.CanBeMovedTo = false;
+            cellViewModel.CanBeSelected = false;
+            cellViewModel.IsSelected = false;
+            cellViewModel.IsInCheck = false;
         }
 
         private void MarkWhichPiecesCanBeSelected()
