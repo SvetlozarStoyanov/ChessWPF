@@ -94,10 +94,8 @@ namespace ChessWPF.ViewModels
             BoardViewModel.UnselectSelectedCell();
             BoardViewModel.ResetBoard();
             ResetMoveAnnotation();
-            MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
             ResetClocks();
-            UpdateClocks();
-            GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
+            StartGame();
         }
 
         public void MovePiece(object sender, MovedToCellViewModelEventArgs args)
