@@ -112,7 +112,7 @@ namespace ChessWPF.ViewModels
             BoardViewModel.UnselectSelectedCell();
             if (BoardViewModel.GameResult != null)
             {
-                BoardViewModel.GameHasEnded = true;
+                BoardViewModel.EndGame();
                 MenuViewModel.UpdateGameStatus(BoardViewModel.GameResult);
             }
             else
@@ -144,7 +144,7 @@ namespace ChessWPF.ViewModels
             AddToMoveAnnotation(Board.Moves.Peek());
             if (BoardViewModel.GameResult != null)
             {
-                BoardViewModel.GameHasEnded = true;
+                BoardViewModel.EndGame();
                 MenuViewModel.UpdateGameStatus(BoardViewModel.GameResult);
             }
             else
