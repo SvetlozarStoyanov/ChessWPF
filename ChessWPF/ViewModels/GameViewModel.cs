@@ -91,7 +91,6 @@ namespace ChessWPF.ViewModels
 
         public void ResetBoard(object sender, EventArgs args)
         {
-            BoardViewModel.UnselectSelectedCell();
             BoardViewModel.ResetBoard();
             ResetMoveAnnotation();
             ResetClocks();
@@ -132,10 +131,6 @@ namespace ChessWPF.ViewModels
                 RemoveFromMoveAnnotation();
             }
 
-            if (SelectedCell != null)
-            {
-                BoardViewModel.UnselectSelectedCell();
-            }
             BoardViewModel.UndoMove();
             MenuViewModel.UpdateGameStatus($"{BoardViewModel.Board.TurnColor} to play");
             GameClockViewModels[BoardViewModel.Board.TurnColor.ToString()].StartClock();
@@ -163,14 +158,7 @@ namespace ChessWPF.ViewModels
         public void EndGameByTimeOut(PieceColor color)
         {
             MenuViewModel.UpdateGameStatus($"{color.ToString()} wins by timeout!");
-            if (BoardViewModel.Board.PromotionMove != null)
-            {
-                BoardViewModel.UndoMove();
-            }
             BoardViewModel.EndGameByTimeOut(color);
-            BoardViewModel.ClearLegalMoves();
-
-            BoardViewModel.UnselectSelectedCell();
         }
 
         public void ResetClocks()
