@@ -269,28 +269,15 @@ namespace ChessWPF.ViewModels
             MakeAllPiecesUnselectable();
         }
 
-        public List<Cell> GetLegalMoves(Piece piece)
+        public void EndGame()
         {
-            var newLegalMoves = new List<Cell>(piece.LegalMoves);
-            return newLegalMoves;
-        }
+            UnselectSelectedCell();
+            ClearLegalMoves();
+            //GameResult = $"{color.ToString()} wins by timeout!";
 
-        public void ShowLegalMoves()
-        {
-            foreach (var cell in legalMoves)
-            {
-                CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
+            this.GameHasEnded = true;
+            MakeAllPiecesUnselectable();
             }
-        }
-
-        public void ClearLegalMoves()
-        {
-            foreach (var cell in LegalMoves)
-            {
-                CellViewModels[cell.Row][cell.Col].CanBeMovedTo = false;
-            }
-            LegalMoves.Clear();
-        }
 
         public void UnselectSelectedCell()
         {
