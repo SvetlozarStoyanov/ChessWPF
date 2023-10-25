@@ -144,45 +144,13 @@ namespace ChessWPF.Models.Data.Board
             fenAnnotation = FenAnnotationWriter.WriteFenAnnotation(this);
         }
 
-        public Move MovePiece(Cell cell, Cell selectedCell)
+        public Move MovePiece(Cell movedToCell, Cell selectedCell)
         {
-            var selectedPieceType = selectedCell.Piece.PieceType;
-            Move move = CreateMove(cell, selectedCell);
-            if (move.CellTwoAfter.Piece.PieceType == PieceType.King
-                && Math.Abs(move.CellOneBefore.Col - move.CellTwoAfter.Col) == 2)
-            {
-                move = MoveRookInCastlingMove(move);
-                Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].Piece = move.CellThreeAfter.Piece;
-            }
-            else if (selectedPieceType == PieceType.Pawn)
-            {
-                if (move.CellTwoAfter.Piece.PieceType == PieceType.Pawn
-                    && (move.CellTwoAfter.Row == 0 || move.CellTwoAfter.Row == 7))
-                {
-                    var pawn = move.CellTwoAfter.Piece;
-                    move.IsPromotionMove = true;
-                    CreatePromotionMove(move, pawn);
-                }
-                if (Moves.Count > 0)
-                {
-                    var lastMove = Moves.Peek();
-                    if (Math.Abs(lastMove.CellOneBefore.Row - lastMove.CellTwoBefore.Row) == 2)
-                    {
-                        var lastMovedPiece = lastMove.CellTwoAfter.Piece;
-                        if (lastMovedPiece.PieceType == PieceType.Pawn
-                            && cell.Col == move.CellTwoAfter.Piece.Cell.Col
-                            && move.CellTwoBefore.Piece == null
-                            && Math.Abs(lastMovedPiece.Cell.Col - move.CellOneBefore.Col) == 1
-                            && lastMovedPiece.Cell.Col == move.CellTwoBefore.Col
-                            && lastMovedPiece.Cell.Row == move.CellOneBefore.Row)
-                        {
-                            move = EnPassantMove(move);
-                        }
-                    }
-                }
-            }
+            var move = CreateMove(movedToCell, selectedCell);
+            
             if (!move.IsPromotionMove)
             {
+                UpdateCellsAndPiecesOfMove(move);
                 move.Annotation = MoveNotationWriter.AnnotateMove(move, pieces);
             }
             return move;
