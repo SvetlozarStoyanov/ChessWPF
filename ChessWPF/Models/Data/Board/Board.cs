@@ -868,6 +868,41 @@ namespace ChessWPF.Models.Data.Board
             return move;
         }
 
+        private void UpdateCellsAndPiecesOfMove(Move move)
+        {
+            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+            Cells[move.CellOneBefore.Row, move.CellOneBefore.Col] = new Cell(move.CellOneAfter.Row, move.CellOneAfter.Col, null);
+            Pieces[TurnColor].Remove(Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellOneBefore.Piece))!);
+            Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col] = new Cell(move.CellTwoAfter.Row, move.CellTwoAfter.Col, move.CellTwoAfter.Piece);
+            if (move.CellTwoBefore.Piece != null)
+            {
+                Pieces[oppositeColor].Remove(Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellTwoBefore.Piece))!);
+            }
+            Pieces[TurnColor].Add(Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col].Piece!);
+
+            
+            if (move.CellThreeBefore != null)
+            {
+                if (move.CellThreeBefore.Piece != null)
+                {
+                    Pieces[move.CellThreeBefore.Piece.Color].Remove(Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellThreeBefore.Piece))!);
+                }
+                Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col] = new Cell(move.CellThreeAfter!.Row, move.CellThreeAfter.Col, move.CellThreeAfter.Piece);
+              
+                if (move.CellThreeAfter.Piece != null)
+                {
+                    Pieces[TurnColor].Add(Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].Piece!);
+                }
+            }
+            if (move.CellFourBefore != null)
+            {
+                
+                Cells[move.CellFourBefore!.Row, move.CellFourBefore.Col] = new Cell(move.CellFourAfter!.Row, move.CellFourAfter!.Col, move.CellFourAfter!.Piece);
+                Pieces[TurnColor].Add(Cells[move.CellFourBefore.Row, move.CellFourBefore.Col].Piece!);
+
+            }
+        }
+
         private bool CheckForDraw()
         {
             var isGameDrawn = false;
