@@ -187,7 +187,7 @@ namespace ChessWPF.ViewModels
 
         public void MovePiece(Cell cell)
         {
-            var move = Board.MovePiece(cell, SelectedCell.Cell);
+            var move = Board.MovePiece(cell, SelectedCell!.Cell);
             if (Board.PromotionMove != null)
             {
                 promotionMove = Board.PromotionMove;

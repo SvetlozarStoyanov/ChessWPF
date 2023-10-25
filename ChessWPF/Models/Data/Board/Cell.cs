@@ -10,11 +10,12 @@ namespace ChessWPF.Models.Data.Board
             Row = row;
             Col = col;
         }
+
         public Cell(int row, int col, Piece? piece) : this(row, col)
         {
             Piece = piece;
-
         }
+
         public int Row { get; set; }
         public int Col { get; set; }
 

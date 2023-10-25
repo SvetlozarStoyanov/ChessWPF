@@ -44,7 +44,7 @@ namespace ChessWPF.Models.Data.Board
 
         public bool IsHalfMove()
         {
-            if (this.CellOneBefore.Piece.PieceType == PieceType.Pawn ||
+            if (this.CellOneBefore.Piece!.PieceType == PieceType.Pawn ||
                 (this.CellTwoAfter.Piece != null && this.CellTwoBefore.Piece != null 
                 && this.CellTwoBefore.Piece.Color != this.CellOneBefore.Piece.Color))
             {
