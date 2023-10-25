@@ -60,20 +60,15 @@ namespace ChessWPF.Game
             switch (king.Color)
             {
                 case PieceColor.White:
-                    enPassantMoveToStopCheck = board.Pieces[king.Color].Where(p => p.PieceType == PieceType.Pawn)
-                        .Select(p => p.LegalMoves.Where(lm => lm.Row - pawn.Cell.Col == -1).FirstOrDefault())
-                        .FirstOrDefault();
-                    if (enPassantMoveToStopCheck != null)
+                    if (board.Pieces[king.Color].Any(p => p.PieceType == PieceType.Pawn))
                     {
-                        validMovesToStopCheck.Add(enPassantMoveToStopCheck);
+                        validMovesToStopCheck.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col]);
                     }
                     break;
                 case PieceColor.Black:
-                    enPassantMoveToStopCheck = board.Pieces[king.Color].Where(p => p.PieceType == PieceType.Pawn)
-                        .Select(p => p.LegalMoves.Where(lm => lm.Row - pawn.Cell.Col == 1).FirstOrDefault()).FirstOrDefault();
-                    if (enPassantMoveToStopCheck != null)
+                    if (board.Pieces[king.Color].Any(p => p.PieceType == PieceType.Pawn))
                     {
-                        validMovesToStopCheck.Add(enPassantMoveToStopCheck);
+                        validMovesToStopCheck.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col]);
                     }
                     break;
             }
