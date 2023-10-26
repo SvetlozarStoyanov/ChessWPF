@@ -9,7 +9,7 @@ namespace ChessWPF.Models.Data.Pieces
         {
         }
 
-        public Queen(PieceColor color, Cell cell) : base(PieceType.Queen, color, cell)
+        public Queen(PieceColor color, int row, int col) : base(PieceType.Queen, color, row, col)
         {
         }
     }

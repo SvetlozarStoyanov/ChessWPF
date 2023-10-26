@@ -9,7 +9,7 @@ namespace ChessWPF.Models.Data.Pieces
         {
         }
 
-        public Bishop(PieceColor color, Cell cell) : base(PieceType.Bishop, color, cell)
+        public Bishop(PieceColor color, int row, int col) : base(PieceType.Bishop, color, row, col)
         {
         }
     }

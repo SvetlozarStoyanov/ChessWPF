@@ -9,7 +9,7 @@ namespace ChessWPF.Models.Data.Pieces
         {
         }
 
-        public Knook(PieceColor color, Cell cell) : base(PieceType.Knook, color, cell)
+        public Knook(PieceColor color, int row, int col) : base(PieceType.Knook, color, row, col)
         {
         }
     }

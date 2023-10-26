@@ -32,8 +32,28 @@ namespace ChessWPF.Models.Data.Pieces
 
         public override bool Equals(object? obj)
         {
-            var otherPiece = obj as Piece;
-            return otherPiece.Cell.HasEqualRowAndCol(this.Cell) && otherPiece.PieceType == this.PieceType;
+            var otherPiece = (obj as Piece)!;
+            return otherPiece.Row == this.Row 
+                && otherPiece.Col == this.Col 
+                && otherPiece.PieceType == this.PieceType 
+                && otherPiece.Color == this.Color;
+        }
+
+        public bool HasEqualCoordinates(object? obj)
+        {
+            var cell = obj as Cell;
+            return cell!.Row == this.Row && cell.Col == this.Col;
+        }
+
+        public void SetCoordinates(Cell cell)
+        {
+            this.Row = cell.Row;
+            this.Col = cell.Col;
+        }
+
+        public bool HasEvenCoordinates()
+        {
+            return (Row + Col) % 2 == 0;
         }
     }
 }
