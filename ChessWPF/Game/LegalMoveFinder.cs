@@ -53,12 +53,12 @@ namespace ChessWPF.Game
             var legalMoves = new List<Cell>();
 
             var protectedCells = new List<Cell>();
-            
+
             var enPassantMoveCell = board.Moves.Count > 0
                 && board.Moves.Peek().CellOneBefore.Piece!.PieceType == PieceType.Pawn
-                && board.Moves.Peek().CellTwoAfter.Row == pawn.Cell.Row
+                && board.Moves.Peek().CellTwoAfter.Row == pawn.Row
                 && Math.Abs(board.Moves.Peek().CellOneBefore.Row - board.Moves.Peek().CellTwoBefore.Row) == 2
-                && Math.Abs(board.Moves.Peek().CellOneBefore.Col - pawn.Cell.Col) == 1
+                && Math.Abs(board.Moves.Peek().CellOneBefore.Col - pawn.Col) == 1
                 ? board.Moves.Peek().CellTwoAfter
                 : null;
 
@@ -67,35 +67,35 @@ namespace ChessWPF.Game
             {
                 if (turnColor == pawn.Color)
                 {
-                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col].Piece == null)
+                    if (board.Cells[pawn.Row - 1, pawn.Col].Piece == null)
                     {
-                        legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col]);
-                        if (pawn.Cell.Row == 6 && board.Cells[pawn.Cell.Row - 2, pawn.Cell.Col].Piece == null)
+                        legalMoves.Add(board.Cells[pawn.Row - 1, pawn.Col]);
+                        if (pawn.Row == 6 && board.Cells[pawn.Row - 2, pawn.Col].Piece == null)
                         {
-                            legalMoves.Add(board.Cells[pawn.Cell.Row - 2, pawn.Cell.Col]);
+                            legalMoves.Add(board.Cells[pawn.Row - 2, pawn.Col]);
                         }
                     }
                 }
-                if (IsCellValid(pawn.Cell.Row - 1, pawn.Cell.Col - 1, board))
+                if (IsCellValid(pawn.Row - 1, pawn.Col - 1, board))
                 {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
-                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece != null)
+                    protectedCells.Add(board.Cells[pawn.Row - 1, pawn.Col - 1]);
+                    if (board.Cells[pawn.Row - 1, pawn.Col - 1].Piece != null)
                     {
-                        if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
+                        if (board.Cells[pawn.Row - 1, pawn.Col - 1].Piece?.Color != pawn.Color)
                         {
-                            legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col - 1]);
+                            legalMoves.Add(board.Cells[pawn.Row - 1, pawn.Col - 1]);
                         }
                     }
                 }
 
-                if (IsCellValid(pawn.Cell.Row - 1, pawn.Cell.Col + 1, board))
+                if (IsCellValid(pawn.Row - 1, pawn.Col + 1, board))
                 {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
-                    if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece != null)
+                    protectedCells.Add(board.Cells[pawn.Row - 1, pawn.Col + 1]);
+                    if (board.Cells[pawn.Row - 1, pawn.Col + 1].Piece != null)
                     {
-                        if (board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
+                        if (board.Cells[pawn.Row - 1, pawn.Col + 1].Piece?.Color != pawn.Color)
                         {
-                            legalMoves.Add(board.Cells[pawn.Cell.Row - 1, pawn.Cell.Col + 1]);
+                            legalMoves.Add(board.Cells[pawn.Row - 1, pawn.Col + 1]);
                         }
                     }
                 }
@@ -108,35 +108,35 @@ namespace ChessWPF.Game
             {
                 if (turnColor == pawn.Color)
                 {
-                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col].Piece == null)
+                    if (board.Cells[pawn.Row + 1, pawn.Col].Piece == null)
                     {
-                        legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col]);
-                        if (pawn.Cell.Row == 1 && board.Cells[pawn.Cell.Row + 2, pawn.Cell.Col].Piece == null)
+                        legalMoves.Add(board.Cells[pawn.Row + 1, pawn.Col]);
+                        if (pawn.Row == 1 && board.Cells[pawn.Row + 2, pawn.Col].Piece == null)
                         {
-                            legalMoves.Add(board.Cells[pawn.Cell.Row + 2, pawn.Cell.Col]);
+                            legalMoves.Add(board.Cells[pawn.Row + 2, pawn.Col]);
                         }
                     }
                 }
-                if (IsCellValid(pawn.Cell.Row + 1, pawn.Cell.Col - 1, board))
+                if (IsCellValid(pawn.Row + 1, pawn.Col - 1, board))
                 {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
-                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece != null)
+                    protectedCells.Add(board.Cells[pawn.Row + 1, pawn.Col - 1]);
+                    if (board.Cells[pawn.Row + 1, pawn.Col - 1].Piece != null)
                     {
-                        if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1].Piece?.Color != pawn.Color)
+                        if (board.Cells[pawn.Row + 1, pawn.Col - 1].Piece?.Color != pawn.Color)
                         {
-                            legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col - 1]);
+                            legalMoves.Add(board.Cells[pawn.Row + 1, pawn.Col - 1]);
                         }
                     }
                 }
 
-                if (IsCellValid(pawn.Cell.Row + 1, pawn.Cell.Col + 1, board))
+                if (IsCellValid(pawn.Row + 1, pawn.Col + 1, board))
                 {
-                    protectedCells.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
-                    if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece != null)
+                    protectedCells.Add(board.Cells[pawn.Row + 1, pawn.Col + 1]);
+                    if (board.Cells[pawn.Row + 1, pawn.Col + 1].Piece != null)
                     {
-                        if (board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1].Piece?.Color != pawn.Color)
+                        if (board.Cells[pawn.Row + 1, pawn.Col + 1].Piece?.Color != pawn.Color)
                         {
-                            legalMoves.Add(board.Cells[pawn.Cell.Row + 1, pawn.Cell.Col + 1]);
+                            legalMoves.Add(board.Cells[pawn.Row + 1, pawn.Col + 1]);
                         }
                     }
                 }
@@ -160,9 +160,9 @@ namespace ChessWPF.Game
             int rowIncrement = 1;
             int colIncrement = 1;
 
-            while (IsCellValid(bishop.Cell.Row + rowIncrement, bishop.Cell.Col + colIncrement, board))
+            while (IsCellValid(bishop.Row + rowIncrement, bishop.Col + colIncrement, board))
             {
-                var currCell = board.Cells[bishop.Cell.Row + rowIncrement, bishop.Cell.Col + colIncrement];
+                var currCell = board.Cells[bishop.Row + rowIncrement, bishop.Col + colIncrement];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -174,9 +174,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(bishop.Cell.Row + ++rowIncrement, bishop.Cell.Col + ++colIncrement, board))
+                            while (IsCellValid(bishop.Row + ++rowIncrement, bishop.Col + ++colIncrement, board))
                             {
-                                currCell = board.Cells[bishop.Cell.Row + rowIncrement, bishop.Cell.Col + colIncrement];
+                                currCell = board.Cells[bishop.Row + rowIncrement, bishop.Col + colIncrement];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == bishop.Color)
@@ -200,9 +200,9 @@ namespace ChessWPF.Game
             }
             rowIncrement = 1;
             colIncrement = 1;
-            while (IsCellValid(bishop.Cell.Row + rowIncrement, bishop.Cell.Col - colIncrement, board))
+            while (IsCellValid(bishop.Row + rowIncrement, bishop.Col - colIncrement, board))
             {
-                var currCell = board.Cells[bishop.Cell.Row + rowIncrement, bishop.Cell.Col - colIncrement];
+                var currCell = board.Cells[bishop.Row + rowIncrement, bishop.Col - colIncrement];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -214,9 +214,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(bishop.Cell.Row + ++rowIncrement, bishop.Cell.Col - ++colIncrement, board))
+                            while (IsCellValid(bishop.Row + ++rowIncrement, bishop.Col - ++colIncrement, board))
                             {
-                                currCell = board.Cells[bishop.Cell.Row + rowIncrement, bishop.Cell.Col - colIncrement];
+                                currCell = board.Cells[bishop.Row + rowIncrement, bishop.Col - colIncrement];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == bishop.Color)
@@ -240,9 +240,9 @@ namespace ChessWPF.Game
             }
             rowIncrement = 1;
             colIncrement = 1;
-            while (IsCellValid(bishop.Cell.Row - rowIncrement, bishop.Cell.Col - colIncrement, board))
+            while (IsCellValid(bishop.Row - rowIncrement, bishop.Col - colIncrement, board))
             {
-                var currCell = board.Cells[bishop.Cell.Row - rowIncrement, bishop.Cell.Col - colIncrement];
+                var currCell = board.Cells[bishop.Row - rowIncrement, bishop.Col - colIncrement];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -254,9 +254,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(bishop.Cell.Row - ++rowIncrement, bishop.Cell.Col - ++colIncrement, board))
+                            while (IsCellValid(bishop.Row - ++rowIncrement, bishop.Col - ++colIncrement, board))
                             {
-                                currCell = board.Cells[bishop.Cell.Row - rowIncrement, bishop.Cell.Col - colIncrement];
+                                currCell = board.Cells[bishop.Row - rowIncrement, bishop.Col - colIncrement];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == bishop.Color)
@@ -280,9 +280,9 @@ namespace ChessWPF.Game
             }
             rowIncrement = 1;
             colIncrement = 1;
-            while (IsCellValid(bishop.Cell.Row - rowIncrement, bishop.Cell.Col + colIncrement, board))
+            while (IsCellValid(bishop.Row - rowIncrement, bishop.Col + colIncrement, board))
             {
-                var currCell = board.Cells[bishop.Cell.Row - rowIncrement, bishop.Cell.Col + colIncrement];
+                var currCell = board.Cells[bishop.Row - rowIncrement, bishop.Col + colIncrement];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -294,9 +294,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(bishop.Cell.Row - ++rowIncrement, bishop.Cell.Col + ++colIncrement, board))
+                            while (IsCellValid(bishop.Row - ++rowIncrement, bishop.Col + ++colIncrement, board))
                             {
-                                currCell = board.Cells[bishop.Cell.Row - rowIncrement, bishop.Cell.Col + colIncrement];
+                                currCell = board.Cells[bishop.Row - rowIncrement, bishop.Col + colIncrement];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == bishop.Color)
@@ -330,7 +330,7 @@ namespace ChessWPF.Game
 
             var protectedCells = new List<Cell>();
 
-            var pieceCell = knight.Cell;
+            var pieceCell = board.Cells[knight.Row, knight.Col];
             var currCell = pieceCell;
             if (IsCellValid(pieceCell.Row - 2, pieceCell.Col - 1, board))
             {
@@ -476,9 +476,9 @@ namespace ChessWPF.Game
             var protectedCells = new List<Cell>();
             int increment = 1;
 
-            while (IsCellValid(rook.Cell.Row - increment, rook.Cell.Col, board))
+            while (IsCellValid(rook.Row - increment, rook.Col, board))
             {
-                var currCell = board.Cells[rook.Cell.Row - increment, rook.Cell.Col];
+                var currCell = board.Cells[rook.Row - increment, rook.Col];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -490,9 +490,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(rook.Cell.Row - ++increment, rook.Cell.Col, board))
+                            while (IsCellValid(rook.Row - ++increment, rook.Col, board))
                             {
-                                currCell = board.Cells[rook.Cell.Row - increment, rook.Cell.Col];
+                                currCell = board.Cells[rook.Row - increment, rook.Col];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == rook.Color)
@@ -514,9 +514,9 @@ namespace ChessWPF.Game
                 increment++;
             }
             increment = 1;
-            while (IsCellValid(rook.Cell.Row + increment, rook.Cell.Col, board))
+            while (IsCellValid(rook.Row + increment, rook.Col, board))
             {
-                var currCell = board.Cells[rook.Cell.Row + increment, rook.Cell.Col];
+                var currCell = board.Cells[rook.Row + increment, rook.Col];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -528,9 +528,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(rook.Cell.Row + ++increment, rook.Cell.Col, board))
+                            while (IsCellValid(rook.Row + ++increment, rook.Col, board))
                             {
-                                currCell = board.Cells[rook.Cell.Row + increment, rook.Cell.Col];
+                                currCell = board.Cells[rook.Row + increment, rook.Col];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == rook.Color)
@@ -552,9 +552,9 @@ namespace ChessWPF.Game
                 increment++;
             }
             increment = 1;
-            while (IsCellValid(rook.Cell.Row, rook.Cell.Col - increment, board))
+            while (IsCellValid(rook.Row, rook.Col - increment, board))
             {
-                var currCell = board.Cells[rook.Cell.Row, rook.Cell.Col - increment];
+                var currCell = board.Cells[rook.Row, rook.Col - increment];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -566,9 +566,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(rook.Cell.Row, rook.Cell.Col - ++increment, board))
+                            while (IsCellValid(rook.Row, rook.Col - ++increment, board))
                             {
-                                currCell = board.Cells[rook.Cell.Row, rook.Cell.Col - increment];
+                                currCell = board.Cells[rook.Row, rook.Col - increment];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == rook.Color)
@@ -590,9 +590,9 @@ namespace ChessWPF.Game
                 increment++;
             }
             increment = 1;
-            while (IsCellValid(rook.Cell.Row, rook.Cell.Col + increment, board))
+            while (IsCellValid(rook.Row, rook.Col + increment, board))
             {
-                var currCell = board.Cells[rook.Cell.Row, rook.Cell.Col + increment];
+                var currCell = board.Cells[rook.Row, rook.Col + increment];
                 if (currCell.Piece == null)
                 {
                     legalMoves.Add(currCell);
@@ -604,9 +604,9 @@ namespace ChessWPF.Game
                         legalMoves.Add(currCell);
                         if (currCell.Piece.PieceType == PieceType.King)
                         {
-                            while (IsCellValid(rook.Cell.Row, rook.Cell.Col + ++increment, board))
+                            while (IsCellValid(rook.Row, rook.Col + ++increment, board))
                             {
-                                currCell = board.Cells[rook.Cell.Row, rook.Cell.Col + increment];
+                                currCell = board.Cells[rook.Row, rook.Col + increment];
                                 if (currCell.Piece != null)
                                 {
                                     if (currCell.Piece.Color == rook.Color)
@@ -664,8 +664,8 @@ namespace ChessWPF.Game
             var legalMoves = new List<Cell>();
 
             var protectedCells = new List<Cell>();
-            var pieceCell = king.Cell;
-            var currCell = king.Cell;
+            var pieceCell = board.Cells[king.Row, king.Col];
+            var currCell = board.Cells[king.Row, king.Col];
             var oppositeColor = king.Color == PieceColor.White ? PieceColor.Black : PieceColor.White;
             if (IsCellValid(pieceCell.Row - 1, pieceCell.Col, board))
             {
@@ -879,9 +879,9 @@ namespace ChessWPF.Game
                 }
             }
 
-            if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(lm => lm.Row == king.Cell.Row && lm.Col == king.Cell.Col))
+            if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(lm => lm.Row == king.Row && lm.Col == king.Col))
                 && !board.Moves.Any(m => m.CellTwoAfter.Piece!.PieceType == PieceType.King && m.CellTwoAfter.Piece.Color == king.Color)
-                && king.Cell.Col == 4)
+                && king.Col == 4)
             {
                 var legalCastlingMoves = CheckForCastling(king, board, oppositeColor);
                 if (legalCastlingMoves.Count > 0)
@@ -898,52 +898,52 @@ namespace ChessWPF.Game
         private static List<Cell> CheckForCastling(Piece king, Board board, PieceColor oppositeColor)
         {
             var legalCastlingMoves = new List<Cell>();
-            if (board.Cells[king.Cell.Row, king.Cell.Col + 3].Piece != null && board.Cells[king.Cell.Row, king.Cell.Col + 3].Piece.PieceType == PieceType.Rook)
+            if (board.Cells[king.Row, king.Col + 3].Piece != null && board.Cells[king.Row, king.Col + 3].Piece!.PieceType == PieceType.Rook)
             {
-                var rook = board.Cells[king.Cell.Row, king.Cell.Col + 3].Piece;
+                var rook = board.Cells[king.Row, king.Col + 3].Piece;
                 bool wayIsClear = true;
-                for (int i = king.Cell.Col + 1; i < board.Cells.GetLength(1) - 1; i++)
+                for (int i = king.Col + 1; i < board.Cells.GetLength(1) - 1; i++)
                 {
-                    if (board.Cells[king.Cell.Row, i].Piece != null)
+                    if (board.Cells[king.Row, i].Piece != null)
                     {
                         wayIsClear = false;
                         break;
                     }
                 }
 
-                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook.Cell.Row && m.CellOneBefore.Col == rook.Cell.Col) && wayIsClear)
+                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook!.Row && m.CellOneBefore.Col == rook.Col) && wayIsClear)
                 {
-                    if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col + 2))
-                    && !board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col + 1))
-                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col + 2))
-                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col + 1)))
+                    if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Row && m.Col == king.Col + 2))
+                    && !board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Row && m.Col == king.Col + 1))
+                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Row && m.Col == king.Col + 2))
+                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Row && m.Col == king.Col + 1)))
                     {
-                        legalCastlingMoves.Add(board.Cells[king.Cell.Row, king.Cell.Col + 2]);
+                        legalCastlingMoves.Add(board.Cells[king.Row, king.Col + 2]);
                     }
                 }
             }
 
-            if (board.Cells[king.Cell.Row, king.Cell.Col - 4].Piece != null && board.Cells[king.Cell.Row, king.Cell.Col - 4].Piece.PieceType == PieceType.Rook)
+            if (board.Cells[king.Row, king.Col - 4].Piece != null && board.Cells[king.Row, king.Col - 4].Piece!.PieceType == PieceType.Rook)
             {
-                var rook = board.Cells[king.Cell.Row, king.Cell.Col - 4].Piece;
+                var rook = board.Cells[king.Row, king.Col - 4].Piece;
 
                 bool wayIsClear = true;
-                for (int i = king.Cell.Col - 1; i > 1; i--)
+                for (int i = king.Col - 1; i > 1; i--)
                 {
-                    if (board.Cells[king.Cell.Row, i].Piece != null)
+                    if (board.Cells[king.Row, i].Piece != null)
                     {
                         wayIsClear = false;
                         break;
                     }
                 }
-                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook.Cell.Row && m.CellOneBefore.Col == rook.Cell.Col) && wayIsClear)
+                if (!board.Moves.Any(m => m.CellOneBefore.Row == rook!.Row && m.CellOneBefore.Col == rook.Col) && wayIsClear)
                 {
-                    if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col - 2))
-                    && !board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col - 1))
-                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col - 2))
-                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Cell.Row && m.Col == king.Cell.Col - 1)))
+                    if (!board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Row && m.Col == king.Col - 2))
+                    && !board.Pieces[oppositeColor].Any(p => p.LegalMoves.Any(m => m.Row == king.Row && m.Col == king.Col - 1))
+                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Row && m.Col == king.Col - 2))
+                    && !board.Pieces[oppositeColor].Any(p => p.ProtectedCells.Any(m => m.Row == king.Row && m.Col == king.Col - 1)))
                     {
-                        legalCastlingMoves.Add(board.Cells[king.Cell.Row, king.Cell.Col - 2]);
+                        legalCastlingMoves.Add(board.Cells[king.Row, king.Col - 2]);
                     }
                 }
             }
