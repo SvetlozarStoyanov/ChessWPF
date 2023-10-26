@@ -901,35 +901,35 @@ namespace ChessWPF.Models.Data.Board
         private void UpdateCellsAndPiecesOfMove(Move move)
         {
             var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            Cells[move.CellOneBefore.Row, move.CellOneBefore.Col] = new Cell(move.CellOneAfter.Row, move.CellOneAfter.Col, null);
-            Pieces[TurnColor].Remove(Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellOneBefore.Piece))!);
-            Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col] = new Cell(move.CellTwoAfter.Row, move.CellTwoAfter.Col, move.CellTwoAfter.Piece);
+
+            Cells[move.CellOneBefore.Row, move.CellOneBefore.Col].Piece = null;
+            
+
             if (move.CellTwoBefore.Piece != null)
             {
-                Pieces[oppositeColor].Remove(Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellTwoBefore.Piece))!);
+                Pieces[oppositeColor].Remove(Pieces[oppositeColor].FirstOrDefault(p => p.Equals(move.CellTwoBefore.Piece))!);
             }
-            Pieces[TurnColor].Add(Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col].Piece!);
+            Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col].Piece = move.CellTwoAfter.Piece;
+            Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinates(move.CellOneBefore))!.SetCoordinates(move.CellTwoBefore);
 
             
             if (move.CellThreeBefore != null)
             {
                 if (move.CellThreeBefore.Piece != null)
                 {
-                    Pieces[move.CellThreeBefore.Piece.Color].Remove(Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellThreeBefore.Piece))!);
+                    if (move.CellThreeBefore.Piece.Color != TurnColor)
+                    {
+                        Pieces[move.CellThreeBefore.Piece.Color].Remove(Pieces[move.CellThreeBefore.Piece.Color].FirstOrDefault(p => p.Equals(move.CellThreeBefore.Piece))!);
+                    }
                 }
-                Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col] = new Cell(move.CellThreeAfter!.Row, move.CellThreeAfter.Col, move.CellThreeAfter.Piece);
               
-                if (move.CellThreeAfter.Piece != null)
-                {
-                    Pieces[TurnColor].Add(Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].Piece!);
-                }
+                Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].Piece = move.CellThreeAfter!.Piece;
             }
+
             if (move.CellFourBefore != null)
             {
-                
-                Cells[move.CellFourBefore!.Row, move.CellFourBefore.Col] = new Cell(move.CellFourAfter!.Row, move.CellFourAfter!.Col, move.CellFourAfter!.Piece);
-                Pieces[TurnColor].Add(Cells[move.CellFourBefore.Row, move.CellFourBefore.Col].Piece!);
-
+                Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellThreeBefore!.Piece))!.SetCoordinates(move.CellFourAfter!);
+                Cells[move.CellFourBefore!.Row, move.CellFourBefore.Col].Piece = move.CellFourAfter!.Piece;
             }
         }
 
