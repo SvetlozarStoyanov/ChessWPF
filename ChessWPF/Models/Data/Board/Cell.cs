@@ -24,22 +24,18 @@ namespace ChessWPF.Models.Data.Board
         public override bool Equals(object? obj)
         {
             var otherCell = obj as Cell;
-            return this.Row == otherCell.Row && this.Col == otherCell.Col && this.Piece?.PieceType == otherCell.Piece?.PieceType;
+            return this.Row == otherCell!.Row && this.Col == otherCell.Col && this.Piece?.PieceType == otherCell.Piece?.PieceType;
         }
 
         public bool HasEqualRowAndCol(object? obj)
         {
             var otherCell = obj as Cell;
-            return this.Row == otherCell.Row && this.Col == otherCell.Col;
+            return this.Row == otherCell!.Row && this.Col == otherCell.Col;
         }
 
         public bool IsEvenCell()
         {
-            if ((Row + Col) % 2 == 0)
-            {
-                return true;
-            }
-            return false;
+            return (Row + Col) % 2 == 0;
         }
 
         public int RowDifference(Cell cell)
