@@ -13,13 +13,19 @@ namespace ChessWPF.Models.Data.Pieces
             LegalMoves = new List<Cell>();
             ProtectedCells = new List<Cell>();
         }
-        public Piece(PieceType pieceType, PieceColor color, Cell cell) : this(pieceType, color)
+
+        public Piece(PieceType pieceType, PieceColor color/*, Cell cell*/, int row, int col) : this(pieceType, color)
         {
-            Cell = cell;
+            Row = row;
+            Col = col;
+            //Cell = cell;
         }
+
         public PieceType PieceType { get; set; }
         public PieceColor Color { get; set; }
-        public Cell Cell { get; set; }
+        public int Row { get; private set; }
+        public int Col { get; private set; }
+        //public Cell Cell { get; set; }
 
         public List<Cell> LegalMoves { get; set; }
         public List<Cell> ProtectedCells { get; set; }
