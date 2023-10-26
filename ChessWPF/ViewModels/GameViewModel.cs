@@ -186,8 +186,8 @@ namespace ChessWPF.ViewModels
         private void AddToMoveAnnotation(Move move)
         {
             var sb = new StringBuilder(MoveNotation);
-            sb.Append($"{(move.CellOneBefore.Piece.Color == PieceColor.White ?
-                ($"{Board.Moves.Count(m => m.CellOneBefore.Piece.Color == PieceColor.White) + 1 / 2}.")
+            sb.Append($"{(move.CellOneBefore.Piece!.Color == PieceColor.White ?
+                ($"{Board.Moves.Count(m => m.CellOneBefore.Piece!.Color == PieceColor.White) + 1 / 2}.")
                 : string.Empty)}{move.Annotation} ");
             MoveNotation = sb.ToString();
             CanCopyMoveNotation = true;
