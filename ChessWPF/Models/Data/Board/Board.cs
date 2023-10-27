@@ -16,7 +16,7 @@ namespace ChessWPF.Models.Data.Board
         private bool gameHasEnded;
         private int halfMoveCount;
         private PieceColor turnColor;
-        private Move promotionMove;
+        private Move ongoingPromotionMove;
         private Stack<Move> moves;
         private Cell[,] cells;
         private List<Cell> backupCells;
@@ -80,10 +80,10 @@ namespace ChessWPF.Models.Data.Board
             get => halfMoveCount;
         }
 
-        public Move? PromotionMove
+        public Move? OngoingPromotionMove
         {
-            get => promotionMove;
-            private set => promotionMove = value!;
+            get => ongoingPromotionMove;
+            private set => ongoingPromotionMove = value!;
         }
 
         public Cell[,] Cells
