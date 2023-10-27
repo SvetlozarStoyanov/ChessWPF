@@ -11,7 +11,7 @@ namespace ChessWPF.ViewModels
     public sealed class BoardViewModel : ViewModelBase
     {
         private bool promotionIsUnderway;
-        private Move? promotionMove;
+        private Move? ongoingPromotionMove;
         private Move? undoneMove;
         private CellViewModel? selectedCell;
         private Board board;
@@ -69,7 +69,6 @@ namespace ChessWPF.ViewModels
             {
                 OnPropertyChanged(nameof(FenAnnotation));
             }
-
         }
 
         public bool GameHasEnded
@@ -188,14 +187,14 @@ namespace ChessWPF.ViewModels
         public void MovePiece(Cell cell)
         {
             var move = Board.MovePiece(cell, SelectedCell!.Cell);
-            if (Board.PromotionMove != null)
+            if (Board.OngoingPromotionMove != null)
             {
-                promotionMove = Board.PromotionMove;
+                ongoingPromotionMove = Board.OngoingPromotionMove;
                 ClearLegalMoves();
                 MakeAllPiecesUnselectable();
                 UpdateCellViewModelsForPromotion();
                 PromotionIsUnderway = true;
-                promotionMove = null;
+                ongoingPromotionMove = null;
             }
             if (Board.BackupCells.Count == 0)
             {
@@ -206,11 +205,11 @@ namespace ChessWPF.ViewModels
 
         public void UndoMove()
         {
-            if (Board.PromotionMove != null)
+            if (Board.OngoingPromotionMove != null)
             {
-                promotionMove = Board.PromotionMove;
+                ongoingPromotionMove = Board.OngoingPromotionMove;
                 RestoreAllBackupCells();
-                Board.UndoPromotionMove();
+                Board.UndoOngoingPromotionMove();
                 UpdateCellViewModels();
                 MarkWhichPiecesCanBeSelected();
                 Board.CalculatePossibleMoves();
@@ -220,7 +219,7 @@ namespace ChessWPF.ViewModels
                 {
                     CellViewModels[king.Row][king.Col].IsInCheck = true;
                 }
-                promotionMove = null;
+                ongoingPromotionMove = null;
                 PromotionIsUnderway = false;
             }
             else
@@ -244,14 +243,14 @@ namespace ChessWPF.ViewModels
         public void PromotePiece(PieceType pieceType)
         {
             Board.PromotePiece(pieceType);
-            var cell = Board.PromotionMove!.CellTwoAfter;
+            var cell = Board.OngoingPromotionMove!.CellTwoAfter;
             //cell.Piece = PieceConstructor.ConstructPieceByType(pieceType, TurnColor, cell);
             CellViewModels[cell.Row][cell.Col].CanBeSelectedForPromotion = false;
             CellViewModels[cell.Row][cell.Col].UpdateCellImage();
             RestoreBackupCells();
-            CellViewModels[Board.PromotionMove.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].Cell.Piece = null;
-            CellViewModels[Board.PromotionMove.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].UpdateCellImage();
-            FinishMove(Board.PromotionMove, null);
+            CellViewModels[Board.OngoingPromotionMove.CellOneBefore.Row][Board.OngoingPromotionMove.CellOneBefore.Col].Cell.Piece = null;
+            CellViewModels[Board.OngoingPromotionMove.CellOneBefore.Row][Board.OngoingPromotionMove.CellOneBefore.Col].UpdateCellImage();
+            FinishMove(Board.OngoingPromotionMove, null);
             PromotionIsUnderway = false;
         }
 
@@ -259,7 +258,7 @@ namespace ChessWPF.ViewModels
         {
             UnselectSelectedCell();
             ClearLegalMoves();
-            if (Board.PromotionMove != null)
+            if (Board.OngoingPromotionMove != null)
             {
                 UndoMove();
             }
@@ -440,22 +439,21 @@ namespace ChessWPF.ViewModels
         {
             backupCellsToUpdate = Board.BackupCells.ToList();
             Board.RestoreAllBackupCells();
-            CellViewModels[Board.PromotionMove!.CellOneBefore.Row][Board.PromotionMove.CellOneBefore.Col].CanBeSelected = true;
+            CellViewModels[Board.OngoingPromotionMove!.CellOneBefore.Row][Board.OngoingPromotionMove.CellOneBefore.Col].CanBeSelected = true;
         }
 
         private void UpdateCellViewModelsOfBackupCells()
         {
-
-            if (promotionMove != null)
+            if (ongoingPromotionMove != null)
             {
-                CellViewModels[promotionMove.CellOneBefore.Row][promotionMove.CellOneBefore.Col].CanBeSelectedForPromotion = false;
-                var pawnBeforePromotion = promotionMove.CellOneBefore.Piece;
+                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].CanBeSelectedForPromotion = false;
+                var pawnBeforePromotion = ongoingPromotionMove.CellOneBefore.Piece;
 
-                CellViewModels[promotionMove.CellOneBefore.Row][promotionMove.CellOneBefore.Col].Cell.Piece = pawnBeforePromotion;
-                CellViewModels[promotionMove.CellOneBefore.Row][promotionMove.CellOneBefore.Col].UpdateCellImage();
+                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].Cell.Piece = pawnBeforePromotion;
+                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].UpdateCellImage();
             }
 
-            foreach (var backupCell in backupCellsToUpdate.Where(c => promotionMove != null ? !c.HasEqualRowAndCol(promotionMove.CellOneBefore) : true))
+            foreach (var backupCell in backupCellsToUpdate.Where(c => ongoingPromotionMove != null ? !c.HasEqualRowAndCol(ongoingPromotionMove.CellOneBefore) : true))
             {
                 CellViewModels[backupCell.Row][backupCell.Col].CanBeSelectedForPromotion = false;
                 CellViewModels[backupCell.Row][backupCell.Col].Cell = Board.Cells[backupCell.Row, backupCell.Col];
@@ -537,12 +535,12 @@ namespace ChessWPF.ViewModels
 
         private void UpdateCellViewModelsForPromotion()
         {
-            if (!Board.BackupCells.Any(c => c.HasEqualRowAndCol(promotionMove!.CellOneBefore)))
+            if (!Board.BackupCells.Any(c => c.HasEqualRowAndCol(ongoingPromotionMove!.CellOneBefore)))
             {
-                CellViewModels[promotionMove!.CellOneBefore.Row][promotionMove.CellOneBefore.Col].Cell.Piece = null;
-                CellViewModels[promotionMove.CellOneBefore.Row][promotionMove.CellOneBefore.Col].UpdateCellImage();
+                CellViewModels[ongoingPromotionMove!.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].Cell.Piece = null;
+                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].UpdateCellImage();
             }
-            CellViewModels[promotionMove!.CellOneBefore.Row][promotionMove.CellOneBefore.Col].CanBeSelected = false;
+            CellViewModels[ongoingPromotionMove!.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].CanBeSelected = false;
             foreach (var cell in Board.BackupCells)
             {
                 CellViewModels[cell.Row][cell.Col].Cell = Board.Cells[cell.Row, cell.Col];

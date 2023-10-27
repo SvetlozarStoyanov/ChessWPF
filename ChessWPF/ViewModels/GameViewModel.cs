@@ -103,7 +103,7 @@ namespace ChessWPF.ViewModels
             var currTurnColor = Board.TurnColor;
             BoardViewModel.MovePiece(args.Cell);
 
-            if (Board.Moves.Any() && !Board.Moves.Peek().IsPromotionMove && Board.PromotionMove == null)
+            if (Board.Moves.Any() && !Board.Moves.Peek().IsPromotionMove && Board.OngoingPromotionMove == null)
             {
                 GameClockViewModels[currTurnColor.ToString()].AddIncrement();
                 AddToMoveAnnotation(Board.Moves.Peek());
@@ -122,7 +122,7 @@ namespace ChessWPF.ViewModels
 
         public void UndoMove(object sender, EventArgs args)
         {
-            if (BoardViewModel.Board.PromotionMove == null)
+            if (BoardViewModel.Board.OngoingPromotionMove == null)
             {
                 GameClockViewModels[Board.TurnColor.ToString()].StopClock();
                 GameClockViewModels[Board.TurnColor.ToString()].AddTime(GameClockViewModels[Board.TurnColor.ToString()].TimeElapsed);
