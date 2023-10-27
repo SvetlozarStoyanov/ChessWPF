@@ -7,7 +7,7 @@ using System.Linq;
 
 namespace ChessWPF.Game
 {
-    public static class CheckDirectionFinder
+    public static class LegalMovesToStopCheckFinder
     {
         public static List<Cell> GetLegalMovesToStopCheck(King king, Piece attacker, Board board)
         {
