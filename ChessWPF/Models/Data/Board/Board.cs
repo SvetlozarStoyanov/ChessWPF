@@ -158,27 +158,25 @@ namespace ChessWPF.Models.Data.Board
 
         public void UndoMove()
         {
-            Move move = Moves.Pop();
-            Cell cellOneBefore = move.CellOneBefore;
+            var move = Moves.Pop();
+            var cellOneBefore = move.CellOneBefore;
+            var cellTwoBefore = move.CellTwoBefore;
             if (move.IsPromotionMove)
             {
-                Pieces[move.CellOneBefore.Piece!.Color].Add(move.CellOneBefore.Piece);
-                Pieces[move.CellOneBefore.Piece.Color].Remove(pieces[move.CellOneBefore.Piece.Color]
-                    .First(p => p.Row == move.CellTwoBefore.Row && p.Col == move.CellTwoBefore.Col));
+                Pieces[cellOneBefore.Piece!.Color].Add(cellOneBefore.Piece!);
+                Pieces[cellOneBefore.Piece!.Color].Remove(pieces[cellOneBefore.Piece!.Color]
+                    .First(p => p.HasEqualCoordinates(cellTwoBefore)));
             }
             else
             {
                 Pieces[cellOneBefore.Piece!.Color].First(piece => piece.Equals(move.CellTwoAfter.Piece)).SetCoordinates(cellOneBefore);
             }
             Cells[cellOneBefore.Row, cellOneBefore.Col] = cellOneBefore;
-            Cells[cellOneBefore.Row, cellOneBefore.Col].Piece = cellOneBefore.Piece;
-            var cellTwoBefore = move.CellTwoBefore;
             Cells[cellTwoBefore.Row, cellTwoBefore.Col] = cellTwoBefore;
-            Cells[cellTwoBefore.Row, cellTwoBefore.Col].Piece = cellTwoBefore.Piece;
 
-            if (move.CellTwoBefore.Piece != null)
+            if (cellTwoBefore.Piece != null)
             {
-                Pieces[move.CellTwoBefore.Piece.Color].Add(move.CellTwoBefore.Piece);
+                Pieces[cellTwoBefore.Piece.Color].Add(cellTwoBefore.Piece!);
             }
 
             if (move.CellThreeBefore != null)
@@ -191,16 +189,10 @@ namespace ChessWPF.Models.Data.Board
                 }
                 else
                 {
-                    Pieces[move.CellThreeBefore.Piece!.Color].First(p => p.Equals(move.CellFourAfter!.Piece)).SetCoordinates(cellThreeBefore);
+                    var cellFourBefore = move.CellFourBefore;
+                    Cells[cellFourBefore!.Row, cellFourBefore.Col] = cellFourBefore;
+                    Pieces[cellThreeBefore.Piece!.Color].FirstOrDefault(p => p.Equals(move.CellFourAfter!.Piece))!.SetCoordinates(cellThreeBefore);
                 }
-                Cells[cellThreeBefore.Row, cellThreeBefore.Col].Piece = cellThreeBefore.Piece;
-            }
-
-            if (move.CellFourBefore != null)
-            {
-                var cellFourBefore = move.CellFourBefore;
-                Cells[cellFourBefore.Row, cellFourBefore.Col] = cellFourBefore;
-                Cells[cellFourBefore.Row, cellFourBefore.Col].Piece = cellFourBefore.Piece;
             }
 
             ReverseTurnColor();
@@ -220,61 +212,34 @@ namespace ChessWPF.Models.Data.Board
             }
         }
 
-        public void UndoPromotionMove()
+        public void UndoOngoingPromotionMove()
         {
-            Cells[PromotionMove!.CellOneBefore.Row, PromotionMove.CellOneBefore.Col] = PromotionMove.CellOneBefore;
-            Cells[PromotionMove.CellOneBefore.Row, PromotionMove.CellOneBefore.Col].Piece = PromotionMove.CellOneBefore.Piece;
-            Cells[PromotionMove.CellTwoBefore.Row, PromotionMove.CellTwoBefore.Col] = PromotionMove.CellTwoBefore;
-            if (PromotionMove.CellTwoBefore.Piece != null)
+            Cells[OngoingPromotionMove!.CellOneBefore.Row, OngoingPromotionMove.CellOneBefore.Col] = OngoingPromotionMove.CellOneBefore;
+            
+            Cells[OngoingPromotionMove.CellTwoBefore.Row, OngoingPromotionMove.CellTwoBefore.Col] = OngoingPromotionMove.CellTwoBefore;
+            if (OngoingPromotionMove.CellTwoBefore.Piece != null)
             {
-                Cells[PromotionMove.CellTwoBefore.Row, PromotionMove.CellTwoBefore.Col].Piece = PromotionMove.CellTwoBefore.Piece;
+                
+                Pieces[OngoingPromotionMove.CellTwoBefore.Piece!.Color].Add(OngoingPromotionMove.CellTwoBefore.Piece!);
             }
 
-            Pieces[PromotionMove.CellOneBefore.Piece!.Color].Remove(Pieces[PromotionMove.CellOneBefore.Piece.Color].First(p => p.HasEqualCoordinates(PromotionMove.CellTwoBefore)));
-            Pieces[PromotionMove.CellOneBefore.Piece.Color].Add(PromotionMove.CellOneBefore.Piece);
+            Pieces[OngoingPromotionMove.CellOneBefore.Piece!.Color].Remove(Pieces[OngoingPromotionMove.CellOneBefore.Piece.Color].First(p => p.HasEqualCoordinates(OngoingPromotionMove.CellTwoBefore)));
+            Pieces[OngoingPromotionMove.CellOneBefore.Piece.Color].Add(OngoingPromotionMove.CellOneBefore.Piece);
 
-            PromotionMove = null;
+            OngoingPromotionMove = null;
         }
 
         public void PromotePiece(PieceType pieceType)
         {
-            var cell = promotionMove.CellTwoAfter;
+            var cell = OngoingPromotionMove!.CellTwoAfter;
             cell.Piece = PieceConstructor.ConstructPieceByType(pieceType, TurnColor, cell.Row, cell.Col);
-            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            PromotionMove!.CellTwoAfter.Piece = cell.Piece;
-            PromotionMove.CellTwoAfter.Piece.SetCoordinates(cell);
-            PromotionMove.Annotation = MoveNotationWriter.AnnotateMove(promotionMove, pieces);
-            Cells[cell.Row, cell.Col].Piece = cell.Piece;
-            Cells[cell.Row, cell.Col].Piece!.SetCoordinates(cell);
-            Cells[PromotionMove.CellOneBefore.Row, PromotionMove.CellOneBefore.Col].Piece = null;
-
-            Pieces[TurnColor].Remove(Pieces[TurnColor].First(p => p.HasEqualCoordinates(cell)));
-            var oppositeColorPieceToRemove = pieces[oppositeColor].FirstOrDefault(p => p.HasEqualCoordinates(cell));
-            if (oppositeColorPieceToRemove != null)
-            {
-                Pieces[oppositeColor].Remove(oppositeColorPieceToRemove);
+            //OngoingPromotionMove!.CellTwoAfter.Piece = cell.Piece;
+            OngoingPromotionMove.Annotation = MoveNotationWriter.AnnotateMove(OngoingPromotionMove, Pieces);
+            UpdateCellsAndPiecesOfMove(OngoingPromotionMove);
             }
-
-            Pieces[cell.Piece.Color].Add(cell.Piece);
-        }
 
         public void FinishMove(Move move, Cell selectedCell)
         {
-            if (selectedCell != null)
-            {
-                if (selectedCell.Piece != null && (move.CellTwoBefore.Piece != null || move.CellThreeBefore != null && move.CellFourBefore == null))
-                {
-                    if (move.CellThreeBefore != null && move.CellFourBefore == null)
-                    {
-                        Pieces[move.CellThreeBefore.Piece!.Color].Remove(Pieces[move.CellThreeBefore.Piece.Color].First(p => p.Equals(move.CellThreeBefore.Piece)));
-                    }
-                    else
-                    {
-                        Pieces[move.CellTwoBefore.Piece!.Color].Remove(Pieces[move.CellTwoBefore.Piece.Color].First(p => p.Equals(move.CellTwoBefore.Piece)));
-                    }
-                }
-                selectedCell.Piece = null;
-            }
             if (move.IsHalfMove())
             {
                 halfMoveCount++;
@@ -283,15 +248,15 @@ namespace ChessWPF.Models.Data.Board
             {
                 halfMoveCount = 0;
             }
-            if (PromotionMove != null)
+            if (OngoingPromotionMove != null)
             {
                 PromotionMove = null;
             }
             move.CurrHalfMoveCount = halfMoveCount;
-            this.ReverseTurnColor();
+            ReverseTurnColor();
             Moves.Push(move);
             UpdateFenAnnotation();
-            Moves.Peek().FenAnnotation = this.fenAnnotation;
+            Moves.Peek().FenAnnotation = FenAnnotation;
         }
 
         public void CalculatePossibleMoves()
