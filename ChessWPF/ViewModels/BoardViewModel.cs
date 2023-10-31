@@ -434,7 +434,6 @@ namespace ChessWPF.ViewModels
 
         private void RestoreAllBackupCells()
         {
-            backupCellsToUpdate = Board.BackupCells.ToList();
             Board.RestoreAllBackupCells();
             CellViewModels[Board.OngoingPromotionMove!.CellOneBefore.Row][Board.OngoingPromotionMove.CellOneBefore.Col].CanBeSelected = true;
         }
@@ -443,14 +442,10 @@ namespace ChessWPF.ViewModels
         {
             if (ongoingPromotionMove != null)
             {
-                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].CanBeSelectedForPromotion = false;
-                var pawnBeforePromotion = ongoingPromotionMove.CellOneBefore.Piece;
-
-                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].Cell.Piece = pawnBeforePromotion;
-                CellViewModels[ongoingPromotionMove.CellOneBefore.Row][ongoingPromotionMove.CellOneBefore.Col].UpdateCellImage();
+                CellViewModels[Board.OngoingPromotionMove.CellOneBefore.Row][Board.OngoingPromotionMove.CellOneBefore.Col].CanBeSelectedForPromotion = false;
             }
 
-            foreach (var backupCell in backupCellsToUpdate.Where(c => ongoingPromotionMove != null ? !c.HasEqualRowAndCol(ongoingPromotionMove.CellOneBefore) : true))
+            foreach (var backupCell in Board.BackupCells.Where(c => Board.OngoingPromotionMove != null ? !c.HasEqualRowAndCol(Board.OngoingPromotionMove.CellOneBefore) : true))
             {
                 CellViewModels[backupCell.Row][backupCell.Col].CanBeSelectedForPromotion = false;
                 CellViewModels[backupCell.Row][backupCell.Col].Cell = Board.Cells[backupCell.Row, backupCell.Col];
