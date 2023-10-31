@@ -412,10 +412,7 @@ namespace ChessWPF.Models.Data.Board
         {
             foreach (var cell in BackupCells.Where(c => c.Row != 7 && c.Row != 0 && !c.HasEqualRowAndCol(ongoingPromotionMove.CellOneBefore)))
             {
-                Cells[cell.Row, cell.Col] = cell;
-                if (cell.Piece != null)
-                {
-                    Cells[cell.Row, cell.Col].Piece = cell.Piece;
+                Cells[cell.Row, cell.Col].UpdateCell(cell.Piece);
                 }
                 else
                 {
@@ -429,16 +426,8 @@ namespace ChessWPF.Models.Data.Board
         {
             foreach (var cell in BackupCells)
             {
-                Cells[cell.Row, cell.Col] = cell;
-                if (cell.Piece != null)
-                {
-                    Cells[cell.Row, cell.Col].Piece = cell.Piece;
+                Cells[cell.Row, cell.Col].UpdateCell(cell.Piece);
                 }
-                else
-                {
-                    Cells[cell.Row, cell.Col].Piece = null;
-                }
-            }
             BackupCells.Clear();
         }
 
