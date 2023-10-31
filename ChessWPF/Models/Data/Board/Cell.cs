@@ -53,5 +53,17 @@ namespace ChessWPF.Models.Data.Board
         {
             return Math.Abs(this.Col - cell.Col);
         }
+
+        public void UpdateCell(Piece? piece)
+        {
+            this.Piece = piece;
+            Update(this, new UpdateCellEventArgs(piece));
+        }
+
+        public void UpdateCellForPromotion(Piece piece)
+        {
+            this.Piece = piece;
+            UpdateForPromotion(this, new UpdateCellEventArgs(piece));
+        }
     }
 }
