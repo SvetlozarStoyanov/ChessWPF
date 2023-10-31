@@ -21,15 +21,19 @@ namespace ChessWPF.ViewModels
 
         public CellViewModel(Cell cell)
         {
-            this.cell = cell;
+            Cell = cell;
+            Cell.Update += Update;
+            Cell.UpdateForPromotion += UpdateForPromotion;
             SelectCommand = new SelectCommand(this);
             MoveCommand = new MoveCommand(this);
             PromoteCommand = new PromoteCommand(this);
             CheckCommand = new CheckCommand(this);
+
             //CanBeMovedTo = false;
             //IsSelected = false;
             //CanBeSelectedForPromotion = false;
         }
+
         public delegate void SelectEventHandler(object sender, SelectCellViewModelEventArgs args);
         public event SelectEventHandler Select;
 
