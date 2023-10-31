@@ -16,6 +16,12 @@ namespace ChessWPF.Models.Data.Board
             Piece = piece;
         }
 
+        public delegate void UpdateEventHandler(object? sender, UpdateCellEventArgs args);
+        public event UpdateEventHandler Update;
+
+        public delegate void UpdateForPromotionEventHandler(object? sender, UpdateCellEventArgs args);
+        public event UpdateForPromotionEventHandler UpdateForPromotion;
+
         public int Row { get; set; }
         public int Col { get; set; }
 
