@@ -1,4 +1,5 @@
-﻿using ChessWPF.Models.Data.Pieces;
+﻿using ChessWPF.HelperClasses.CustomEventArgs;
+using ChessWPF.Models.Data.Pieces;
 using System;
 
 namespace ChessWPF.Models.Data.Board
