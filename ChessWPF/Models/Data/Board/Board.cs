@@ -33,24 +33,6 @@ namespace ChessWPF.Models.Data.Board
             };
             CreateCells(Cells);
             BackupCells = new List<Cell>();
-            //TurnColor = PieceColor.White;
-
-            SetupPieces();
-            //SetupPiecesAnnotationTest();
-            //SetupPiecesDemo();
-            //SetupPiecesCheckBishopTest();
-            //SetupPiecesCheckRookTest();
-            //SetupPiecesEnPassantTest();
-            //SetupPiecesEnPassantCheckSaveTest();
-            //SetupPiecesPromotionTest();
-            //SetupPiecesPromotionCheckSaveTest();
-            //SetupPiecesStalemateTest();
-            //SetupPiecesKnightCheckTest();
-            //SetupPiecesKnookTest();
-            //SetupPiecesBeforeMoveCheckTest();
-            //SetupPiecesPawnCheckTest();
-
-            AddPiecesFromSetup();
         }
 
         public string GameResult
@@ -128,6 +110,47 @@ namespace ChessWPF.Models.Data.Board
                     cells[row, col] = new Cell(row, col);
                 }
             }
+        }
+
+        public void SetupPieces()
+        {
+            SetupPiecesDefault();
+            //SetupPiecesAnnotationTest();
+            //SetupPiecesDemo();
+            //SetupPiecesCheckBishopTest();
+            //SetupPiecesCheckRookTest();
+            //SetupPiecesEnPassantTest();
+            //SetupPiecesEnPassantCheckSaveTest();
+            //SetupPiecesPromotionTest();
+            //SetupPiecesPromotionCheckSaveTest();
+            //SetupPiecesStalemateTest();
+            //SetupPiecesKnightCheckTest();
+            //SetupPiecesKnookTest();
+            //SetupPiecesBeforeMoveCheckTest();
+            //SetupPiecesPawnCheckTest();
+
+            AddPiecesFromSetup();
+        }
+
+        public void Reset()
+        {
+            foreach (var piece in Pieces[PieceColor.White])
+            {
+                Cells[piece.Row, piece.Col].UpdateCell(null);
+            }
+            Pieces[PieceColor.White].Clear();
+            foreach (var piece in Pieces[PieceColor.Black])
+            {
+                Cells[piece.Row, piece.Col].UpdateCell(null);
+            }
+            Pieces[PieceColor.Black].Clear();
+            if (Moves.Any())
+            {
+                TurnColor = Moves.Reverse().FirstOrDefault()!.CellOneBefore.Piece!.Color;
+                Moves.Clear();
+            }
+
+            SetupPieces();
         }
 
         public void ReverseTurnColor()
