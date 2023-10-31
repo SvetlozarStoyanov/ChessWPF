@@ -1,6 +1,8 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Board;
+using ChessWPF.Models.Data.Pieces;
+using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -130,7 +132,7 @@ namespace ChessWPF.ViewModels
 
         public void OnPromotedTo()
         {
-            PromotedTo(this, new PromotePieceEventArgs(this.Cell.Piece.PieceType));
+            PromotedTo(this, new PromotePieceEventArgs(this.Cell.Piece!.PieceType));
         }
 
         private void OnMovedTo()
@@ -143,8 +145,8 @@ namespace ChessWPF.ViewModels
         {
             if (cell.Piece != null)
             {
-                string imageUrl = $"/Graphics/Chess Pieces/{cell.Piece.Color} {cell.Piece.GetType().Name}.png";
-                Uri resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
+                var imageUrl = $"/Graphics/Chess Pieces/{cell.Piece.Color} {cell.Piece.GetType().Name}.png";
+                var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
                 CellImage = new BitmapImage(resourceUri);
             }
             else
@@ -164,6 +166,20 @@ namespace ChessWPF.ViewModels
                 IsSelected = false;
             }
             Select(this, new SelectCellViewModelEventArgs(this));
+        }
+
+        private void Update(object? sender, UpdateCellEventArgs args)
+        {
+            UpdateCellImage();
+            CanBeSelected = false;
+        }
+
+        private void UpdateForPromotion(object? sender, UpdateCellEventArgs args)
+        {
+            UpdateCellImage();
+            CanBeSelectedForPromotion = true;
+            IsInCheck = false;
+            CanBeSelected = false;
         }
     }
 }
