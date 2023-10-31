@@ -11,8 +11,6 @@ namespace ChessWPF.ViewModels
     public sealed class BoardViewModel : ViewModelBase
     {
         private bool promotionIsUnderway;
-        private Move? ongoingPromotionMove;
-        private Move? undoneMove;
         private CellViewModel? selectedCell;
         private Board board;
         private CellViewModel[][] cellViewModels;
