@@ -145,11 +145,11 @@ namespace ChessWPF.ViewModels
             UnselectSelectedCell();
             if (Board.BackupCells.Count > 0)
             {
-                RestoreAllBackupCells();
                 UpdateCellViewModelsOfBackupCells();
+                RestoreAllBackupCells();
                 PromotionIsUnderway = false;
             }
-            Board = new Board();
+            Board.Reset();
             GameHasStarted = false;
             GameHasEnded = false;
             GameResult = null;
