@@ -20,10 +20,9 @@ namespace ChessWPF.ViewModels
         public BoardViewModel()
         {
             Board = new Board();
-            cellViewModels = new CellViewModel[8][];
+            CellViewModels = new CellViewModel[8][];
             MatchCellViewModelsToCells();
-            //Board.TurnColor = PieceColor.White;
-            backupCellsToUpdate = new List<Cell>();
+            Board.SetupPieces();
             LegalMoves = new List<Cell>();
             PromotionIsUnderway = false;
         }
