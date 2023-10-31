@@ -14,18 +14,16 @@ namespace ChessWPF.Models.Data.Pieces
             ProtectedCells = new List<Cell>();
         }
 
-        public Piece(PieceType pieceType, PieceColor color/*, Cell cell*/, int row, int col) : this(pieceType, color)
+        public Piece(PieceType pieceType, PieceColor color, int row, int col) : this(pieceType, color)
         {
             Row = row;
             Col = col;
-            //Cell = cell;
         }
 
         public PieceType PieceType { get; set; }
         public PieceColor Color { get; set; }
         public int Row { get; private set; }
         public int Col { get; private set; }
-        //public Cell Cell { get; set; }
 
         public List<Cell> LegalMoves { get; set; }
         public List<Cell> ProtectedCells { get; set; }
@@ -33,9 +31,9 @@ namespace ChessWPF.Models.Data.Pieces
         public override bool Equals(object? obj)
         {
             var otherPiece = (obj as Piece)!;
-            return otherPiece.Row == this.Row 
-                && otherPiece.Col == this.Col 
-                && otherPiece.PieceType == this.PieceType 
+            return otherPiece.Row == this.Row
+                && otherPiece.Col == this.Col
+                && otherPiece.PieceType == this.PieceType
                 && otherPiece.Color == this.Color;
         }
 
@@ -45,15 +43,22 @@ namespace ChessWPF.Models.Data.Pieces
             return cell!.Row == this.Row && cell.Col == this.Col;
         }
 
+
+        public bool HasEvenCoordinates()
+        {
+            return (Row + Col) % 2 == 0;
+        }
+
         public void SetCoordinates(Cell cell)
         {
             this.Row = cell.Row;
             this.Col = cell.Col;
         }
 
-        public bool HasEvenCoordinates()
+        public void UpdateLegalMovesAndProtectedCells(List<Cell> legalMoves, List<Cell> protectedCells)
         {
-            return (Row + Col) % 2 == 0;
+            this.LegalMoves = legalMoves;
+            this.ProtectedCells = protectedCells;
         }
     }
 }
