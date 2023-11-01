@@ -50,13 +50,13 @@ namespace ChessWPF.Models.Data.Board
         public bool GameHasStarted
         {
             get => gameHasStarted;
-            set { gameHasStarted = value; }
+            set => gameHasStarted = value;
         }
 
         public bool GameHasEnded
         {
             get => gameHasEnded;
-            set { gameHasEnded = value; }
+            set => gameHasEnded = value;
         }
 
         public int HalfMoveCount
@@ -298,11 +298,7 @@ namespace ChessWPF.Models.Data.Board
             var oppositeKing = (King)Pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
             UnCheckKing(oppositeKing);
             var king = (King)Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
-            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            king.Attackers.Clear();
-            king.IsInCheck = false;
             king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor);
-            (Cells[king.Row, king.Col].Piece as King)!.IsInCheck = false;
 
             foreach (var piece in Pieces[oppositeColor])
             {
@@ -314,7 +310,6 @@ namespace ChessWPF.Models.Data.Board
                 if (checkedKingCell != null)
                 {
                     king.Attackers.Add(piece);
-                    king.IsInCheck = true;
                 }
             }
             if (king.Attackers.Any())
@@ -322,7 +317,7 @@ namespace ChessWPF.Models.Data.Board
                 Cells[king.Row, king.Col].MarkAsChecked();
                 king.IsInCheck = true;
                 if (Moves.Any())
-            {
+                {
                     Moves.Peek().Annotation += "+";
                 }
             }
@@ -927,7 +922,6 @@ namespace ChessWPF.Models.Data.Board
                         Pieces[move.CellThreeBefore.Piece.Color].Remove(Pieces[move.CellThreeBefore.Piece.Color].FirstOrDefault(p => p.Equals(move.CellThreeBefore.Piece))!);
                     }
                 }
-
                 Cells[move.CellThreeBefore.Row, move.CellThreeBefore.Col].UpdateCell(move.CellThreeAfter!.Piece);
             }
 
@@ -956,7 +950,6 @@ namespace ChessWPF.Models.Data.Board
             else if (Pieces.Sum(p => p.Value.Count) == 2)
             {
                 GameResult = "Draw!";
-
                 isGameDrawn = true;
             }
             else if (Pieces.Sum(p => p.Value.Count) == 3)
