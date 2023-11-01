@@ -184,6 +184,11 @@ namespace ChessWPF.Models.Data.Board
 
         public void UndoMove()
         {
+            var king = (Pieces[TurnColor].FirstOrDefault(p => p.PieceType == PieceType.King) as King);
+            if (king!.IsInCheck)
+            {
+                UnCheckKing(king!);
+            }
             var move = Moves.Pop();
             var cellOneBefore = move.CellOneBefore;
             var cellTwoBefore = move.CellTwoBefore;
@@ -276,6 +281,10 @@ namespace ChessWPF.Models.Data.Board
             {
                 OngoingPromotionMove = null;
             }
+            if (move.CellOneBefore.Piece!.PieceType == PieceType.King /*&& (move.CellOneBefore.Piece as King)!.IsInCheck*/ )
+            {
+                Cells[move.CellOneBefore.Row, move.CellOneBefore.Col].MarkAsUnchecked();
+            }
             move.CurrHalfMoveCount = halfMoveCount;
             ReverseTurnColor();
             Moves.Push(move);
@@ -285,6 +294,9 @@ namespace ChessWPF.Models.Data.Board
 
         public void CalculatePossibleMoves()
         {
+            var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+            var oppositeKing = (King)Pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
+            UnCheckKing(oppositeKing);
             var king = (King)Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
             var oppositeColor = TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             king.Attackers.Clear();
@@ -305,9 +317,14 @@ namespace ChessWPF.Models.Data.Board
                     king.IsInCheck = true;
                 }
             }
-            if (king.IsInCheck && moves.Any())
+            if (king.Attackers.Any())
             {
-                moves.Peek().Annotation += "+";
+                Cells[king.Row, king.Col].MarkAsChecked();
+                king.IsInCheck = true;
+                if (Moves.Any())
+            {
+                    Moves.Peek().Annotation += "+";
+                }
             }
             var validMovesToStopCheck = new List<Cell>();
             if (king.Attackers.Count == 1)
