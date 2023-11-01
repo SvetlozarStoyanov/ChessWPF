@@ -921,6 +921,13 @@ namespace ChessWPF.Models.Data.Board
             }
         }
 
+        private void UnCheckKing(King king)
+        {
+            king.Attackers.Clear();
+            king.IsInCheck = false;
+            Cells[king.Row, king.Col].MarkAsUnchecked();
+        }
+
         private bool CheckForDraw()
         {
             var isGameDrawn = false;
