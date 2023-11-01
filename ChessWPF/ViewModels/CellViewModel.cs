@@ -26,6 +26,8 @@ namespace ChessWPF.ViewModels
             Cell = cell;
             Cell.Update += Update;
             Cell.UpdateForPromotion += UpdateForPromotion;
+            Cell.Check += OnCheck;
+            Cell.UnCheck += OnUnCheck;
             SelectCommand = new SelectCommand(this);
             MoveCommand = new MoveCommand(this);
             PromoteCommand = new PromoteCommand(this);
@@ -180,6 +182,16 @@ namespace ChessWPF.ViewModels
             CanBeSelectedForPromotion = true;
             IsInCheck = false;
             CanBeSelected = false;
+        }
+
+        private void OnCheck(object? sender, EventArgs args)
+        {
+            this.IsInCheck = true;
+        }
+
+        private void OnUnCheck(object? sender, EventArgs args)
+        {
+            this.IsInCheck = false;
         }
     }
 }
