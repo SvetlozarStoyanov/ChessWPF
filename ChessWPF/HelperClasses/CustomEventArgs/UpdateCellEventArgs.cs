@@ -1,8 +1,9 @@
 ﻿using ChessWPF.Models.Data.Pieces;
+using System;
 
 namespace ChessWPF.HelperClasses.CustomEventArgs
 {
-    public class UpdateCellEventArgs
+    public class UpdateCellEventArgs : EventArgs
     {
         public UpdateCellEventArgs(Piece? piece)
         {

@@ -1,5 +1,4 @@
-﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
+﻿using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 
 namespace ChessWPF.Game
@@ -22,10 +21,9 @@ namespace ChessWPF.Game
                     return new Queen(color, row, col);
                 case PieceType.Knook:
                     return new Knook(color, row, col);
-                case PieceType.King:
-                    return new King(color, row, col);
+                default:
+                    return new King(color, row, col); 
             }
-            return null;
         }
 
         public static Piece ConstructPieceForPromotion(PieceType pieceType, PieceColor Color)
