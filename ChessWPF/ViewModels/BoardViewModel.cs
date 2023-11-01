@@ -158,14 +158,7 @@ namespace ChessWPF.ViewModels
         public void PrepareForNextTurn()
         {
             ClearLegalMoves();
-            var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
-            CellViewModels[king.Row][king.Col].IsInCheck = false;
             Board.CalculatePossibleMoves();
-            if ((Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King) as King)!.IsInCheck)
-            {
-                CellViewModels[king.Row][king.Col].IsInCheck = true;
-            }
-
 
             if (Board.CheckForGameEnding())
             {
@@ -204,12 +197,6 @@ namespace ChessWPF.ViewModels
                 Board.UndoOngoingPromotionMove();
                 MarkWhichPiecesCanBeSelected();
                 Board.CalculatePossibleMoves();
-                var king = (King)Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King);
-
-                if ((Board.Pieces[Board.TurnColor].First(p => p.PieceType == PieceType.King) as King)!.IsInCheck)
-                {
-                    CellViewModels[king.Row][king.Col].IsInCheck = true;
-                }
                 PromotionIsUnderway = false;
             }
             else
@@ -354,9 +341,6 @@ namespace ChessWPF.ViewModels
         private void ResetMatchCellViewModelToCell(int row, int col)
         {
             var cellViewModel = CellViewModels[row][col];
-            cellViewModel.Cell = Board.Cells[row, col];
-            
-            cellViewModel.UpdateCellImage();
             cellViewModel.CanBeMovedTo = false;
             cellViewModel.CanBeSelected = false;
             cellViewModel.IsSelected = false;
@@ -375,33 +359,23 @@ namespace ChessWPF.ViewModels
             {
                 var currCellViewModel = CellViewModels[piece.Row][piece.Col];
                 currCellViewModel.CanBeSelected = false;
-                if (piece.PieceType == PieceType.King && (piece as King)!.IsInCheck)
-                {
-                    currCellViewModel.IsInCheck = false;
-                }
             }
         }
 
         private void MakeAllPiecesUnselectable()
         {
-            var oppositeColor = Board.TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-            foreach (var pieceCoordinates in Board.Pieces[Board.TurnColor].Select(p => new { Row = p.Row, Col = p.Col }))
+            foreach (var pieceColor in Board.Pieces.Keys)
             {
-                CellViewModels[pieceCoordinates.Row][pieceCoordinates.Col].CanBeSelected = false;
-            }
-            foreach (var pieceCell in Board.Pieces[oppositeColor].Select(p => new { Row = p.Row, Col = p.Col }))
-            {
-                CellViewModels[pieceCell.Row][pieceCell.Col].CanBeSelected = false;
-            }
+                foreach (var pieceCoordinates in Board.Pieces[pieceColor].Select(p => new { Row = p.Row, Col = p.Col }))
+                {
+                    CellViewModels[pieceCoordinates.Row][pieceCoordinates.Col].CanBeSelected = false;
+                }
+            } 
         }
 
         private void FinishMove(Move move, Cell? selectedCell)
         {
             Board.FinishMove(move, selectedCell!);
-            if (move.CellOneBefore.Piece!.PieceType == PieceType.King && CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].IsInCheck)
-            {
-                CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].IsInCheck = false;
-            }
             if (!GameHasStarted)
             {
                 GameHasStarted = true;
