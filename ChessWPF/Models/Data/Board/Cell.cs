@@ -29,7 +29,6 @@ namespace ChessWPF.Models.Data.Board
 
         public int Row { get; set; }
         public int Col { get; set; }
-
         public Piece? Piece { get; set; }
 
         public override bool Equals(object? obj)

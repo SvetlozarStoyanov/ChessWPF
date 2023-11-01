@@ -47,6 +47,8 @@ namespace ChessWPF.ViewModels
         public delegate void PromotedToEventHandler(object sender, PromotePieceEventArgs args);
         public event PromotedToEventHandler PromotedTo;
 
+        
+
         public bool CanBeMovedTo
         {
             get { return canBeMovedTo; }
