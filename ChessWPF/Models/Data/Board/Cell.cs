@@ -23,6 +23,10 @@ namespace ChessWPF.Models.Data.Board
         public delegate void UpdateForPromotionEventHandler(object? sender, UpdateCellEventArgs args);
         public event UpdateForPromotionEventHandler UpdateForPromotion;
 
+        public delegate void CheckEventHandler(object? sender, EventArgs args);
+        public event CheckEventHandler Check;
+        public event CheckEventHandler UnCheck;
+
         public int Row { get; set; }
         public int Col { get; set; }
 
@@ -65,6 +69,16 @@ namespace ChessWPF.Models.Data.Board
         {
             this.Piece = piece;
             UpdateForPromotion(this, new UpdateCellEventArgs(piece));
+        }
+
+        public void MarkAsChecked()
+        {
+            Check(this, EventArgs.Empty);
+        }
+
+        public void MarkAsUnchecked()
+        {
+            UnCheck(this, EventArgs.Empty);
         }
     }
 }
