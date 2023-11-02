@@ -1,14 +1,9 @@
-﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.ViewModels;
-
-namespace ChessWPF.Singleton
+﻿namespace ChessWPF.Singleton
 {
     public sealed class BackgroundSingleton
     {
         private static BackgroundSingleton instance = null;
         private static readonly object padlock = new object();
-        private GameViewModel gameViewModel;
 
         public BackgroundSingleton()
         {
@@ -28,17 +23,6 @@ namespace ChessWPF.Singleton
                     return instance;
                 }
             }
-        }
-
-        public GameViewModel GameViewModel
-        {
-            get { return gameViewModel; }
-            set { gameViewModel = value; }
-        }
-
-        public Board Board 
-        { 
-            get => GameViewModel.BoardViewModel.Board;
         }
     }
 }
