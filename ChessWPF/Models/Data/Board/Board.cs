@@ -298,11 +298,11 @@ namespace ChessWPF.Models.Data.Board
             var oppositeKing = (King)Pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
             UnCheckKing(oppositeKing);
             var king = (King)Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
-            king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor);
+            king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor, this);
 
             foreach (var piece in Pieces[oppositeColor])
             {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
+                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece,this);
                 piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                 piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
                 Cells[piece.Row, piece.Col].Piece = piece;
@@ -328,7 +328,7 @@ namespace ChessWPF.Models.Data.Board
             }
             if (king.Attackers.Count > 1)
             {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king);
+                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king, this);
                 king.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                 foreach (var piece in Pieces[TurnColor].Where(p => p.PieceType != PieceType.King))
                 {
@@ -340,7 +340,7 @@ namespace ChessWPF.Models.Data.Board
             {
                 foreach (var piece in Pieces[TurnColor])
                 {
-                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece);
+                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
                     if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
                     {
                         legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
