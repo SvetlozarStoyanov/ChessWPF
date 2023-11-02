@@ -1,5 +1,4 @@
 ﻿using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Singleton;
 using System.Collections.Generic;
 
 namespace ChessWPF.ViewModels
@@ -9,17 +8,16 @@ namespace ChessWPF.ViewModels
         public GameViewModel GameViewModel { get; set; }
         public MainViewModel()
         {
-            BoardViewModel boardViewModel = new BoardViewModel();
-            MenuViewModel menuViewModel = new MenuViewModel(boardViewModel);
-            GameClockViewModel whiteGameClockViewModel = new GameClockViewModel(PieceColor.White);
-            GameClockViewModel blackGameClockViewModel = new GameClockViewModel(PieceColor.Black);
+            var boardViewModel = new BoardViewModel();
+            var menuViewModel = new MenuViewModel(boardViewModel);
+            var whiteGameClockViewModel = new GameClockViewModel(PieceColor.White);
+            var blackGameClockViewModel = new GameClockViewModel(PieceColor.Black);
             var gameClocks = new Dictionary<string, GameClockViewModel>()
             {
                 ["White"] = whiteGameClockViewModel,
                 ["Black"] = blackGameClockViewModel
             };
             GameViewModel = new GameViewModel(boardViewModel, menuViewModel, gameClocks);
-            BackgroundSingleton.Instance.GameViewModel = GameViewModel;
             GameViewModel.StartGame();
         }
     }
