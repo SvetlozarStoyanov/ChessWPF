@@ -29,19 +29,19 @@ namespace ChessWPF.Views.Boards
 
         }
 
-        private void btnGameEnd_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (btnGameEnd.IsEnabled)
-            {
-                MessageBox.Show(gameResultTextBox.Text, "Game over!");
-            }
-        }
-
         private void ChessBoard_Loaded(object sender, RoutedEventArgs e)
         {
             double controlsize = ((SystemParameters.PrimaryScreenWidth / 10) / 3 * 2) / 5 * 0.7;
             Application.Current.Resources.Remove("FenFontSize");
             Application.Current.Resources.Add("FenFontSize", controlsize);
+        }
+
+        private void gameResultTextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (gameResultTextBox.IsEnabled)
+            {
+                MessageBox.Show(gameResultTextBox.Text, "Game over!");
+            }
         }
     }
 }
