@@ -10,15 +10,11 @@
         <Border BorderBrush="Black" BorderThickness="1"/>
         <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" Click="cellBtnSelect_Click" LostFocus="cellBtnSelect_LostFocus" >
         </Button>
-        <!--<Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" >
-        </Button>-->
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
         </Button>
         <Button Command="{Binding MoveCommand}" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
         </Button>
-        <Button Command="{Binding CheckCommand}" x:Name="checkBtn" IsEnabledChanged="checkBtn_IsEnabledChanged">
-        </Button>
-        <Image x:Name="imgCheckMarker"/>
+        <Image x:Name="imgCheckMarker" IsEnabled="{Binding IsInCheck,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="imgCheckMarker_IsEnabledChanged"/>
         <Image x:Name="imgPiece" Source="{Binding CellImage}" Opacity="1" />
 
         <Image x:Name="imgSelector"/>

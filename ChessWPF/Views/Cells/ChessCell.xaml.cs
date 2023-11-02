@@ -35,7 +35,7 @@ namespace ChessWPF.Views.Cells
             cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
             cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
             cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
-            checkBtn.Style = this.FindResource("defaultBtn") as Style;
+            //checkBtn.Style = this.FindResource("defaultBtn") as Style;
         }
 
         private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -108,9 +108,9 @@ namespace ChessWPF.Views.Cells
             }
         }
 
-        private void checkBtn_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        private void imgCheckMarker_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            if (checkBtn.IsEnabled)
+            if (imgCheckMarker.IsEnabled)
             {
                 Panel.SetZIndex(imgCheckMarker, 1);
                 imgCheckMarker.Opacity = 1;
