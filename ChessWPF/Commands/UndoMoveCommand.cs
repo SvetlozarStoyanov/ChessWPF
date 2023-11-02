@@ -1,5 +1,4 @@
-﻿using ChessWPF.Singleton;
-using ChessWPF.ViewModels;
+﻿using ChessWPF.ViewModels;
 using System.ComponentModel;
 
 namespace ChessWPF.Commands
@@ -16,17 +15,17 @@ namespace ChessWPF.Commands
 
         public override bool CanExecute(object? parameter)
         {
-            return boardViewModel.Board.Moves.Count > 0;
+            return boardViewModel.Board.Moves.Count > 0 || boardViewModel.PromotionIsUnderway;
         }
 
         public override void Execute(object? parameter)
         {
-            BackgroundSingleton.Instance.UndoMove();
+            boardViewModel.OnMoveUndo();
         }
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(BoardViewModel.GameHasStarted))
+            if (e.PropertyName == nameof(BoardViewModel.GameHasStarted) || e.PropertyName == nameof(BoardViewModel.PromotionIsUnderway))
             {
                 OnCanExecuteChanged();
             }

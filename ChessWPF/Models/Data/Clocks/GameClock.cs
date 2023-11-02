@@ -1,22 +1,20 @@
-﻿using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Singleton;
-using Microsoft.Win32;
+﻿using ChessWPF.HelperClasses.CustomEventArgs;
+using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Diagnostics;
 using System.Windows.Threading;
 
 namespace ChessWPF.Models.Data.Clocks
 {
-    public class GameClock
+    public sealed class GameClock
     {
         private int increment;
         private PieceColor color;
-
-        private DispatcherTimer timer;
-        private Stopwatch watch;
         private TimeSpan timeLeft;
         private TimeSpan startingTime;
         private TimeSpan timeElapsed;
+        private DispatcherTimer timer;
+        private Stopwatch watch;
 
         public GameClock(int increment, int startingTime, PieceColor color)
         {
@@ -27,37 +25,42 @@ namespace ChessWPF.Models.Data.Clocks
             timer = new DispatcherTimer();
 
             timer.Interval = TimeSpan.FromMilliseconds(10);
-            timer.Tick += new EventHandler(Timer_Tick);
+            timer.Tick += Timer_Tick;
             watch = new Stopwatch();
         }
 
+        public delegate void ClockTickEventHandler(object source, ClockTickEventArgs args);
+        public delegate void TimeOutEventHandler(object source, TimeOutEventArgs args);
+        public event ClockTickEventHandler ClockTick;
+        public event TimeOutEventHandler TimeOut;
+
         public int Increment
         {
-            get { return increment; }
-            set { increment = value; }
+            get => increment;
+            set => increment = value;
         }
 
         public PieceColor Color
         {
-            get { return color; }
-            set { color = value; }
+            get => color;
+            private set => color = value;
         }
+
         public TimeSpan TimeLeft
         {
-            get { return timeLeft; }
-            set { timeLeft = value; }
+            get => timeLeft;
         }
 
         public TimeSpan StartingTime
         {
-            get { return startingTime; }
-            private set { startingTime = value; }
+            get => startingTime;
+            private set => startingTime = value;
         }
 
         public TimeSpan TimeElapsed
         {
-            get { return timeElapsed; }
-            set { timeElapsed = value; }
+            get => timeElapsed;
+            set => timeElapsed = value;
         }
 
         public void StartClock()
@@ -74,7 +77,6 @@ namespace ChessWPF.Models.Data.Clocks
             timeLeft -= watch.Elapsed;
             timeElapsed = watch.Elapsed;
             watch.Reset();
-            BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
         }
 
         public void ResetClock()
@@ -85,44 +87,42 @@ namespace ChessWPF.Models.Data.Clocks
             timeLeft = startingTime;
         }
 
-
         public void AddTime(TimeSpan time)
         {
             timeLeft += time;
-            BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
         }
 
         public void AddIncrement()
         {
             timeLeft += TimeSpan.FromSeconds(increment);
-            BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
         }
 
         public void RemoveIncrement()
         {
             timeLeft -= TimeSpan.FromSeconds(increment);
-            BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft);
         }
 
         private void Timer_Tick(object? sender, EventArgs e)
         {
-            //timeLeft -= TimeSpan.FromMilliseconds(100);
-
+            OnClockTick();
             if (timeLeft - watch.Elapsed <= TimeSpan.FromSeconds(0))
             {
-                watch.Stop();
-                timer.Stop();
-                watch.Reset();
-                var oppositeColor = this.color == PieceColor.White ? PieceColor.Black : PieceColor.White;
-                BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(TimeSpan.FromSeconds(0));
-                BackgroundSingleton.Instance.EndGameByTimeOut(oppositeColor);
-            }
-            else
-            {
-                BackgroundSingleton.Instance.GameViewModel.GameClocks[Color.ToString()].UpdateClock(timeLeft - watch.Elapsed);
-
+                OnTimeOut();
+                return;
             }
         }
 
+        private void OnClockTick()
+        {
+            ClockTick(this, new ClockTickEventArgs(timeLeft - watch.Elapsed));
+        }
+
+        private void OnTimeOut()
+        {
+            watch.Stop();
+            timer.Stop();
+            watch.Reset();
+            TimeOut(this, new TimeOutEventArgs(color));
+        }
     }
 }

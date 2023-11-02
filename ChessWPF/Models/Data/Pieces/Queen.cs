@@ -3,13 +3,13 @@ using ChessWPF.Models.Data.Pieces.Enums;
 
 namespace ChessWPF.Models.Data.Pieces
 {
-    public class Queen : Piece
+    public sealed class Queen : Piece
     {
         public Queen(PieceColor color) : base(PieceType.Queen, color)
         {
         }
 
-        public Queen(PieceColor color, Cell cell) : base(PieceType.Queen, color, cell)
+        public Queen(PieceColor color, int row, int col) : base(PieceType.Queen, color, row, col)
         {
         }
     }

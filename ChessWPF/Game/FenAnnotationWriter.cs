@@ -99,10 +99,10 @@ namespace ChessWPF.Game
             var whiteCastlingRights = new StringBuilder();
             var blackCastlingRights = new StringBuilder();
 
-            var hasWhiteKingMoved = board.Moves.Any(m => m.CellOneBefore.Piece.PieceType == PieceType.King
+            var hasWhiteKingMoved = board.Moves.Any(m => m.CellOneBefore.Piece!.PieceType == PieceType.King
                 && m.CellOneBefore.Piece.Color == PieceColor.White);
 
-            var hasBlackKingMoved = board.Moves.Any(m => m.CellOneBefore.Piece.PieceType == PieceType.King
+            var hasBlackKingMoved = board.Moves.Any(m => m.CellOneBefore.Piece!.PieceType == PieceType.King
                 && m.CellOneBefore.Piece.Color == PieceColor.Black);
 
             if (!hasWhiteKingMoved)
@@ -110,16 +110,16 @@ namespace ChessWPF.Game
                 if (!board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 7) ||
                 (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 7))) &&
-                (board.Cells[7, 7].Piece != null && board.Cells[7, 7].Piece.PieceType == PieceType.Rook &&
-                board.Cells[7, 7].Piece.Color == PieceColor.White))
+                (board.Cells[7, 7].Piece != null && board.Cells[7, 7].Piece!.PieceType == PieceType.Rook &&
+                board.Cells[7, 7].Piece!.Color == PieceColor.White))
                 {
                     whiteCastlingRights.Append('K');
                 }
                 if (!board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 0) ||
                 (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 0))) &&
-                (board.Cells[7, 0].Piece != null && board.Cells[7, 0].Piece.PieceType == PieceType.Rook &&
-                board.Cells[7, 0].Piece.Color == PieceColor.White))
+                (board.Cells[7, 0].Piece != null && board.Cells[7, 0].Piece!.PieceType == PieceType.Rook &&
+                board.Cells[7, 0].Piece!.Color == PieceColor.White))
                 {
                     whiteCastlingRights.Append('Q');
                 }
@@ -130,16 +130,16 @@ namespace ChessWPF.Game
                 if (!board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 7) ||
                 (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 7))) &&
-                (board.Cells[0, 7].Piece != null && board.Cells[0, 7].Piece.PieceType == PieceType.Rook &&
-                board.Cells[0, 7].Piece.Color == PieceColor.Black))
+                (board.Cells[0, 7].Piece != null && board.Cells[0, 7].Piece!.PieceType == PieceType.Rook &&
+                board.Cells[0, 7].Piece!.Color == PieceColor.Black))
                 {
                     blackCastlingRights.Append('k');
                 }
                 if (!board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 0) ||
                 (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 0))) &&
-                (board.Cells[0, 0].Piece != null && board.Cells[0, 0].Piece.PieceType == PieceType.Rook &&
-                board.Cells[0, 0].Piece.Color == PieceColor.Black))
+                (board.Cells[0, 0].Piece != null && board.Cells[0, 0].Piece!.PieceType == PieceType.Rook &&
+                board.Cells[0, 0].Piece!.Color == PieceColor.Black))
                 {
                     blackCastlingRights.Append('q');
                 }
@@ -155,7 +155,7 @@ namespace ChessWPF.Game
 
         private static string AnnotatePossibleEnPassant(Move move)
         {
-            if (move.CellOneBefore.Piece.PieceType == PieceType.Pawn && Math.Abs(move.CellTwoBefore.Row - move.CellOneBefore.Row) == 2)
+            if (move.CellOneBefore.Piece!.PieceType == PieceType.Pawn && Math.Abs(move.CellTwoBefore.Row - move.CellOneBefore.Row) == 2)
             {
                 var columnAsLetter = (char)(97 + move.CellOneBefore.Col);
                 var row = move.CellOneBefore.Row == 1 ? 6 : 3;
@@ -171,7 +171,7 @@ namespace ChessWPF.Game
 
         private static string AnnotateFullMoveCount(Board board)
         {
-            return $"{(board.Moves.Count < 2 ? 1 : board.Moves.Count(m => m.CellOneBefore.Piece.Color == PieceColor.Black) + 1)}";
+            return $"{(board.Moves.Count < 2 ? 1 : board.Moves.Count(m => m.CellOneBefore.Piece!.Color == PieceColor.Black) + 1)}";
         }
     }
 }

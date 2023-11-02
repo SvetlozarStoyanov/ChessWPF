@@ -10,19 +10,22 @@ namespace ChessWPF.Game
 {
     public static class MoveNotationWriter
     {
+
         public static string AnnotateMove(Move move, Dictionary<PieceColor, List<Piece>> pieces)
         {
             var sb = new StringBuilder();
-            if (move.CellOneBefore.Piece.PieceType == PieceType.King
+            if (move.CellOneBefore.Piece!.PieceType == PieceType.King
                 && move.CellThreeBefore != null)
             {
                 return AnnotateCastling(move);
             }
             if (move.CellOneBefore.Piece.PieceType != PieceType.Pawn && pieces[move.CellOneBefore.Piece.Color].Count(p => p.PieceType == move.CellOneBefore.Piece.PieceType) > 1)
             {
-                var otherPiecesWhoCanDoThisMove = pieces[move.CellOneBefore.Piece.Color].Where(p => p.PieceType == move.CellOneBefore.Piece.PieceType
-                && p.LegalMoves.Any(lm => lm.HasEqualRowAndCol(move.CellTwoBefore)) && !p.Equals(move.CellOneBefore.Piece));
-                if (otherPiecesWhoCanDoThisMove.Count() > 1)
+                var otherPiecesWhoCanDoThisMove = pieces[move.CellOneBefore.Piece.Color]
+                    .Where(p => p.PieceType == move.CellOneBefore.Piece.PieceType 
+                     && !p.Equals(move.CellOneBefore.Piece)
+                     && p.LegalMoves.Any(lm => lm.HasEqualRowAndCol(move.CellTwoBefore)));
+                if (otherPiecesWhoCanDoThisMove.Count() > 0)
                 {
                     sb.Append(AnnotatePiece(move.CellOneBefore, otherPiecesWhoCanDoThisMove));
                 }
@@ -47,30 +50,30 @@ namespace ChessWPF.Game
 
         private static string AnnotatePiece(Cell cell)
         {
-            var pieceAnnotation = AnnotatePieceType(cell.Piece.PieceType);
+            var pieceAnnotation = AnnotatePieceType(cell.Piece!.PieceType);
             return pieceAnnotation;
         }
 
         private static string AnnotatePiece(Cell movingPieceCell, IEnumerable<Piece> otherPiecesWhoHaveThisLegalMove)
         {
             var pieceAnnotation = new StringBuilder();
-            pieceAnnotation.Append(AnnotatePieceType(movingPieceCell.Piece.PieceType));
-            if (otherPiecesWhoHaveThisLegalMove.Any(p => (p.Cell.Row == movingPieceCell.Row)
-                && otherPiecesWhoHaveThisLegalMove.All(p => p.Cell.Col != movingPieceCell.Col))
-                || (otherPiecesWhoHaveThisLegalMove.All(p => p.Cell.Row != movingPieceCell.Row)
-                && otherPiecesWhoHaveThisLegalMove.All(p => p.Cell.Col != movingPieceCell.Col)))
+            pieceAnnotation.Append(AnnotatePieceType(movingPieceCell.Piece!.PieceType));
+            if (otherPiecesWhoHaveThisLegalMove.Any(p => (p.Row == movingPieceCell.Row)
+                && otherPiecesWhoHaveThisLegalMove.All(p => p.Col != movingPieceCell.Col))
+                || (otherPiecesWhoHaveThisLegalMove.All(p => p.Row != movingPieceCell.Row)
+                && otherPiecesWhoHaveThisLegalMove.All(p => p.Col != movingPieceCell.Col)))
             {
                 pieceAnnotation.Append($"{Convert.ToChar(97 + movingPieceCell.Col)}");
             }
-            else if (otherPiecesWhoHaveThisLegalMove.Any(p => (p.Cell.Col == movingPieceCell.Col)
-                && otherPiecesWhoHaveThisLegalMove.All(p => p.Cell.Row != movingPieceCell.Row))
-                || (otherPiecesWhoHaveThisLegalMove.All(p => p.Cell.Row != movingPieceCell.Row)
-                && otherPiecesWhoHaveThisLegalMove.All(p => p.Cell.Col != movingPieceCell.Col)))
+            else if (otherPiecesWhoHaveThisLegalMove.Any(p => (p.Col == movingPieceCell.Col)
+                && otherPiecesWhoHaveThisLegalMove.All(p => p.Row != movingPieceCell.Row))
+                || (otherPiecesWhoHaveThisLegalMove.All(p => p.Row != movingPieceCell.Row)
+                && otherPiecesWhoHaveThisLegalMove.All(p => p.Col != movingPieceCell.Col)))
             {
                 pieceAnnotation.Append($"{8 - movingPieceCell.Row}");
             }
-            else if (otherPiecesWhoHaveThisLegalMove.Any(p => p.Cell.Col == movingPieceCell.Col)
-                && otherPiecesWhoHaveThisLegalMove.Any(p => p.Cell.Row == movingPieceCell.Row))
+            else if (otherPiecesWhoHaveThisLegalMove.Any(p => p.Col == movingPieceCell.Col)
+                && otherPiecesWhoHaveThisLegalMove.Any(p => p.Row == movingPieceCell.Row))
             {
                 pieceAnnotation.Append($"{Convert.ToChar(97 + movingPieceCell.Col)}{8 - movingPieceCell.Row}");
             }
@@ -81,7 +84,7 @@ namespace ChessWPF.Game
         {
             if (move.CellTwoBefore.Piece != null || (move.CellThreeBefore != null && move.CellFourBefore == null))
             {
-                return $"{(move.CellOneBefore.Piece.PieceType == PieceType.Pawn ? AnnotateColumn(move.CellOneBefore.Col)
+                return $"{(move.CellOneBefore.Piece!.PieceType == PieceType.Pawn ? AnnotateColumn(move.CellOneBefore.Col)
                     : string.Empty)}x";
             }
             return string.Empty;
@@ -89,7 +92,7 @@ namespace ChessWPF.Game
 
         private static string AnnotatePromotion(Cell cell)
         {
-            var promotedPieceAnnotation = AnnotatePieceType(cell.Piece.PieceType);
+            var promotedPieceAnnotation = AnnotatePieceType(cell.Piece!.PieceType);
             return $"={promotedPieceAnnotation}";
         }
 
@@ -100,11 +103,11 @@ namespace ChessWPF.Game
 
         private static string AnnotateCastling(Move move)
         {
-            if (move.CellOneBefore.ColumnDifference(move.CellTwoBefore) == 2)
+            if (move.CellOneBefore.ColumnDifference(move.CellThreeBefore!) == 3)
             {
                 return "O-O";
             }
-            if (move.CellOneBefore.ColumnDifference(move.CellTwoBefore) == 3)
+            if (move.CellOneBefore.ColumnDifference(move.CellThreeBefore!) == 4)
             {
                 return "O-O-O";
             }

@@ -50,10 +50,10 @@
         <local:ChessBoard Grid.Row="1" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}">
 
         </local:ChessBoard>
-        <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="1" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClocks[Black]}">
+        <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="1" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[Black]}">
 
         </View.Clocks:GameClock>
-        <View.Clocks:GameClock VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClocks[White]}">
+        <View.Clocks:GameClock VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[White]}">
 
         </View.Clocks:GameClock>
 

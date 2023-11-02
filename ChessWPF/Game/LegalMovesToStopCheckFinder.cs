@@ -1,32 +1,34 @@
 ﻿using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
+using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace ChessWPF.Game
 {
-    public static class CheckDirectionFinder
+    public static class LegalMovesToStopCheckFinder
     {
         public static List<Cell> GetLegalMovesToStopCheck(King king, Piece attacker, Board board)
         {
             var validMovesToStopCheck = new List<Cell>();
-            var rowDiff = attacker.Cell.Row - king.Cell.Row;
-            var colDiff = attacker.Cell.Col - king.Cell.Col;
+            var rowDiff = attacker.Row - king.Row;
+            var colDiff = attacker.Col - king.Col;
             switch (attacker.PieceType)
             {
-                case Models.Data.Pieces.Enums.PieceType.Pawn:
-                    validMovesToStopCheck.Add(attacker.Cell);
+                case PieceType.Pawn:
+                    validMovesToStopCheck.AddRange(GetLegalMovesToStopCheckForPawn(king, attacker, board));
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Knight:
-                    validMovesToStopCheck.Add(attacker.Cell);
+                case PieceType.Knight:
+                    validMovesToStopCheck.Add(board.Cells[attacker.Row, attacker.Col]);
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Bishop:
+                case PieceType.Bishop:
                     validMovesToStopCheck.AddRange(GetLegalMovesToStopCheckForBishop(king, attacker, board, rowDiff, colDiff));
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Rook:
+                case PieceType.Rook:
                     validMovesToStopCheck.AddRange(GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff));
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Queen:
+                case PieceType.Queen:
                     if (rowDiff != 0 && colDiff != 0)
                     {
                         validMovesToStopCheck = GetLegalMovesToStopCheckForBishop(king, attacker, board, rowDiff, colDiff);
@@ -36,14 +38,37 @@ namespace ChessWPF.Game
                         validMovesToStopCheck = GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff);
                     }
                     break;
-                case Models.Data.Pieces.Enums.PieceType.Knook:
-                    if (king.Cell.Row == attacker.Cell.Row || king.Cell.Col == attacker.Cell.Col)
+                case PieceType.Knook:
+                    if (king.Row == attacker.Row || king.Col == attacker.Col)
                     {
                         validMovesToStopCheck = GetLegalMovesToStopCheckForRook(king, attacker, board, rowDiff, colDiff);
                     }
                     else
                     {
-                        validMovesToStopCheck.Add(attacker.Cell);
+                        validMovesToStopCheck.Add(board.Cells[attacker.Row, attacker.Col]);
+                    }
+                    break;
+            }
+            return validMovesToStopCheck;
+        }
+
+        private static List<Cell> GetLegalMovesToStopCheckForPawn(King king, Piece pawn, Board board)
+        {
+            var validMovesToStopCheck = new List<Cell>();
+            validMovesToStopCheck.Add(board.Cells[pawn.Row, pawn.Col]);
+            var enPassantMoveToStopCheck = new Cell(-1, -1);
+            switch (king.Color)
+            {
+                case PieceColor.White:
+                    if (board.Pieces[king.Color].Any(p => p.PieceType == PieceType.Pawn))
+                    {
+                        validMovesToStopCheck.Add(board.Cells[pawn.Row - 1, pawn.Col]);
+                    }
+                    break;
+                case PieceColor.Black:
+                    if (board.Pieces[king.Color].Any(p => p.PieceType == PieceType.Pawn))
+                    {
+                        validMovesToStopCheck.Add(board.Cells[pawn.Row + 1, pawn.Col]);
                     }
                     break;
             }
@@ -57,13 +82,13 @@ namespace ChessWPF.Game
             var rowIncrement = 1;
             var colIncrement = 1;
 
-            var currCell = bishop.Cell;
+            var currCell = board.Cells[bishop.Row, bishop.Col];
             if (rowDiff > 0 && colDiff > 0)
             {
                 while (rowIncrement <= rowDiff && colIncrement <= colDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[bishop.Cell.Row - rowIncrement++, bishop.Cell.Col - colIncrement++];
+                    currCell = board.Cells[bishop.Row - rowIncrement++, bishop.Col - colIncrement++];
                 }
             }
             else if (rowDiff < 0 && colDiff > 0)
@@ -72,7 +97,7 @@ namespace ChessWPF.Game
                 while (rowIncrement <= rowDiff && colIncrement <= colDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[bishop.Cell.Row + rowIncrement++, bishop.Cell.Col - colIncrement++];
+                    currCell = board.Cells[bishop.Row + rowIncrement++, bishop.Col - colIncrement++];
                 }
             }
             else if (rowDiff < 0 && colDiff < 0)
@@ -82,7 +107,7 @@ namespace ChessWPF.Game
                 while (rowIncrement <= rowDiff && colIncrement <= colDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[bishop.Cell.Row + rowIncrement++, bishop.Cell.Col + colIncrement++];
+                    currCell = board.Cells[bishop.Row + rowIncrement++, bishop.Col + colIncrement++];
                 }
             }
             else if (rowDiff > 0 && colDiff < 0)
@@ -92,7 +117,7 @@ namespace ChessWPF.Game
                 while (rowIncrement <= rowDiff && colIncrement <= colDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[bishop.Cell.Row - rowIncrement++, bishop.Cell.Col + colIncrement++];
+                    currCell = board.Cells[bishop.Row - rowIncrement++, bishop.Col + colIncrement++];
                 }
             }
             return validMovesToStopCheck;
@@ -103,13 +128,13 @@ namespace ChessWPF.Game
             var validMovesToStopCheck = new List<Cell>();
 
             var increment = 1;
-            var currCell = rook.Cell;
+            var currCell = board.Cells[rook.Row, rook.Col];
             if (rowDiff > 0)
             {
                 while (increment <= rowDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[rook.Cell.Row - increment++, rook.Cell.Col];
+                    currCell = board.Cells[rook.Row - increment++, rook.Col];
                 }
             }
             else if (rowDiff < 0)
@@ -118,7 +143,7 @@ namespace ChessWPF.Game
                 while (increment <= rowDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[rook.Cell.Row + increment++, rook.Cell.Col];
+                    currCell = board.Cells[rook.Row + increment++, rook.Col];
                 }
             }
             else if (colDiff > 0)
@@ -126,7 +151,7 @@ namespace ChessWPF.Game
                 while (increment <= colDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[rook.Cell.Row, rook.Cell.Col - increment++];
+                    currCell = board.Cells[rook.Row, rook.Col - increment++];
                 }
             }
             else if (colDiff < 0)
@@ -136,7 +161,7 @@ namespace ChessWPF.Game
                 while (increment <= colDiff)
                 {
                     validMovesToStopCheck.Add(currCell);
-                    currCell = board.Cells[rook.Cell.Row, rook.Cell.Col + increment++];
+                    currCell = board.Cells[rook.Row, rook.Col + increment++];
                 }
             }
             return validMovesToStopCheck;
