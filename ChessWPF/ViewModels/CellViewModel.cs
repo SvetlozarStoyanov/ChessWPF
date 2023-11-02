@@ -31,11 +31,6 @@ namespace ChessWPF.ViewModels
             SelectCommand = new SelectCommand(this);
             MoveCommand = new MoveCommand(this);
             PromoteCommand = new PromoteCommand(this);
-            CheckCommand = new CheckCommand(this);
-
-            //CanBeMovedTo = false;
-            //IsSelected = false;
-            //CanBeSelectedForPromotion = false;
         }
 
         public delegate void SelectEventHandler(object sender, SelectCellViewModelEventArgs args);
@@ -122,7 +117,6 @@ namespace ChessWPF.ViewModels
         public ICommand SelectCommand { get; set; }
         public ICommand MoveCommand { get; set; }
         public ICommand PromoteCommand { get; set; }
-        public ICommand CheckCommand { get; set; }
 
         public void SelectCell()
         {
