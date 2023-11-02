@@ -2,7 +2,6 @@
 using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Singleton;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -11,9 +10,8 @@ namespace ChessWPF.Game
 {
     public static class LegalMoveFinder
     {
-        public static Dictionary<string, List<Cell>> GetLegalMovesAndProtectedCells(Piece piece)
+        public static Dictionary<string, List<Cell>> GetLegalMovesAndProtectedCells(Piece piece, Board board)
         {
-            var board = BackgroundSingleton.Instance.Board;
             var legalMovesAndProtectedSquares = new Dictionary<string, List<Cell>>();
             if (piece.PieceType == PieceType.Pawn)
             {

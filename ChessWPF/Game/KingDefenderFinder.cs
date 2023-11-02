@@ -1,7 +1,6 @@
 ﻿using ChessWPF.Models.Data.Board;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Singleton;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,9 +9,8 @@ namespace ChessWPF.Game
 {
     public static class KingDefenderFinder
     {
-        public static List<ValueTuple<Piece, Piece>> FindDefenders(King king, PieceColor turnColor)
-        {
-            var board = BackgroundSingleton.Instance.Board;
+        public static List<ValueTuple<Piece, Piece>> FindDefenders(King king, PieceColor turnColor, Board board)
+        {   
             var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             var defenders = new List<ValueTuple<Piece, Piece>>();
             if (board.Pieces[oppositeColor].Any(p => p.PieceType == PieceType.Rook || p.PieceType == PieceType.Queen || p.PieceType == PieceType.Knook))
