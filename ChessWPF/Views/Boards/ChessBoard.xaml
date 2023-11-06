@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
               MaxHeight="1000px" MaxWidth="1000px"
              Loaded="ChessBoard_Loaded">
-    <Grid SizeChanged="Grid_SizeChanged">
+    <Grid x:Name="grid" SizeChanged="Grid_SizeChanged">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -37,9 +37,10 @@
         </Grid.ColumnDefinitions>
         <Border Panel.ZIndex="2" Grid.Row="0" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="5" >
         </Border>
-        <TextBlock Grid.Row="0" Grid.Column="0" Text="8" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="1" Grid.Column="0" Text="7" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="2" Grid.Column="0" Text="6" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        
+        <TextBlock  Grid.Row="0" Grid.Column="0" Text="8" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock  Grid.Row="1" Grid.Column="0" Text="7" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock  Grid.Row="2" Grid.Column="0" Text="6" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="3" Grid.Column="0" Text="5" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="4" Grid.Column="0" Text="4" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
         <TextBlock Grid.Row="5" Grid.Column="0" Text="3" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
