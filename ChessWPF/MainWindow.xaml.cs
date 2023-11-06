@@ -1,4 +1,5 @@
-﻿using System.Windows;
+﻿using ChessWPF.HelperClasses.WindowDimensions;
+using System.Windows;
 using static System.Windows.SystemParameters;
 
 namespace ChessWPF
@@ -10,11 +11,18 @@ namespace ChessWPF
     {
         public MainWindow()
         {
+            InitializeComponent();
             this.MaxWidth = PrimaryScreenWidth;
             this.MinWidth = PrimaryScreenWidth / 2;
             this.MaxHeight = PrimaryScreenHeight;
             this.MinHeight = PrimaryScreenHeight / 2;
-            InitializeComponent();
         }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            GlobalDimensions.Height = this.ActualHeight;
+            GlobalDimensions.Width = this.ActualWidth;
+        }
+
     }
 }
