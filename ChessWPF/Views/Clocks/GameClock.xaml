@@ -8,16 +8,16 @@
              d:DesignHeight="200" d:DesignWidth="100"
              Loaded="GameClock_Loaded">
     
-    <Grid Background="White" VerticalAlignment="Top">
+    <Grid Background="White" VerticalAlignment="Top" SizeChanged="Grid_SizeChanged">
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
             <ColumnDefinition/>
         </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" FontSize="{DynamicResource ClockTimeFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock x:Name="timeTextBlock" Grid.Column="0" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
 
         </TextBlock>
-        <TextBlock Grid.Column="1" FontSize="{DynamicResource ClockColorFontSize}" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Color}">
+        <TextBlock x:Name="colorTextBlock" Grid.Column="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Color}">
             
         </TextBlock>
     </Grid>

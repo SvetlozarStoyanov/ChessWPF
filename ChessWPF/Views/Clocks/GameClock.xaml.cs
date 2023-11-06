@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessWPF.HelperClasses.WindowDimensions;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -18,12 +19,18 @@ namespace ChessWPF.Views.Clocks
 
         private void GameClock_Loaded(object sender, RoutedEventArgs e)
         {
-            double clockTimeSize = ((SystemParameters.PrimaryScreenWidth / 6) / 3 * 2) / 5 * 0.7;
-            Application.Current.Resources.Remove("ClockTimeFontSize");
-            Application.Current.Resources.Add("ClockTimeFontSize", clockTimeSize);
-            double clockColorSize = ((SystemParameters.PrimaryScreenWidth / 5) / 3 * 2) / 5 * 0.7;
-            Application.Current.Resources.Remove("ClockColorFontSize");
-            Application.Current.Resources.Add("ClockColorFontSize", clockColorSize);
+            var clockTimeSize = GlobalDimensions.Width / 64;
+            timeTextBlock.FontSize = clockTimeSize;
+            var clockColorSize = GlobalDimensions.Width / 53;
+            colorTextBlock.FontSize = clockColorSize;
+        }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var clockTimeSize = GlobalDimensions.Width / 64;
+            timeTextBlock.FontSize = clockTimeSize;
+            var clockColorSize = GlobalDimensions.Width / 53;
+            colorTextBlock.FontSize = clockColorSize;
         }
     }
 }
