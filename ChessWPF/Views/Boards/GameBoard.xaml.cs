@@ -11,15 +11,11 @@ namespace ChessWPF.Views.Boards
         public GameBoard()
         {
             InitializeComponent();
-            //fenTextBox.FocusVisualStyle = null;
-            //copyMoveNotationButton.Style = this.FindResource("defaultBtn") as Style;
         }
 
         private void copyMoveNotationButton_Click(object sender, RoutedEventArgs e)
         {
             Clipboard.SetText(moveNotationTextBox.Text);
         }
-
-
     }
 }
