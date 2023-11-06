@@ -16,15 +16,15 @@
             <ColumnDefinition Width="2.7*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel >
-            <Menu Background="LightGray">
+            <Menu Background="LightGray" SizeChanged="Menu_SizeChanged">
 
-                <MenuItem Header="New Game"  FontSize="{DynamicResource MenuFontSize}" Command="{Binding ResetBoardCommand}"></MenuItem>
-                <MenuItem Header="Undo Move"  FontSize="{DynamicResource MenuFontSize}" Command="{Binding UndoMoveCommand}"></MenuItem>
+                <MenuItem x:Name="newGameMenuItem" Header="New Game"  Command="{Binding ResetBoardCommand}"></MenuItem>
+                <MenuItem x:Name="undoMoveMenuItem" Header="Undo Move"  Command="{Binding UndoMoveCommand}"></MenuItem>
             </Menu>
         </StackPanel>
         <StackPanel Grid.Column="1" >
             <Menu Background="LightGray">
-                <MenuItem x:Name="gameStatusMenuItem" IsEnabled="False" Header="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" FontSize="{DynamicResource MenuFontSize}" />
+                <MenuItem x:Name="gameStatusMenuItem" IsEnabled="False" Header="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" />
             </Menu>
 
         </StackPanel>
