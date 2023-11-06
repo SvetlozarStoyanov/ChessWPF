@@ -5,9 +5,8 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Cells"
              mc:Ignorable="d" 
-             d:DesignHeight="200" d:DesignWidth="100">
-    <Grid x:Name="cellBackground">
-        <Border BorderBrush="Black" BorderThickness="1"/>
+                d:DesignHeight="200" d:DesignWidth="200">
+    <Grid x:Name="cellBackground" SizeChanged="cellBackground_SizeChanged">
         <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" Click="cellBtnSelect_Click" LostFocus="cellBtnSelect_LostFocus" >
         </Button>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">

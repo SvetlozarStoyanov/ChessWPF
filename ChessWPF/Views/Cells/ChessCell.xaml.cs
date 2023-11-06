@@ -1,4 +1,5 @@
-﻿using System;
+﻿using ChessWPF.HelperClasses.WindowDimensions;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media;
@@ -17,25 +18,28 @@ namespace ChessWPF.Views.Cells
 
             Panel.SetZIndex(cellBtnSelect, 2);
             Panel.SetZIndex(imgPiece, 1);
-
-            string imageUrl = $"/Graphics/Selectors/Green Marker.png";
-            Uri resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
+            //this.Height = 200;
+            this.Width = this.Height;
+            this.MaxWidth = this.MaxHeight;
+            this.MinWidth = this.MinHeight;
+            var imageUrl = $"/Graphics/Selectors/Green Marker.png";
+            var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgSelector.Source = new BitmapImage(resourceUri);
+            imgSelector.Height = 40;
+            imgSelector.Width = 40;
+            imgSelector.MinHeight = 15;
+            imgSelector.MinWidth = 15;
+            imgSelector.MaxHeight = 40;
+            imgSelector.MaxWidth = 40;
+            imgSelector.Opacity = 0;
             imageUrl = $"/Graphics/Selectors/Red Marker.png";
             resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
-            imgSelector.Height = 30;
-            imgSelector.Width = 30;
             imgCheckMarker.Source = new BitmapImage(resourceUri);
-            imgSelector.Opacity = 0;
-            //imgCheckMarker.Opacity = 0;
-            imgCheckMarker.Height = 85;
-            imgCheckMarker.Width = 85;
             imgCheckMarker.HorizontalAlignment = HorizontalAlignment.Center;
             imgCheckMarker.VerticalAlignment = VerticalAlignment.Center;
             cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
             cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
             cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
-            //checkBtn.Style = this.FindResource("defaultBtn") as Style;
         }
 
         private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -120,6 +124,12 @@ namespace ChessWPF.Views.Cells
                 Panel.SetZIndex(imgCheckMarker, 0);
                 imgCheckMarker.Opacity = 0.0;
             }
+        }
+
+        private void cellBackground_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            imgSelector.Width = GlobalDimensions.Width / 48;
+            imgSelector.Height = GlobalDimensions.Height / 24;
         }
     }
 }
