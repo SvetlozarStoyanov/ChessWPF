@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
               MaxHeight="1000px" MaxWidth="1000px"
              Loaded="ChessBoard_Loaded">
-    <Grid >
+    <Grid SizeChanged="Grid_SizeChanged">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -128,7 +128,7 @@
         <TextBox x:Name="gameResultTextBox" Visibility="Hidden" Text="{Binding GameResult,UpdateSourceTrigger=PropertyChanged}"
                  IsEnabled="{Binding GameHasEnded,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="gameResultTextBox_IsEnabledChanged"></TextBox>
         <Border Grid.Row="10" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1">
-            <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="{DynamicResource FenFontSize}" Text="{Binding FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
+            <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="10" Text="{Binding FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
         </Border>
 

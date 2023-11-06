@@ -1,18 +1,6 @@
-﻿using ChessWPF.Singleton;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChessWPF.HelperClasses.WindowDimensions;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ChessWPF.Views.Boards
 {
@@ -24,16 +12,13 @@ namespace ChessWPF.Views.Boards
         public ChessBoard()
         {
             InitializeComponent();
-            //btnGameEnd.IsEnabled = false;
             fenTextBox.FocusVisualStyle = null;
-
         }
 
         private void ChessBoard_Loaded(object sender, RoutedEventArgs e)
         {
-            double controlsize = ((SystemParameters.PrimaryScreenWidth / 10) / 3 * 2) / 5 * 0.7;
-            Application.Current.Resources.Remove("FenFontSize");
-            Application.Current.Resources.Add("FenFontSize", controlsize);
+            var fenFontSize = GlobalDimensions.Width / 100;
+            fenTextBox.FontSize = fenFontSize;
         }
 
         private void gameResultTextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
@@ -42,6 +27,12 @@ namespace ChessWPF.Views.Boards
             {
                 MessageBox.Show(gameResultTextBox.Text, "Game over!");
             }
+        }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var fenFontSize = GlobalDimensions.Width / 100;
+            fenTextBox.FontSize = fenFontSize;
         }
     }
 }
