@@ -49,7 +49,7 @@
                 <Setter Property="Template">
                     <Setter.Value>
                         <ControlTemplate TargetType="Button">
-                            <Grid Background="DarkBlue">
+                            <Grid Background="DarkGreen">
                                 <ContentPresenter />
                             </Grid>
                         </ControlTemplate>
