@@ -126,9 +126,8 @@
         <Views.Cells:ChessCell Grid.Row="7" Grid.Column="6" DataContext="{Binding CellViewModels[7][5]}" Background="{StaticResource EvenTile}"/>
         <Views.Cells:ChessCell Grid.Row="7" Grid.Column="7" DataContext="{Binding CellViewModels[7][6]}" Background="{StaticResource OddTile}" />
         <Views.Cells:ChessCell Grid.Row="7" Grid.Column="8" DataContext="{Binding CellViewModels[7][7]}" Background="{StaticResource EvenTile}"/>
-        <TextBox x:Name="gameResultTextBox" Visibility="Hidden" Text="{Binding GameResult,UpdateSourceTrigger=PropertyChanged}"
-                 IsEnabled="{Binding GameHasEnded,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="gameResultTextBox_IsEnabledChanged"></TextBox>
-        <Border Grid.Row="10" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1">
+
+        <Border Grid.Row="10" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1" Margin="0,20,0,0">
             <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="10" Text="{Binding FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
             </TextBox>
         </Border>

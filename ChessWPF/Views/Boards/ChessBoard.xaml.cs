@@ -28,14 +28,6 @@ namespace ChessWPF.Views.Boards
             cellAnnotationTextBlocks.ForEach(block => block.FontSize = cellAnnotationFontSize);
         }
 
-        private void gameResultTextBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
-        {
-            if (gameResultTextBox.IsEnabled)
-            {
-                MessageBox.Show(gameResultTextBox.Text, "Game over!");
-            }
-        }
-
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             var fenFontSize = GlobalDimensions.Width / 100;
