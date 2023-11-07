@@ -15,7 +15,7 @@
 
 
 
-    <Grid Name="gameBoard" >
+    <Grid Name="gameBoard">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -47,7 +47,7 @@
         <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="13" DataContext="{Binding MenuViewModel}">
 
         </View.Menus:Menu>
-        <local:ChessBoard Grid.Row="1" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}">
+        <local:ChessBoard Grid.Row="1" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center"  >
 
         </local:ChessBoard>
         <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="1" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[Black]}">
