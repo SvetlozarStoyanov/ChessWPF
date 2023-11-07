@@ -5,7 +5,6 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Menus"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800"
              Loaded="Menu_Loaded">
     <Grid>
         <Grid.RowDefinitions>
@@ -13,20 +12,18 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="7*"></ColumnDefinition>
-            <ColumnDefinition Width="2.7*"></ColumnDefinition>
+            <ColumnDefinition Width="3*"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <StackPanel >
             <Menu Background="LightGray" SizeChanged="Menu_SizeChanged">
-
                 <MenuItem x:Name="newGameMenuItem" Header="New Game"  Command="{Binding ResetBoardCommand}"></MenuItem>
                 <MenuItem x:Name="undoMoveMenuItem" Header="Undo Move"  Command="{Binding UndoMoveCommand}"></MenuItem>
             </Menu>
         </StackPanel>
-        <StackPanel Grid.Column="1" >
+        <StackPanel Grid.Column="1"  >
             <Menu Background="LightGray">
-                <MenuItem x:Name="gameStatusMenuItem" IsEnabled="False" Header="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}" />
+                <MenuItem x:Name="gameStatusMenuItem" IsEnabled="False" Header="{Binding GameStatus,UpdateSourceTrigger=PropertyChanged}"/>
             </Menu>
-
         </StackPanel>
     </Grid>
 </UserControl>
