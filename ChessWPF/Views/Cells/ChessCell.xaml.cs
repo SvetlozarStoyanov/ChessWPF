@@ -18,7 +18,6 @@ namespace ChessWPF.Views.Cells
 
             Panel.SetZIndex(cellBtnSelect, 2);
             Panel.SetZIndex(imgPiece, 1);
-            //this.Height = 200;
             this.Width = this.Height;
             this.MaxWidth = this.MaxHeight;
             this.MinWidth = this.MinHeight;
@@ -35,8 +34,6 @@ namespace ChessWPF.Views.Cells
             imageUrl = $"/Graphics/Selectors/Red Marker.png";
             resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgCheckMarker.Source = new BitmapImage(resourceUri);
-            imgCheckMarker.HorizontalAlignment = HorizontalAlignment.Center;
-            imgCheckMarker.VerticalAlignment = VerticalAlignment.Center;
             cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
             cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
             cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
@@ -58,14 +55,14 @@ namespace ChessWPF.Views.Cells
         }
         private void cellBtnSelect_Click(object sender, RoutedEventArgs e)
         {
-            if (cellBtnSelect.Opacity == 0.6)
+            if (cellBtnSelect.Opacity == 0.7)
             {
                 cellBtnSelect.Opacity = 0;
                 cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
             }
             else
             {
-                cellBtnSelect.Opacity = 0.6;
+                cellBtnSelect.Opacity = 0.7;
                 cellBtnSelect.Style = this.FindResource("selectedBtn") as Style;
             }
         }
@@ -130,6 +127,8 @@ namespace ChessWPF.Views.Cells
         {
             imgSelector.Width = GlobalDimensions.Width / 48;
             imgSelector.Height = GlobalDimensions.Height / 24;
+            imgPiece.Height = this.ActualHeight - 1;
+            imgPiece.Width = this.ActualWidth - 1;
         }
     }
 }
