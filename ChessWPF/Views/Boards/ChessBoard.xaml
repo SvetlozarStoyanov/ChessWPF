@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
               MaxHeight="1000px" MaxWidth="1000px"
              Loaded="ChessBoard_Loaded">
-    <Grid x:Name="grid" SizeChanged="Grid_SizeChanged">
+    <Grid x:Name="grid" SizeChanged="Grid_SizeChanged"  HorizontalAlignment="Center" VerticalAlignment="Center">
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -37,24 +37,25 @@
         </Grid.ColumnDefinitions>
         <Border Panel.ZIndex="2" Grid.Row="0" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="5" >
         </Border>
-        
-        <TextBlock  Grid.Row="0" Grid.Column="0" Text="8" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock  Grid.Row="1" Grid.Column="0" Text="7" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock  Grid.Row="2" Grid.Column="0" Text="6" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="3" Grid.Column="0" Text="5" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="4" Grid.Column="0" Text="4" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="5" Grid.Column="0" Text="3" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="6" Grid.Column="0" Text="2" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="7" Grid.Column="0" Text="1" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
 
-        <TextBlock Grid.Row="8" Grid.Column="1" Text="A" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="2" Text="B" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="3" Text="C" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="4" Text="D" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="5" Text="E" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="6" Text="F" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="7" Text="G" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
-        <TextBlock Grid.Row="8" Grid.Column="8" Text="H" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center"/>
+        <TextBlock Grid.Row="0" Grid.Column="0" Text="8" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="1" Grid.Column="0" Text="7" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="2" Grid.Column="0" Text="6" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="3" Grid.Column="0" Text="5" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="4" Grid.Column="0" Text="4" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="5" Grid.Column="0" Text="3" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="6" Grid.Column="0" Text="2" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+        <TextBlock Grid.Row="7" Grid.Column="0" Text="1" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Left" Margin="0,0,40,0"/>
+
+        <TextBlock Grid.Row="8" Grid.Column="1" Text="A" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="2" Text="B" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="3" Text="C" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="4" Text="D" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="5" Text="E" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="6" Text="F" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="7" Text="G" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        <TextBlock Grid.Row="8" Grid.Column="8" Text="H" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" />
+        
         <Views.Cells:ChessCell Grid.Row="0" Grid.Column="1" DataContext="{Binding CellViewModels[0][0]}" Background="{StaticResource EvenTile}"/>
         <Views.Cells:ChessCell Grid.Row="0" Grid.Column="2" DataContext="{Binding CellViewModels[0][1]}" Background="{StaticResource OddTile}"/>
         <Views.Cells:ChessCell Grid.Row="0" Grid.Column="3" DataContext="{Binding CellViewModels[0][2]}" Background="{StaticResource EvenTile}"/>
