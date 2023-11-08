@@ -1,8 +1,6 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -12,7 +10,6 @@ namespace ChessWPF.ViewModels
 {
     public sealed class CellViewModel : ViewModelBase
     {
-
         private bool canBeMovedTo;
         private bool isSelected;
         private bool canBeSelected;
@@ -50,8 +47,6 @@ namespace ChessWPF.ViewModels
 
         public delegate void PromotedToEventHandler(object sender, PromotePieceEventArgs args);
         public event PromotedToEventHandler PromotedTo;
-
-        
 
         public bool CanBeMovedTo
         {
