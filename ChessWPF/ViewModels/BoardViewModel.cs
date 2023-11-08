@@ -128,12 +128,24 @@ namespace ChessWPF.ViewModels
 
         public void MatchCellViewModelsToCells()
         {
+            var oddTileColor = (Color)new ColorConverter().ConvertFrom("#14691B")!;
+            var evenTileColor = (Color)new ColorConverter().ConvertFrom("#FAE8C8")!;
+            var oddTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#315375")!;
+            var evenTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#5693D1")!;
+
             for (int row = 0; row < Board.Cells.GetLength(0); row++)
             {
                 CellViewModels[row] = new CellViewModel[8];
                 for (int col = 0; col < Board.Cells.GetLength(1); col++)
                 {
-                    MatchCellViewModelToCell(row, col);
+                    if ((row + col) % 2 == 0)
+                    {
+                        MatchCellViewModelToCell(row, col, evenTileColor, evenTileMovedToColor);
+                    }
+                    else
+                    {
+                        MatchCellViewModelToCell(row, col, oddTileColor, oddTileMovedToColor);
+                    }
                 }
             }
         }
@@ -325,9 +337,9 @@ namespace ChessWPF.ViewModels
             OnPromote(args.PieceType);
         }
 
-        private void MatchCellViewModelToCell(int row, int col)
+        private void MatchCellViewModelToCell(int row, int col, Color defaultColor, Color movedToColor)
         {
-            CellViewModels[row][col] = new CellViewModel(Board.Cells[row, col]);
+            CellViewModels[row][col] = new CellViewModel(Board.Cells[row, col], defaultColor, movedToColor);
             var cellViewModel = CellViewModels[row][col];
             cellViewModel.Select += OnCellViewModelSelect;
             cellViewModel.MovedTo += OnCellViewModelMovedTo;
