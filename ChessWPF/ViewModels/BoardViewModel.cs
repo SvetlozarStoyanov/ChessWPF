@@ -13,6 +13,7 @@ namespace ChessWPF.ViewModels
         private bool promotionIsUnderway;
         private CellViewModel? selectedCell;
         private Board board;
+        private (int, int)[] lastMoveCellCoordinates;
         private CellViewModel[][] cellViewModels;
         private List<Cell> legalMoves;
 
@@ -107,6 +108,12 @@ namespace ChessWPF.ViewModels
         {
             get => legalMoves;
             private set => legalMoves = value;
+        }
+
+        public (int, int)[] LastMoveCellCoordinates
+        {
+            get => lastMoveCellCoordinates;
+            private set => lastMoveCellCoordinates = value;
         }
 
         public CellViewModel[][] CellViewModels
