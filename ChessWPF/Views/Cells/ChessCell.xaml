@@ -5,8 +5,10 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Cells"
              mc:Ignorable="d" 
-                >
+               Background="{Binding BackgroundBrush,UpdateSourceTrigger=PropertyChanged}" 
+             >
     <Grid x:Name="cellBackground" SizeChanged="cellBackground_SizeChanged">
+        
         <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" Click="cellBtnSelect_Click" LostFocus="cellBtnSelect_LostFocus" >
         </Button>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
