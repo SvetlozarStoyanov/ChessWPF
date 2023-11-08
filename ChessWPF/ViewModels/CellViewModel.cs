@@ -25,13 +25,18 @@ namespace ChessWPF.ViewModels
         private Color defaultColor;
         private Color movedToColor;
 
-        public CellViewModel(Cell cell)
+
+        public CellViewModel(Cell cell, Color defaultColor,Color movedToColor)
         {
             Cell = cell;
             Cell.Update += Update;
             Cell.UpdateForPromotion += UpdateForPromotion;
             Cell.Check += OnCheck;
             Cell.UnCheck += OnUnCheck;
+            this.defaultColor = defaultColor;
+            this.movedToColor = movedToColor;
+            BackgroundBrush = new SolidColorBrush(defaultColor);
+
             SelectCommand = new SelectCommand(this);
             MoveCommand = new MoveCommand(this);
             PromoteCommand = new PromoteCommand(this);
