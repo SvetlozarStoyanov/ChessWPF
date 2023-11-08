@@ -112,6 +112,16 @@ namespace ChessWPF.ViewModels
             }
         }
 
+        public Cell Cell
+        {
+            get => cell;
+            set
+            {
+                cell = value;
+                OnPropertyChanged(nameof(Cell));
+            }
+        }
+
         public BitmapImage? CellImage
         {
             get => cellImage;
@@ -168,6 +178,19 @@ namespace ChessWPF.ViewModels
             else
             {
                 CellImage = null;
+            }
+        }
+
+        public void UpdateMovedTo()
+        {
+            IsPartOfLastMove = !IsPartOfLastMove;
+            if (IsPartOfLastMove)
+            {
+                BackgroundBrush.Color = movedToColor;
+            }
+            else
+            {
+                BackgroundBrush.Color = defaultColor;
             }
         }
 
