@@ -18,6 +18,7 @@ namespace ChessWPF.ViewModels
         private bool canBeSelected;
         private bool canBeSelectedForPromotion;
         private bool isInCheck;
+        private bool isPartOfLastMove;
         private Cell cell = null!;
         private BitmapImage? cellImage;
 
@@ -91,6 +92,15 @@ namespace ChessWPF.ViewModels
             {
                 isInCheck = value;
                 OnPropertyChanged(nameof(IsInCheck));
+            }
+        }
+        public bool IsPartOfLastMove
+        {
+            get => isPartOfLastMove;
+            set
+            {
+                isPartOfLastMove = value;
+                OnPropertyChanged(nameof(IsPartOfLastMove));
             }
         }
 
