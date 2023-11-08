@@ -5,6 +5,7 @@ using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows.Media;
 
 namespace ChessWPF.ViewModels
 {
@@ -17,9 +18,12 @@ namespace ChessWPF.ViewModels
         private CellViewModel[][] cellViewModels;
         private List<Cell> legalMoves;
 
+
+
         public BoardViewModel()
         {
             Board = new Board();
+            LastMoveCellCoordinates = new (int, int)[2];
             CellViewModels = new CellViewModel[8][];
             MatchCellViewModelsToCells();
             Board.SetupPieces();
@@ -166,6 +170,10 @@ namespace ChessWPF.ViewModels
                 RestoreAllBackupCells();
                 PromotionIsUnderway = false;
             }
+            if (Board.Moves.Any())
+            {
+                UnMarkCellsOfMove(Board.Moves.Peek());
+            }
             Board.Reset();
             GameHasStarted = false;
             GameHasEnded = false;
@@ -220,6 +228,8 @@ namespace ChessWPF.ViewModels
             }
             else
             {
+                var move = Board.Moves.Peek();
+
                 Board.UndoMove();
                 if (!Board.Moves.Any())
                 {
@@ -229,6 +239,12 @@ namespace ChessWPF.ViewModels
                 {
                     GameHasEnded = false;
                     GameResult = null;
+                }
+                UnMarkCellsOfMove(move);
+                if (Board.Moves.Any())
+                {
+                    move = Board.Moves.Peek();
+                    MarkCellsOfMove(move);
                 }
                 PrepareForNextTurn();
             }
@@ -389,16 +405,21 @@ namespace ChessWPF.ViewModels
                 {
                     CellViewModels[pieceCoordinates.Row][pieceCoordinates.Col].CanBeSelected = false;
                 }
-            } 
+            }
         }
 
         private void FinishMove(Move move, Cell? selectedCell)
         {
+            if (Board.Moves.Any())
+            {
+                UnMarkCellsOfMove(Board.Moves.Peek());
+            }
             Board.FinishMove(move, selectedCell!);
             if (!GameHasStarted)
             {
                 GameHasStarted = true;
             }
+            MarkCellsOfMove(move);
             PrepareForNextTurn();
         }
 
