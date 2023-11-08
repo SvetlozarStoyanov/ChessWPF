@@ -18,9 +18,11 @@ namespace ChessWPF.Views.Cells
 
             Panel.SetZIndex(cellBtnSelect, 2);
             Panel.SetZIndex(imgPiece, 1);
+
             this.Width = this.Height;
             this.MaxWidth = this.MaxHeight;
             this.MinWidth = this.MinHeight;
+
             var imageUrl = $"/Graphics/Selectors/Green Marker.png";
             var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgSelector.Source = new BitmapImage(resourceUri);
@@ -31,6 +33,7 @@ namespace ChessWPF.Views.Cells
             imgSelector.MaxHeight = 40;
             imgSelector.MaxWidth = 40;
             imgSelector.Opacity = 0;
+
             imageUrl = $"/Graphics/Selectors/Red Marker.png";
             resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgCheckMarker.Source = new BitmapImage(resourceUri);
