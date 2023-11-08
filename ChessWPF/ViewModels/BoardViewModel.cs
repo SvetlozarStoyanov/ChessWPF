@@ -402,6 +402,20 @@ namespace ChessWPF.ViewModels
             PrepareForNextTurn();
         }
 
+        private void MarkCellsOfMove(Move move)
+        {
+            LastMoveCellCoordinates[0] = (move.CellOneBefore.Row, move.CellOneBefore.Col);
+            LastMoveCellCoordinates[1] = (move.CellTwoBefore.Row, move.CellTwoBefore.Col);
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateMovedTo();
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateMovedTo();
+        }
+
+        private void UnMarkCellsOfMove(Move move)
+        {
+            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateMovedTo();
+            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateMovedTo();
+        }
+
         private void RestoreBackupCells()
         {
             Board.RestoreBackupCells();
