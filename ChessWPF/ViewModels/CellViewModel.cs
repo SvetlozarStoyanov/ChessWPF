@@ -21,6 +21,9 @@ namespace ChessWPF.ViewModels
         private bool isPartOfLastMove;
         private Cell cell = null!;
         private BitmapImage? cellImage;
+        private SolidColorBrush backgroundBrush = new SolidColorBrush();
+        private Color defaultColor;
+        private Color movedToColor;
 
         public CellViewModel(Cell cell)
         {
@@ -114,13 +117,13 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public Cell Cell
+        public SolidColorBrush BackgroundBrush
         {
-            get => cell;
+            get => backgroundBrush;
             set
             {
-                cell = value;
-                OnPropertyChanged(nameof(Cell));
+                backgroundBrush = value;
+                OnPropertyChanged(nameof(BackgroundBrush.Color));
             }
         }
 
