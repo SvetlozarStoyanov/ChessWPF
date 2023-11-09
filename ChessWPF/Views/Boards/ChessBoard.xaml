@@ -9,7 +9,7 @@
              d:DesignHeight="450" d:DesignWidth="800"
               MaxHeight="1000px" MaxWidth="1000px"
              Loaded="ChessBoard_Loaded">
-    <Grid x:Name="grid" SizeChanged="Grid_SizeChanged"  HorizontalAlignment="Center" VerticalAlignment="Center">
+    <Grid x:Name="grid" SizeChanged="Grid_SizeChanged"  >
         <Grid.RowDefinitions>
             <RowDefinition />
             <RowDefinition />
@@ -35,8 +35,6 @@
             <ColumnDefinition/>
 
         </Grid.ColumnDefinitions>
-        <Border Panel.ZIndex="2" Grid.Row="0" Grid.RowSpan="8" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="5" >
-        </Border>
 
         <TextBlock Grid.Row="0" Grid.Column="0" Text="8" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,20,0"/>
         <TextBlock Grid.Row="1" Grid.Column="0" Text="7" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,20,0"/>
@@ -55,16 +53,32 @@
         <TextBlock Grid.Row="8" Grid.Column="6" Text="F" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
         <TextBlock Grid.Row="8" Grid.Column="7" Text="G" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
         <TextBlock Grid.Row="8" Grid.Column="8" Text="H" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-        
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="1" DataContext="{Binding CellViewModels[0][0]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="2" DataContext="{Binding CellViewModels[0][1]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="3" DataContext="{Binding CellViewModels[0][2]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="4" DataContext="{Binding CellViewModels[0][3]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="5" DataContext="{Binding CellViewModels[0][4]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="6" DataContext="{Binding CellViewModels[0][5]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="7" DataContext="{Binding CellViewModels[0][6]}"/>
-        <Views.Cells:ChessCell Grid.Row="0" Grid.Column="8" DataContext="{Binding CellViewModels[0][7]}"/>
 
+        <Grid x:Name="cellGrid" Loaded="cellGrid_Loaded" Grid.Row="0" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="8">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Border Panel.ZIndex="2" Grid.Row="0" Grid.RowSpan="8" Grid.Column="0" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="5" >
+            </Border>
+            <!--All cells are now added programmatically in the code behind-->
+            
         </Grid>
         <Border Grid.Row="10" Height="30px" Grid.Column="1" Grid.ColumnSpan="8" BorderBrush="Black" BorderThickness="1" Margin="0,10,0,10">
             <TextBox x:Name="fenTextBox" IsReadOnly="True" BorderThickness="0"  TextAlignment="Center" FontSize="10" Text="{Binding FenAnnotation, UpdateSourceTrigger=PropertyChanged}">
