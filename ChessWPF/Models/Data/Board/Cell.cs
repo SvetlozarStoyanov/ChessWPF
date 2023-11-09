@@ -27,6 +27,9 @@ namespace ChessWPF.Models.Data.Board
         public event CheckEventHandler Check;
         public event CheckEventHandler UnCheck;
 
+        public delegate void UpdateMovedToEventHandler(object? sender, EventArgs args);
+        public event UpdateMovedToEventHandler UpdateMovedTo;
+
         public int Row { get; set; }
         public int Col { get; set; }
         public Piece? Piece { get; set; }
@@ -78,6 +81,11 @@ namespace ChessWPF.Models.Data.Board
         public void MarkAsUnchecked()
         {
             UnCheck(this, EventArgs.Empty);
+        }
+
+        public void UpdateMarkAsMovedTo()
+        {
+            UpdateMovedTo(this, EventArgs.Empty);
         }
     }
 }
