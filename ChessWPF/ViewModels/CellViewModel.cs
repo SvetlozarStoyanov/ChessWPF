@@ -23,13 +23,14 @@ namespace ChessWPF.ViewModels
         private Color movedToColor;
 
 
-        public CellViewModel(Cell cell, Color defaultColor,Color movedToColor)
+        public CellViewModel(Cell cell, Color defaultColor, Color movedToColor)
         {
             Cell = cell;
             Cell.Update += Update;
             Cell.UpdateForPromotion += UpdateForPromotion;
             Cell.Check += OnCheck;
             Cell.UnCheck += OnUnCheck;
+            Cell.UpdateMovedTo += UpdateMarkAsMovedTo;
             this.defaultColor = defaultColor;
             this.movedToColor = movedToColor;
             BackgroundBrush = new SolidColorBrush(defaultColor);
@@ -176,7 +177,7 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public void UpdateMovedTo()
+        public void UpdateMarkAsMovedTo(object? sender, EventArgs args)
         {
             IsPartOfLastMove = !IsPartOfLastMove;
             if (IsPartOfLastMove)
