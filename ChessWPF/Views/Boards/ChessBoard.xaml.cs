@@ -1,6 +1,7 @@
 ﻿using ChessWPF.HelperClasses.ControlGetters;
 using ChessWPF.HelperClasses.WindowDimensions;
-using System;
+using ChessWPF.ViewModels;
+using ChessWPF.Views.Cells;
 using System.Collections.Generic;
 using System.Windows;
 using System.Windows.Controls;
