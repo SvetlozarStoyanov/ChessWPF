@@ -14,7 +14,6 @@ namespace ChessWPF.ViewModels
         private bool promotionIsUnderway;
         private CellViewModel? selectedCell;
         private Board board;
-        private (int, int)[] lastMoveCellCoordinates;
         private CellViewModel[][] cellViewModels;
         private List<Cell> legalMoves;
 
@@ -23,7 +22,6 @@ namespace ChessWPF.ViewModels
         public BoardViewModel()
         {
             Board = new Board();
-            LastMoveCellCoordinates = new (int, int)[2];
             CellViewModels = new CellViewModel[8][];
             MatchCellViewModelsToCells();
             Board.SetupPieces();
@@ -114,11 +112,6 @@ namespace ChessWPF.ViewModels
             private set => legalMoves = value;
         }
 
-        public (int, int)[] LastMoveCellCoordinates
-        {
-            get => lastMoveCellCoordinates;
-            private set => lastMoveCellCoordinates = value;
-        }
 
         public CellViewModel[][] CellViewModels
         {
@@ -169,10 +162,6 @@ namespace ChessWPF.ViewModels
                 UpdateCellViewModelsOfBackupCells();
                 RestoreAllBackupCells();
                 PromotionIsUnderway = false;
-            }
-            if (Board.Moves.Any())
-            {
-                UnMarkCellsOfMove(Board.Moves.Peek());
             }
             Board.Reset();
             GameHasStarted = false;
@@ -240,11 +229,9 @@ namespace ChessWPF.ViewModels
                     GameHasEnded = false;
                     GameResult = null;
                 }
-                UnMarkCellsOfMove(move);
                 if (Board.Moves.Any())
                 {
                     move = Board.Moves.Peek();
-                    MarkCellsOfMove(move);
                 }
                 PrepareForNextTurn();
             }
@@ -410,31 +397,12 @@ namespace ChessWPF.ViewModels
 
         private void FinishMove(Move move, Cell? selectedCell)
         {
-            if (Board.Moves.Any())
-            {
-                UnMarkCellsOfMove(Board.Moves.Peek());
-            }
             Board.FinishMove(move, selectedCell!);
             if (!GameHasStarted)
             {
                 GameHasStarted = true;
             }
-            MarkCellsOfMove(move);
             PrepareForNextTurn();
-        }
-
-        private void MarkCellsOfMove(Move move)
-        {
-            LastMoveCellCoordinates[0] = (move.CellOneBefore.Row, move.CellOneBefore.Col);
-            LastMoveCellCoordinates[1] = (move.CellTwoBefore.Row, move.CellTwoBefore.Col);
-            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateMovedTo();
-            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateMovedTo();
-        }
-
-        private void UnMarkCellsOfMove(Move move)
-        {
-            CellViewModels[move.CellOneBefore.Row][move.CellOneBefore.Col].UpdateMovedTo();
-            CellViewModels[move.CellTwoBefore.Row][move.CellTwoBefore.Col].UpdateMovedTo();
         }
 
         private void RestoreBackupCells()
