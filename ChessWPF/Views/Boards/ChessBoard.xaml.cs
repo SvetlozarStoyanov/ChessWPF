@@ -36,5 +36,26 @@ namespace ChessWPF.Views.Boards
             fenTextBox.FontSize = fenFontSize;
             cellAnnotationTextBlocks.ForEach(block => block.FontSize = cellAnnotationFontSize);
         }
+
+        private void cellGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            InitializeChessCells();
+        }
+
+        private void InitializeChessCells()
+        {
+            var cellViewModels = (this.DataContext as BoardViewModel)!.CellViewModels;
+            for (int row = 0; row < cellViewModels.Length; row++)
+            {
+                for (int col = 0; col < cellViewModels[row].Length; col++)
+                {
+                    var chessCell = new ChessCell();
+                    chessCell.SetValue(Grid.RowProperty, row);
+                    chessCell.SetValue(Grid.ColumnProperty, col);
+                    chessCell.DataContext = cellViewModels[row][col];
+                    cellGrid.Children.Add(chessCell);
+                }
+            }
+        }
     }
 }
