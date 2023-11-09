@@ -146,6 +146,7 @@ namespace ChessWPF.Models.Data.Board
             Pieces[PieceColor.Black].Clear();
             if (Moves.Any())
             {
+                UpdateCellsMovedTo(Moves.Peek());
                 TurnColor = Moves.Reverse().FirstOrDefault()!.CellOneBefore.Piece!.Color;
                 Moves.Clear();
             }
@@ -203,6 +204,7 @@ namespace ChessWPF.Models.Data.Board
                 Pieces[cellOneBefore.Piece!.Color].First(piece => piece.Equals(move.CellTwoAfter.Piece)).SetCoordinates(cellOneBefore);
             }
             Cells[cellOneBefore.Row, cellOneBefore.Col].UpdateCell(cellOneBefore.Piece);
+
             Cells[cellTwoBefore.Row, cellTwoBefore.Col].UpdateCell(move.CellTwoBefore.Piece);
 
             if (cellTwoBefore.Piece != null)
@@ -225,7 +227,7 @@ namespace ChessWPF.Models.Data.Board
                     Pieces[cellThreeBefore.Piece!.Color].FirstOrDefault(p => p.Equals(move.CellFourAfter!.Piece))!.SetCoordinates(cellThreeBefore);
                 }
             }
-
+            UpdateCellsMovedTo(move);
             ReverseTurnColor();
             if (moves.Any())
             {
@@ -235,6 +237,7 @@ namespace ChessWPF.Models.Data.Board
                 {
                     HalfMoveCount = lastMove.CurrHalfMoveCount;
                 }
+                UpdateCellsMovedTo(lastMove);
             }
             else
             {
@@ -281,15 +284,20 @@ namespace ChessWPF.Models.Data.Board
             {
                 OngoingPromotionMove = null;
             }
-            if (move.CellOneBefore.Piece!.PieceType == PieceType.King /*&& (move.CellOneBefore.Piece as King)!.IsInCheck*/ )
+            if (move.CellOneBefore.Piece!.PieceType == PieceType.King)
             {
                 Cells[move.CellOneBefore.Row, move.CellOneBefore.Col].MarkAsUnchecked();
+            }
+            if (Moves.Any())
+            {
+                UpdateCellsMovedTo(Moves.Peek());
             }
             move.CurrHalfMoveCount = halfMoveCount;
             ReverseTurnColor();
             Moves.Push(move);
             UpdateFenAnnotation();
             Moves.Peek().FenAnnotation = FenAnnotation;
+            UpdateCellsMovedTo(move);
         }
 
         public void CalculatePossibleMoves()
@@ -302,7 +310,7 @@ namespace ChessWPF.Models.Data.Board
 
             foreach (var piece in Pieces[oppositeColor])
             {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece,this);
+                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
                 piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                 piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
                 Cells[piece.Row, piece.Col].Piece = piece;
@@ -930,6 +938,12 @@ namespace ChessWPF.Models.Data.Board
                 Pieces[TurnColor].FirstOrDefault(p => p.Equals(move.CellThreeBefore!.Piece))!.SetCoordinates(move.CellFourAfter!);
                 Cells[move.CellFourBefore!.Row, move.CellFourBefore.Col].UpdateCell(move.CellFourAfter!.Piece);
             }
+        }
+
+        private void UpdateCellsMovedTo(Move move)
+        {
+            Cells[move.CellOneBefore.Row, move.CellOneBefore.Col].UpdateMarkAsMovedTo();
+            Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col].UpdateMarkAsMovedTo();
         }
 
         private void UnCheckKing(King king)
