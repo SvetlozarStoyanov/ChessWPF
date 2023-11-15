@@ -1,7 +1,9 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Board;
+using ChessWPF.ViewModels.Enums;
 using System;
+using System.Collections.Generic;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -16,12 +18,14 @@ namespace ChessWPF.ViewModels
         private bool canBeSelectedForPromotion;
         private bool isInCheck;
         private bool isPartOfLastMove;
-        private Cell cell = null!;
-        private BitmapImage? cellImage;
-        private SolidColorBrush backgroundBrush = new SolidColorBrush();
-        private Color defaultColor;
+        private bool isOccupied;
+        private string selectorImage;
         private Color movedToColor;
-
+        private Color defaultColor;
+        private Cell cell = null!;
+        private SolidColorBrush backgroundBrush = new SolidColorBrush();
+        private BitmapImage? cellPieceImage;
+        private Dictionary<SelectorStates, string> selectors;
 
         public CellViewModel(Cell cell, Color defaultColor, Color movedToColor)
         {
@@ -38,6 +42,18 @@ namespace ChessWPF.ViewModels
             SelectCommand = new SelectCommand(this);
             MoveCommand = new MoveCommand(this);
             PromoteCommand = new PromoteCommand(this);
+            IsOccupied = false;
+            
+
+            selectors = new Dictionary<SelectorStates, string>()
+            {
+                [SelectorStates.Empty] = "/Graphics/Selectors/Empty Selector.png",
+                [SelectorStates.Occupied] = "/Graphics/Selectors/Occupied Selector.png"
+            };
+
+            //var emptyCellUrl = "/Graphics/Empty Cell.png";
+            CellPieceImage = null;
+            SelectorImage = @$"pack://application:,,,{selectors[SelectorStates.Empty]}";
         }
 
         public delegate void SelectEventHandler(object sender, SelectCellViewModelEventArgs args);
@@ -107,6 +123,15 @@ namespace ChessWPF.ViewModels
                 OnPropertyChanged(nameof(IsPartOfLastMove));
             }
         }
+        public bool IsOccupied
+        {
+            get { return isOccupied; }
+            set 
+            { 
+                isOccupied = value;
+                OnPropertyChanged(nameof(IsOccupied));
+            }
+        }
 
         public Cell Cell
         {
@@ -118,13 +143,23 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public BitmapImage? CellImage
+        public BitmapImage? CellPieceImage
         {
-            get => cellImage;
+            get => cellPieceImage;
             set
             {
-                cellImage = value;
-                OnPropertyChanged(nameof(CellImage));
+                cellPieceImage = value;
+                OnPropertyChanged(nameof(CellPieceImage));
+            }
+        }
+
+        public string SelectorImage
+        {
+            get { return selectorImage; }
+            set
+            {
+                selectorImage = value;
+                OnPropertyChanged(nameof(SelectorImage));
             }
         }
 
@@ -168,12 +203,20 @@ namespace ChessWPF.ViewModels
             if (cell.Piece != null)
             {
                 var imageUrl = $"/Graphics/Chess Pieces/{cell.Piece.Color} {cell.Piece.GetType().Name}.png";
-                var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
-                CellImage = new BitmapImage(resourceUri);
+                var pieceImageUri = new Uri(@$"pack://application:,,,{imageUrl}");
+                CellPieceImage = new BitmapImage(pieceImageUri);
+                SelectorImage = @$"pack://application:,,,{selectors[SelectorStates.Occupied]}";
+                IsOccupied = true;
             }
             else
             {
-                CellImage = null;
+                if (!this.CanBeSelectedForPromotion)
+                {
+                    //var emptyCellUrl = $"/Graphics/Empty Cell.png";
+                    CellPieceImage = null;
+                    SelectorImage = @$"pack://application:,,,{selectors[SelectorStates.Empty]}";
+                    IsOccupied = false;
+                }
             }
         }
 

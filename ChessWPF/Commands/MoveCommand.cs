@@ -26,7 +26,7 @@ namespace ChessWPF.Commands
 
         private void OnViewModelPropertyChanged(object? sender, PropertyChangedEventArgs e)
         {
-            if (e.PropertyName == nameof(CellViewModel.CanBeMovedTo) || e.PropertyName == nameof(CellViewModel.CellImage) )
+            if (e.PropertyName == nameof(CellViewModel.CanBeMovedTo) || e.PropertyName == nameof(CellViewModel.CellPieceImage) )
             {
                 OnCanExecuteChanged();
             }
