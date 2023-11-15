@@ -25,17 +25,6 @@ namespace ChessWPF.Views.Cells
 
             var imageUrl = $"/Graphics/Selectors/Green Marker.png";
             var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
-            imgSelector.Source = new BitmapImage(resourceUri);
-            imgSelector.Height = 40;
-            imgSelector.Width = 40;
-            imgSelector.MinHeight = 15;
-            imgSelector.MinWidth = 15;
-            imgSelector.MaxHeight = 40;
-            imgSelector.MaxWidth = 40;
-            imgSelector.Opacity = 0;
-
-            imageUrl = $"/Graphics/Selectors/Red Marker.png";
-            resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgCheckMarker.Source = new BitmapImage(resourceUri);
             cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
             cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
