@@ -117,10 +117,35 @@ namespace ChessWPF.Views.Cells
 
         private void cellBackground_SizeChanged(object sender, SizeChangedEventArgs e)
         {
-            imgSelector.Width = GlobalDimensions.Width / 48;
+            if (imgSelector.Source != null && imgSelector.Source.ToString().Contains("Occupied"))
+            {
+                imgSelector.Height = this.ActualHeight;
+                imgSelector.Width = this.ActualWidth;
+            }
+            else
+            {
             imgSelector.Height = GlobalDimensions.Height / 24;
+                imgSelector.Width = GlobalDimensions.Width / 48;
+            }
             imgPiece.Height = this.ActualHeight - 1;
             imgPiece.Width = this.ActualWidth - 1;
+        }
+
+
+        private void imgSelector_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (imgSelector.Source != null && imgSelector.Source.ToString().Contains("Occupied"))
+            {
+                imgSelector.Height = this.ActualHeight;
+                imgSelector.Width = this.ActualWidth;
+                imgSelector.Stretch = Stretch.UniformToFill;
+            }
+            else
+            {
+                imgSelector.Height = GlobalDimensions.Height / 24;
+                imgSelector.Width = GlobalDimensions.Width / 48;
+                imgSelector.Stretch = Stretch.Uniform;
+            }
         }
     }
 }
