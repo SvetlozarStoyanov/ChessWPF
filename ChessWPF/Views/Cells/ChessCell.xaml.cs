@@ -23,7 +23,7 @@ namespace ChessWPF.Views.Cells
             this.MaxWidth = this.MaxHeight;
             this.MinWidth = this.MinHeight;
 
-            var imageUrl = $"/Graphics/Selectors/Green Marker.png";
+            var imageUrl = $"/Graphics/Selectors/Red Marker.png";
             var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgCheckMarker.Source = new BitmapImage(resourceUri);
             cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
@@ -122,7 +122,7 @@ namespace ChessWPF.Views.Cells
             }
             else
             {
-            imgSelector.Height = GlobalDimensions.Height / 24;
+                imgSelector.Height = GlobalDimensions.Height / 24;
                 imgSelector.Width = GlobalDimensions.Width / 48;
             }
             imgPiece.Height = this.ActualHeight - 1;
