@@ -71,7 +71,6 @@ namespace ChessWPF.Views.Cells
             {
                 Panel.SetZIndex(cellBtnMove, 3);
                 cellBtnMove.Opacity = 0.5;
-                cellBtnMove.Background = Brushes.DarkSlateGray;
                 imgSelector.Opacity = 1;
                 Panel.SetZIndex(imgSelector, 2);
             }
@@ -79,7 +78,6 @@ namespace ChessWPF.Views.Cells
             {
                 Panel.SetZIndex(cellBtnMove, 1);
                 cellBtnMove.Opacity = 0;
-                cellBtnMove.Background = null;
                 imgSelector.Opacity = 0;
                 Panel.SetZIndex(imgSelector, 1);
             }
