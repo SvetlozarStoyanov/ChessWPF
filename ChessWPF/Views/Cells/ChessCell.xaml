@@ -13,12 +13,15 @@
         </Button>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
         </Button>
-        <Button Command="{Binding MoveCommand}" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
+        <Button Command="{Binding MoveCommand}" BorderThickness="0" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
         </Button>
 
         <Image x:Name="imgCheckMarker" IsEnabled="{Binding IsInCheck,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="imgCheckMarker_IsEnabledChanged" HorizontalAlignment="Center" VerticalAlignment="Center"/>
-        <Image x:Name="imgPiece" Source="{Binding CellImage}" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="1" />
+        <Image x:Name="imgPiece" Source="{Binding CellPieceImage,UpdateSourceTrigger=PropertyChanged}" HorizontalAlignment="Center" VerticalAlignment="Center" Opacity="1" />
 
-        <Image x:Name="imgSelector"/>
+        <Image x:Name="imgSelector" Source="{Binding SelectorImage,UpdateSourceTrigger=PropertyChanged}"
+               IsEnabled="{Binding IsOccupied,UpdateSourceTrigger=PropertyChanged,FallbackValue=False}"
+               IsEnabledChanged="imgSelector_IsEnabledChanged"
+               HorizontalAlignment="Stretch" VerticalAlignment="Stretch"/>
     </Grid>
 </UserControl>
