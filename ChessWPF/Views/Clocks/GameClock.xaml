@@ -8,17 +8,21 @@
              d:DesignHeight="200" d:DesignWidth="100"
              Loaded="GameClock_Loaded">
     
-    <Grid Background="White" VerticalAlignment="Top" SizeChanged="Grid_SizeChanged">
+    
+    <Grid x:Name="clockGrid" Background="White" VerticalAlignment="Center" SizeChanged="Grid_SizeChanged" 
+          IsEnabled="{Binding IsRunning,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="clockGrid_IsEnabledChanged"
+          >
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            <!--<ColumnDefinition/>-->
         </Grid.ColumnDefinitions>
-        <TextBlock x:Name="timeTextBlock" Grid.Column="0" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
+        <TextBlock x:Name="timeTextBlock" Grid.Column="0" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
 
         </TextBlock>
-        <TextBlock x:Name="colorTextBlock" Grid.Column="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Color}">
+        <!--<TextBlock x:Name="colorTextBlock" Grid.Column="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Color}">
             
-        </TextBlock>
+        </TextBlock>-->
+        <Border Grid.Row="0" Grid.Column="0"   BorderBrush="Black" BorderThickness="3" Height="60"></Border>
     </Grid>
 </UserControl>

@@ -22,7 +22,15 @@ namespace ChessWPF.Views.Clocks
             var clockTimeSize = GlobalDimensions.Width / 64;
             timeTextBlock.FontSize = clockTimeSize;
             var clockColorSize = GlobalDimensions.Width / 53;
-            colorTextBlock.FontSize = clockColorSize;
+            //colorTextBlock.FontSize = clockColorSize;
+            if (clockGrid.IsEnabled)
+            {
+                clockGrid.Background = Brushes.Green;
+            }
+            else
+            {
+                clockGrid.Background = Brushes.White;
+            }
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
@@ -30,7 +38,19 @@ namespace ChessWPF.Views.Clocks
             var clockTimeSize = GlobalDimensions.Width / 64;
             timeTextBlock.FontSize = clockTimeSize;
             var clockColorSize = GlobalDimensions.Width / 53;
-            colorTextBlock.FontSize = clockColorSize;
+            //colorTextBlock.FontSize = clockColorSize;
+        }
+
+        private void clockGrid_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (clockGrid.IsEnabled)
+            {
+                clockGrid.Background = Brushes.Green;
+            }
+            else
+            {
+                clockGrid.Background = Brushes.White;
+            }
         }
     }
 }
