@@ -38,9 +38,10 @@
             <ColumnDefinition/>
             <ColumnDefinition/>
             <ColumnDefinition/>
-            <ColumnDefinition/>
+            
             <ColumnDefinition Width="2.35*"/>
             <ColumnDefinition/>
+
 
         </Grid.ColumnDefinitions>
 
@@ -50,19 +51,19 @@
         <local:ChessBoard Grid.Row="1" Grid.Column="0" Grid.RowSpan="9" Grid.ColumnSpan="9" DataContext="{Binding BoardViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center"  >
 
         </local:ChessBoard>
-        <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="1" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[Black]}">
+        <View.Clocks:GameClock VerticalAlignment="Center" Grid.Row="2" Grid.Column="9" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[Black]}" Height="60">
 
         </View.Clocks:GameClock>
-        <View.Clocks:GameClock VerticalAlignment="Bottom" Grid.Row="8" Grid.Column="10" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[White]}">
+        <View.Clocks:GameClock VerticalAlignment="Center" Grid.Row="7" Grid.Column="9" Grid.ColumnSpan="1" DataContext="{Binding GameClockViewModels[White]}" Height="60">
 
         </View.Clocks:GameClock>
 
-        <Grid Grid.Row="2" Grid.Column="10" Grid.RowSpan="6">
+        <Grid Grid.Row="3" Grid.Column="9" Grid.RowSpan="4">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="9*"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-            <Border Grid.Row="0" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="4">
+            <Border Grid.Row="0"  VerticalAlignment="Stretch" HorizontalAlignment="Stretch" BorderBrush="Black" BorderThickness="4">
                 <TextBox x:Name="moveNotationTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                          TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" FontWeight="Bold"
                       Background="White" FontSize="16px" Text="{Binding MoveNotation,UpdateSourceTrigger=PropertyChanged}">
@@ -70,6 +71,7 @@
         </Border>
                 <Button Grid.Row="1" Name="copyMoveNotationButton" Click="copyMoveNotationButton_Click"
                         IsEnabled="{Binding CanCopyMoveNotation,UpdateSourceTrigger=PropertyChanged}"
+                         Margin="0,0,0,10"
                         >Copy</Button>
             </Grid>
     </Grid>
