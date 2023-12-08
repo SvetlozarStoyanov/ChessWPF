@@ -160,9 +160,10 @@ namespace ChessWPF.ViewModels
 
         public void ResetClocks()
         {
-            foreach (var clock in gameClocks)
+            foreach (var clock in gameClocks.Values)
             {
-                clock.Value.ResetClock();
+                clock.StopClock();
+                clock.ResetClock();
             }
         }
 
