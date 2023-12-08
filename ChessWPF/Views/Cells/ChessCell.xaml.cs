@@ -129,14 +129,13 @@ namespace ChessWPF.Views.Cells
             imgPiece.Width = this.ActualWidth - 1;
         }
 
-
         private void imgSelector_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             if (imgSelector.Source != null && imgSelector.Source.ToString().Contains("Occupied"))
             {
                 imgSelector.Height = this.ActualHeight;
                 imgSelector.Width = this.ActualWidth;
-                imgSelector.Stretch = Stretch.UniformToFill;
+                imgSelector.Stretch = Stretch.Fill;
             }
             else
             {
