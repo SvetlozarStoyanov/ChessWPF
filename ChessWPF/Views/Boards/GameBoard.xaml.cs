@@ -12,10 +12,5 @@ namespace ChessWPF.Views.Boards
         {
             InitializeComponent();
         }
-
-        private void copyMoveNotationButton_Click(object sender, RoutedEventArgs e)
-        {
-            Clipboard.SetText(moveNotationTextBox.Text);
-        }
     }
 }
