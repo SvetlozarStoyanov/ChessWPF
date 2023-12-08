@@ -9,8 +9,8 @@ namespace ChessWPF.ViewModels
     public sealed class GameClockViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private string timeLeft;
+        private bool isRunning;
         private GameClock gameClock;
-
 
         public GameClockViewModel(PieceColor color)
         {
@@ -35,6 +35,19 @@ namespace ChessWPF.ViewModels
             {
                 timeLeft = value;
                 OnPropertyChanged(nameof(TimeLeft));
+            }
+        }
+
+        public bool IsRunning
+        {
+            get
+            {
+                return isRunning;
+            }
+            set
+            {
+                isRunning = value;
+                OnPropertyChanged(nameof(IsRunning));
             }
         }
 
@@ -75,18 +88,21 @@ namespace ChessWPF.ViewModels
         public void StartClock()
         {
             gameClock.StartClock();
+            IsRunning = true;
         }
 
         public void StopClock()
         {
             gameClock.StopClock();
             UpdateClock(gameClock.TimeLeft);
+            IsRunning = false;
         }
 
         public void ResetClock()
         {
             gameClock.ResetClock();
             UpdateClock(gameClock.TimeLeft);
+            //IsRunning = false;
         }
 
         public void AddTime(TimeSpan time)
@@ -116,6 +132,7 @@ namespace ChessWPF.ViewModels
         private void OnTimeOut(object source, TimeOutEventArgs args)
         {
             UpdateClock(TimeSpan.FromSeconds(0));
+            IsRunning = false;
             TimeOut(this, new TimeOutEventArgs(this.Color));
         }
     }
