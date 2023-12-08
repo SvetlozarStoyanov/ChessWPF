@@ -150,7 +150,7 @@ namespace ChessWPF.Models.Data.Board
                 TurnColor = Moves.Reverse().FirstOrDefault()!.CellOneBefore.Piece!.Color;
                 Moves.Clear();
             }
-
+            HalfMoveCount = 0;
             SetupPieces();
         }
 
