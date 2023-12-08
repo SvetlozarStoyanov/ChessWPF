@@ -1,0 +1,43 @@
+﻿<UserControl x:Class="ChessWPF.Views.MoveNotations.MoveNotation"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.MoveNotations"
+             xmlns:View.Clocks="clr-namespace:ChessWPF.Views.Clocks"
+             mc:Ignorable="d" 
+             d:DesignHeight="600" d:DesignWidth="600">
+    <Grid >
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="4*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="7*"/>
+            <ColumnDefinition Width="3*"/>
+        </Grid.ColumnDefinitions>
+
+        <View.Clocks:GameClock VerticalAlignment="Bottom" Grid.Row="0" DataContext="{Binding GameClockViewModels[Black]}"/>
+
+        <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="2" DataContext="{Binding GameClockViewModels[White]}"/>
+
+        <Border Grid.Row="1" BorderBrush="Black" BorderThickness="4 0 4 0">
+            <Grid Grid.Row="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="9*"/>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <TextBox Grid.Row="0" x:Name="moveNotationTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                  TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" FontWeight="Bold"
+               Background="White" FontSize="16px" Text="{Binding MoveNotation,UpdateSourceTrigger=PropertyChanged}">
+                </TextBox>
+                <Button Grid.Row="1" Name="copyMoveNotationButton" Click="copyMoveNotationButton_Click"
+                 IsEnabled="{Binding CanCopyMoveNotation,UpdateSourceTrigger=PropertyChanged}"
+                 >Copy</Button>
+            </Grid>
+        </Border>
+    </Grid>
+</UserControl>
+
+
