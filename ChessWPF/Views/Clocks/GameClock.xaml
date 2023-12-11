@@ -7,22 +7,15 @@
              mc:Ignorable="d" 
              d:DesignHeight="200" d:DesignWidth="100"
              Loaded="GameClock_Loaded">
-    
-    
-    <Grid x:Name="clockGrid" Background="White" VerticalAlignment="Center" SizeChanged="Grid_SizeChanged" 
-          IsEnabled="{Binding IsRunning,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="clockGrid_IsEnabledChanged"
-          >
 
+    <Grid x:Name="clockGrid" Background="{Binding ClockBrush,UpdateSourceTrigger=PropertyChanged}" VerticalAlignment="Center" SizeChanged="Grid_SizeChanged" 
+          IsEnabled="{Binding IsRunning,UpdateSourceTrigger=PropertyChanged}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition/>
-            <!--<ColumnDefinition/>-->
         </Grid.ColumnDefinitions>
         <TextBlock x:Name="timeTextBlock" Grid.Column="0" FontSize="60" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding TimeLeft,UpdateSourceTrigger=PropertyChanged}">
 
         </TextBlock>
-        <!--<TextBlock x:Name="colorTextBlock" Grid.Column="1" FontSize="20" VerticalAlignment="Center" HorizontalAlignment="Center" Text="{Binding Color}">
-            
-        </TextBlock>-->
-        <Border Grid.Row="0" Grid.Column="0"   BorderBrush="Black" BorderThickness="3" Height="60"></Border>
+        <Border Grid.Row="0" Grid.Column="0" BorderBrush="Black" BorderThickness="3" Height="60"></Border>
     </Grid>
 </UserControl>
