@@ -3,6 +3,7 @@ using ChessWPF.Models.Data.Clocks;
 using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.ComponentModel;
+using System.Windows.Media;
 
 namespace ChessWPF.ViewModels
 {
@@ -11,12 +12,24 @@ namespace ChessWPF.ViewModels
         private string timeLeft;
         private bool isRunning;
         private GameClock gameClock;
+        private SolidColorBrush clockBrush;
+        private Color normalRunningColor;
+        private Color stoppedColor;
+        private Color lowTimeColor;
 
-        public GameClockViewModel(PieceColor color)
+        public GameClockViewModel(PieceColor color,
+            Color normalRunningColor,
+            Color stoppedColor,
+            Color lowTimeColor)
         {
-            gameClock = new GameClock(3, 300, color);
+            gameClock = new GameClock(3, 10, color);
             gameClock.ClockTick += OnClockTick;
             gameClock.TimeOut += OnTimeOut;
+            NormalRunningColor = normalRunningColor;
+            StoppedColor = stoppedColor;
+            LowTimeColor = lowTimeColor;
+            ClockBrush = new SolidColorBrush(StoppedColor);
+            ClockBrush.Opacity = 0.6;
         }
 
         public delegate void TimeOutEventHandler(object source, TimeOutEventArgs args);
@@ -62,10 +75,27 @@ namespace ChessWPF.ViewModels
             {
                 return gameClock.TimeElapsed;
             }
-            set
+            private set
             {
                 gameClock.TimeElapsed = value;
             }
+        }
+        public Color NormalRunningColor
+        {
+            get => normalRunningColor;
+            private set { normalRunningColor = value; }
+        }
+
+        public Color StoppedColor
+        {
+            get => stoppedColor;
+            private set { stoppedColor = value; }
+        }
+
+        public Color LowTimeColor
+        {
+            get => lowTimeColor;
+            private set { lowTimeColor = value; }
         }
 
         public GameClock GameClock
@@ -73,8 +103,19 @@ namespace ChessWPF.ViewModels
             get { return gameClock; }
         }
 
+        public SolidColorBrush ClockBrush
+        {
+            get => clockBrush;
+            private set => clockBrush = value;
+        }
+
         public void UpdateClock(TimeSpan timeLeft)
         {
+            if (gameClock.IsLowTime)
+            {
+                ClockBrush.Color = LowTimeColor;
+            }
+
             if (timeLeft.TotalSeconds > 10)
             {
                 this.TimeLeft = timeLeft.ToString(@"mm\:ss");
@@ -88,6 +129,9 @@ namespace ChessWPF.ViewModels
         public void StartClock()
         {
             gameClock.StartClock();
+
+            ClockBrush.Color = NormalRunningColor;
+
             IsRunning = true;
         }
 
@@ -95,6 +139,9 @@ namespace ChessWPF.ViewModels
         {
             gameClock.StopClock();
             UpdateClock(gameClock.TimeLeft);
+
+            ClockBrush.Color = StoppedColor;
+
             IsRunning = false;
         }
 
