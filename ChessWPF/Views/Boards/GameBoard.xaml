@@ -27,6 +27,6 @@
         </Grid.ColumnDefinitions>
         <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="3" DataContext="{Binding MenuViewModel}" />
         <local:ChessBoard Grid.Row="1" Grid.Column="0" DataContext="{Binding BoardViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
-        <View.MoveNotations:MoveNotation Grid.Row="1" Grid.Column="2" />
+        <View.MoveNotations:MoveNotation Grid.Column="1"  Grid.RowSpan="2" Margin="0,16,0,0"/>
     </Grid>
 </UserControl>
