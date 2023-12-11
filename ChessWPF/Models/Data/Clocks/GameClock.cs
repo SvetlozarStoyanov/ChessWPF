@@ -9,6 +9,7 @@ namespace ChessWPF.Models.Data.Clocks
     public sealed class GameClock
     {
         private int increment;
+        private bool isLowTime;
         private PieceColor color;
         private TimeSpan timeLeft;
         private TimeSpan startingTime;
@@ -24,7 +25,7 @@ namespace ChessWPF.Models.Data.Clocks
             timeLeft = this.startingTime;
             timer = new DispatcherTimer();
 
-            timer.Interval = TimeSpan.FromMilliseconds(10);
+            timer.Interval = TimeSpan.FromMilliseconds(64);
             timer.Tick += Timer_Tick;
             watch = new Stopwatch();
         }
@@ -38,6 +39,12 @@ namespace ChessWPF.Models.Data.Clocks
         {
             get => increment;
             set => increment = value;
+        }
+
+        public bool IsLowTime
+        {
+            get { return isLowTime; }
+            set { isLowTime = value; }
         }
 
         public PieceColor Color
@@ -85,16 +92,33 @@ namespace ChessWPF.Models.Data.Clocks
             watch.Stop();
             watch.Reset();
             timeLeft = startingTime;
+            isLowTime = false;
         }
 
         public void AddTime(TimeSpan time)
         {
             timeLeft += time;
+            if (timeLeft < startingTime / 10)
+            {
+                isLowTime = true;
+            }
+            else
+            {
+                isLowTime = false;
+            }
         }
 
         public void AddIncrement()
         {
             timeLeft += TimeSpan.FromSeconds(increment);
+            if (timeLeft < startingTime / 10)
+            {
+                isLowTime = true;
+            }
+            else
+            {
+                isLowTime = false;
+            }
         }
 
         public void RemoveIncrement()
@@ -105,15 +129,23 @@ namespace ChessWPF.Models.Data.Clocks
         private void Timer_Tick(object? sender, EventArgs e)
         {
             OnClockTick();
+        }
+
+        private void OnClockTick()
+        {
             if (timeLeft - watch.Elapsed <= TimeSpan.FromSeconds(0))
             {
                 OnTimeOut();
                 return;
             }
-        }
-
-        private void OnClockTick()
-        {
+            if (timeLeft - watch.Elapsed < startingTime / 10)
+            {
+                isLowTime = true;
+            }
+            else
+            {
+                isLowTime = false;
+            }
             ClockTick(this, new ClockTickEventArgs(timeLeft - watch.Elapsed));
         }
 
