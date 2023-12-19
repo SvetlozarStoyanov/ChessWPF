@@ -22,7 +22,7 @@ namespace ChessWPF.ViewModels
             Color stoppedColor,
             Color lowTimeColor)
         {
-            gameClock = new GameClock(3, 10, color);
+            gameClock = new GameClock(3, 300, color);
             gameClock.ClockTick += OnClockTick;
             gameClock.TimeOut += OnTimeOut;
             NormalRunningColor = normalRunningColor;
