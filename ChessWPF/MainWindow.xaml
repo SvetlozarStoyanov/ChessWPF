@@ -5,11 +5,27 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:ChessWPF"
         xmlns:Views.Boards="clr-namespace:ChessWPF.Views.Boards"
+        xmlns:viewmodels="clr-namespace:ChessWPF.ViewModels"
+        xmlns:views.Boards="clr-namespace:ChessWPF.Views.Boards" 
+        xmlns:Views.Menus="clr-namespace:ChessWPF.Views.Menus"
         mc:Ignorable="d"
-        Title="Chess" Height="800px" Width="800px" WindowState="Maximized"  WindowStartupLocation="CenterScreen" ResizeMode="CanResize">
-    <Grid SizeChanged="Grid_SizeChanged">
-        <Views.Boards:GameBoard DataContext="{Binding GameViewModel}">
+        Title="Chess" Height="800px" Width="800px" WindowState="Maximized"
+        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        Loaded="Window_Loaded">
+    <ContentControl Content="{Binding CurrentViewModel,UpdateSourceTrigger=PropertyChanged}" SizeChanged="Grid_SizeChanged">
+        <ContentControl.Resources>
+            <DataTemplate DataType="{x:Type viewmodels:GameViewModel}">
+                <Views.Boards:GameBoard />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:MainMenuViewModel}">
+                <Views.Menus:MainMenu />
+            </DataTemplate>
+        </ContentControl.Resources>
+    </ContentControl>
+</Window>
+
+<!--<Grid SizeChanged="Grid_SizeChanged">
+        <Views.Boards:GameBoard DataContext="{Binding CurrentViewModel}">
 
         </Views.Boards:GameBoard>
-    </Grid>
-</Window>
+    </Grid>-->
