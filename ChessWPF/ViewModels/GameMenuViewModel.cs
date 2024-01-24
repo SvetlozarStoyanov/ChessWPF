@@ -4,15 +4,16 @@ using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
 {
-    public sealed class MenuViewModel : ViewModelBase, INotifyPropertyChanged
+    public sealed class GameMenuViewModel : ViewModelBase, INotifyPropertyChanged
     {
         private string gameStatus;
 
-        public MenuViewModel(BoardViewModel boardViewModel)
+        public GameMenuViewModel(BoardViewModel boardViewModel)
         {
             ResetBoardCommand = new ResetBoardCommand(boardViewModel);
             UndoMoveCommand = new UndoMoveCommand(boardViewModel);
         }
+
         public string GameStatus
         {
             get { return gameStatus; }
@@ -22,6 +23,7 @@ namespace ChessWPF.ViewModels
                 OnPropertyChanged(nameof(GameStatus));
             }
         }
+
         public ICommand ResetBoardCommand { get; set; }
         public ICommand UndoMoveCommand { get; set; }
 
@@ -29,5 +31,6 @@ namespace ChessWPF.ViewModels
         {
             GameStatus = status;
         }
+
     }
 }

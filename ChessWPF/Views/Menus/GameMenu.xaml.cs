@@ -7,9 +7,9 @@ namespace ChessWPF.Views.Menus
     /// <summary>
     /// Interaction logic for Menu.xaml
     /// </summary>
-    public partial class Menu : UserControl
+    public partial class GameMenu : UserControl
     {
-        public Menu()
+        public GameMenu()
         {
             InitializeComponent();
             gameStatusMenuItem.FontWeight = FontWeights.Bold;
@@ -20,6 +20,7 @@ namespace ChessWPF.Views.Menus
             var menuFontSize = GlobalDimensions.Width / 64;
             newGameMenuItem.FontSize = menuFontSize;
             undoMoveMenuItem.FontSize = menuFontSize;
+            navigateToMainMenuMenuItem.FontSize = menuFontSize;
             gameStatusMenuItem.FontSize = menuFontSize;
         }
 
@@ -28,6 +29,7 @@ namespace ChessWPF.Views.Menus
             var menuFontSize = GlobalDimensions.Width / 64;
             newGameMenuItem.FontSize = menuFontSize;
             undoMoveMenuItem.FontSize = menuFontSize;
+            navigateToMainMenuMenuItem.FontSize = menuFontSize;
             gameStatusMenuItem.FontSize = menuFontSize;
         }
     }
