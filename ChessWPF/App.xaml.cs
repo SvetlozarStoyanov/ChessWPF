@@ -1,4 +1,5 @@
-﻿using ChessWPF.ViewModels;
+﻿using ChessWPF.Stores;
+using ChessWPF.ViewModels;
 using System.Windows;
 
 namespace ChessWPF
@@ -10,9 +11,11 @@ namespace ChessWPF
     {
         protected override void OnStartup(StartupEventArgs e)
         {
+            NavigationStore navigationStore = new NavigationStore();
+            navigationStore.CurrentViewModel = new MainMenuViewModel(navigationStore);
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel()
+                DataContext = new MainViewModel(navigationStore)
             };
             MainWindow.Show();
             base.OnStartup(e);
