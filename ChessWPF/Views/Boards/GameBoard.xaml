@@ -13,9 +13,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="800" d:DesignWidth="800"
              >
-
-
-
     <Grid Name="gameBoard">
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
@@ -25,7 +22,7 @@
             <ColumnDefinition Width="6*"/>
             <ColumnDefinition Width="2.0*"/>
         </Grid.ColumnDefinitions>
-        <View.Menus:Menu Grid.Row="0" Grid.ColumnSpan="3" DataContext="{Binding MenuViewModel}" />
+        <View.Menus:GameMenu Grid.Row="0" Grid.ColumnSpan="3" DataContext="{Binding GameMenuViewModel}" />
         <local:ChessBoard Grid.Row="1" Grid.Column="0" DataContext="{Binding BoardViewModel}" HorizontalAlignment="Center" VerticalAlignment="Center" />
         <View.MoveNotations:MoveNotation Grid.Column="1"  Grid.RowSpan="2" Margin="0,16,0,0"/>
     </Grid>
