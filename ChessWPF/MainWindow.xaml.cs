@@ -24,5 +24,10 @@ namespace ChessWPF
             GlobalDimensions.Width = this.ActualWidth;
         }
 
+        private void Window_Loaded(object sender, RoutedEventArgs e)
+        {
+            GlobalDimensions.Height = this.ActualHeight;
+            GlobalDimensions.Width = this.ActualWidth;
+        }
     }
 }
