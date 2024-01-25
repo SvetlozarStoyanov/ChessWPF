@@ -21,6 +21,6 @@
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <Button Grid.Row="1" Grid.Column="2" Command="{Binding NavigateToGameCommand}">Start Game</Button>
-        <Button Grid.Row="2" Grid.Column="2">Options</Button>
+        <Button Grid.Row="2" Grid.Column="2" Command="{Binding NavigateToOptionsCommand}">Options</Button>
     </Grid>
 </UserControl>
