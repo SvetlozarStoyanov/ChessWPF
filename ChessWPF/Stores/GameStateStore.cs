@@ -1,15 +1,19 @@
-﻿using ChessWPF.ViewModels;
+﻿using ChessWPF.Models.Data.Options;
+using ChessWPF.ViewModels;
 using System;
 
 namespace ChessWPF.Stores
 {
-    public class NavigationStore
+    public class GameStateStore
     {
         private ViewModelBase currentViewModel;
-        public NavigationStore()
-        {
+        private GameOptions gameOptions;
 
+        public GameStateStore()
+        {
+            GameOptions = new GameOptions();
         }
+
         public event Action CurrentViewModelChanged;
         public ViewModelBase CurrentViewModel 
         {
@@ -19,6 +23,12 @@ namespace ChessWPF.Stores
                 currentViewModel = value;
                 OnCurrentViewModelChanged();
             }
+        }
+
+        public GameOptions GameOptions
+        {
+            get { return gameOptions; }
+            set { gameOptions = value; }
         }
 
         private void OnCurrentViewModelChanged()
