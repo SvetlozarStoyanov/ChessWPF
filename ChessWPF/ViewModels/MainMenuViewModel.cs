@@ -6,10 +6,12 @@ namespace ChessWPF.ViewModels
 {
     public class MainMenuViewModel : ViewModelBase
     {
-        public MainMenuViewModel(NavigationStore navigationStore)
+        public MainMenuViewModel(GameStateStore gameStateStore)
         {
-            NavigateToGameCommand = new NavigateCommand<GameViewModel>(navigationStore, () => new GameViewModel(navigationStore));
+            NavigateToGameCommand = new NavigateCommand<GameViewModel>(gameStateStore, () => new GameViewModel(gameStateStore));
+            NavigateToOptionsCommand = new NavigateCommand<GameOptionsViewModel>(gameStateStore, () => new GameOptionsViewModel(gameStateStore));
         }
         public ICommand NavigateToGameCommand { get; init; }
+        public ICommand NavigateToOptionsCommand{ get; init; }
     }
 }
