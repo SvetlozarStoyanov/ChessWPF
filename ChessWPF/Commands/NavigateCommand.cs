@@ -7,18 +7,18 @@ namespace ChessWPF.Commands
     public class NavigateCommand<TViewModel> : CommandBase 
         where TViewModel : ViewModelBase
     {
-        private NavigationStore navigationStore;
+        private GameStateStore gameStateStore;
         private readonly Func<TViewModel> createViewModel;
 
-        public NavigateCommand(NavigationStore navigationStore, Func<TViewModel> createViewModel)
+        public NavigateCommand(GameStateStore gameStateStore, Func<TViewModel> createViewModel)
         {
-            this.navigationStore = navigationStore;
+            this.gameStateStore = gameStateStore;
             this.createViewModel = createViewModel;
         }
 
         public override void Execute(object? parameter)
         {
-            navigationStore.CurrentViewModel = createViewModel();
+            gameStateStore.CurrentViewModel = createViewModel();
         }
     }
 }
