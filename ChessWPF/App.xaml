@@ -56,6 +56,29 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="transparentButton" x:Name="TransparentButton" TargetType="Button">
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="False">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 
