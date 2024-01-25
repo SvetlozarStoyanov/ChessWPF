@@ -12,7 +12,7 @@ namespace ChessWPF
         protected override void OnStartup(StartupEventArgs e)
         {
             NavigationStore navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new MainMenuViewModel(navigationStore);
+            navigationStore.CurrentViewModel = new GameViewModel(navigationStore);
             MainWindow = new MainWindow()
             {
                 DataContext = new MainViewModel(navigationStore)
