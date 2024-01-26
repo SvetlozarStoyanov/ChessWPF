@@ -1,8 +1,10 @@
 ﻿using ChessWPF.Commands;
+using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Enums;
 using ChessWPF.Models.Data.Options;
 using ChessWPF.Stores;
-using System.Collections.ObjectModel;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
 
@@ -16,7 +18,7 @@ namespace ChessWPF.ViewModels
         {
             gameOptions = gameStateStore.GameOptions;
             NavigateToMainMenuCommand = new NavigateCommand<MainMenuViewModel>(gameStateStore, () => new MainMenuViewModel(gameStateStore));
-            InitializeTimeControls();
+            InitializeTimeControlCollections();
         }
 
         public GameOptions GameOptions
@@ -26,37 +28,47 @@ namespace ChessWPF.ViewModels
         }
 
         public ICommand NavigateToMainMenuCommand { get; init; }
-        public ObservableCollection<TimeControlViewModel> TimeControlViewModels { get; private set; }
+        public List<TimeControlViewModel> TimeControlViewModels { get; private set; }
+        public Dictionary<TimeControlType, List<TimeControlViewModel>> TimeControlViewModelsSplit { get; private set; }
 
-        private void InitializeTimeControls()
+        private void InitializeTimeControlCollections()
         {
-            TimeControlViewModels = new ObservableCollection<TimeControlViewModel>
+            var idNum = (byte)1;
+            TimeControlViewModels = new List<TimeControlViewModel>
             {
-                new TimeControlViewModel(new TimeControl(30, 0, TimeControlType.Bullet)),
-                new TimeControlViewModel(new TimeControl(60, 0, TimeControlType.Bullet)),
-                new TimeControlViewModel(new TimeControl(120, 1, TimeControlType.Bullet)),
-                new TimeControlViewModel(new TimeControl(180, 2, TimeControlType.Blitz)),
-                new TimeControlViewModel(new TimeControl(300, 5, TimeControlType.Blitz)),
-                new TimeControlViewModel(new TimeControl(300, 0, TimeControlType.Blitz)),
-                new TimeControlViewModel(new TimeControl(600, 5, TimeControlType.Rapid)),
-                new TimeControlViewModel(new TimeControl(900, 10, TimeControlType.Rapid)),
-                new TimeControlViewModel(new TimeControl(900, 0, TimeControlType.Rapid)),
-                new TimeControlViewModel(new TimeControl(1800, 0, TimeControlType.Classical)),
-                new TimeControlViewModel(new TimeControl(1800, 20, TimeControlType.Classical)),
-                new TimeControlViewModel(new TimeControl(3600, 30, TimeControlType.Classical))
+                new TimeControlViewModel(idNum++, 30, 0, TimeControlType.Bullet),
+                new TimeControlViewModel(idNum++, 60, 0, TimeControlType.Bullet),
+                new TimeControlViewModel(idNum++, 120, 1, TimeControlType.Bullet),
+                new TimeControlViewModel(idNum++, 180, 2, TimeControlType.Blitz),
+                new TimeControlViewModel(idNum++, 300, 5, TimeControlType.Blitz),
+                new TimeControlViewModel(idNum++, 300, 0, TimeControlType.Blitz),
+                new TimeControlViewModel(idNum++, 600, 5, TimeControlType.Rapid),
+                new TimeControlViewModel(idNum++, 900, 10, TimeControlType.Rapid),
+                new TimeControlViewModel(idNum++, 900, 0, TimeControlType.Rapid),
+                new TimeControlViewModel(idNum++, 1800, 0, TimeControlType.Classical),
+                new TimeControlViewModel(idNum++, 1800, 20, TimeControlType.Classical),
+                new TimeControlViewModel(idNum++, 3600, 30, TimeControlType.Classical)
             };
-            TimeControlViewModels
-                .FirstOrDefault(tc => tc.TimeControl.ClockTime == GameOptions.TimeControl.ClockTime
-                && tc.TimeControl.ClockIncrement == GameOptions.TimeControl.ClockIncrement)!.IsSelected = true;
+
+            TimeControlViewModels.FirstOrDefault(tc => tc.TimeControl.ClockTime == GameOptions.TimeControl.ClockTime
+                    && tc.TimeControl.ClockIncrement == GameOptions.TimeControl.ClockIncrement)!.IsSelected = true;
+
             foreach (var timeControlViewModel in TimeControlViewModels)
             {
                 timeControlViewModel.Select += SelectedTimeControlChanged;
             }
+            TimeControlViewModelsSplit = new Dictionary<TimeControlType, List<TimeControlViewModel>>();
+            foreach (var timeControlType in Enum.GetValues<TimeControlType>())
+            {
+                TimeControlViewModelsSplit[timeControlType] = TimeControlViewModels
+                    .Where(tc => tc.TimeControl.TimeControlType == timeControlType)
+                    .ToList();
+            }
         }
 
-        private void SelectedTimeControlChanged()
+        private void SelectedTimeControlChanged(object? sender, SelectTimeControlEventArgs eventArgs)
         {
-            GameOptions.TimeControl = TimeControlViewModels.FirstOrDefault(tc => tc.IsSelected)!.TimeControl;
+            GameOptions.TimeControl = TimeControlViewModels.FirstOrDefault(tc => tc.Id == eventArgs.Id)!.TimeControl;
         }
     }
 }
