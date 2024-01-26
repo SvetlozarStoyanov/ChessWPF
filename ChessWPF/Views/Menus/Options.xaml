@@ -4,6 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Menus"
+             xmlns:timecontrols="clr-namespace:ChessWPF.Views.TimeControls"
              mc:Ignorable="d" 
              >
     <Grid>
@@ -24,32 +25,34 @@
         <Label Grid.Row="0" Grid.Column="2" FontWeight="Black" FontSize="30px"
                HorizontalAlignment="Center" VerticalAlignment="Center">Time Controls
         </Label>
-        <ItemsControl HorizontalAlignment="Center" VerticalAlignment="Center"
-                      Grid.Row="1" Grid.ColumnSpan="5" Grid.RowSpan="2" x:Name="listview"
-                       ItemsSource="{Binding TimeControlViewModels}">
-            <ItemsControl.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <UniformGrid Columns="3"/>
-                </ItemsPanelTemplate>
-            </ItemsControl.ItemsPanel>
-            <ItemsControl.ItemTemplate>
-                <DataTemplate>
-                    <RadioButton Padding="5px" Margin="10,20" GroupName="TimeControlGroup" HorizontalAlignment="Center"
-                                    VerticalAlignment="Center" HorizontalContentAlignment="Center"
-                                    VerticalContentAlignment="Center"
-                                    FontSize="20px" FontWeight="DemiBold"
-                                    IsChecked="{Binding IsSelected,Mode=TwoWay}"
-                                    Command="{Binding SelectTimeControlCommand}"
-                                    Content="{Binding TimeAsText}">
-                    </RadioButton>
-                </DataTemplate>
-            </ItemsControl.ItemTemplate>
-        </ItemsControl>
+        <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <timecontrols:TimeControlList Grid.Row="0" DataContext="{Binding TimeControlViewModelsSplit[Bullet]}">
 
+            </timecontrols:TimeControlList>
+            <timecontrols:TimeControlList Grid.Row="1" DataContext="{Binding TimeControlViewModelsSplit[Blitz]}">
+
+            </timecontrols:TimeControlList>
+            <timecontrols:TimeControlList Grid.Row="2" DataContext="{Binding TimeControlViewModelsSplit[Rapid]}">
+
+            </timecontrols:TimeControlList>
+            <timecontrols:TimeControlList Grid.Row="3" DataContext="{Binding TimeControlViewModelsSplit[Classical]}">
+
+            </timecontrols:TimeControlList>
+        </Grid>
         <Button Grid.Row="3" Grid.Column="2"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Padding="15px"
                 FontSize="20px"
-                Command="{Binding NavigateToMainMenuCommand}">Back to menu</Button>
+                Command="{Binding NavigateToMainMenuCommand}">Back to menu
+        </Button>
     </Grid>
 </UserControl>
