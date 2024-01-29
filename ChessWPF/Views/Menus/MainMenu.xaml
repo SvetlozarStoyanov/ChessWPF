@@ -26,5 +26,9 @@
         <Button HorizontalAlignment="Center" VerticalAlignment="Center"
                 Padding="20px" FontSize="25px" FontWeight="Bold"
                 Grid.Row="2" Grid.Column="2" Command="{Binding NavigateToOptionsCommand}">Options</Button>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center"
+                x:Name="exitApplicationButton" Click="exitApplicationButton_Click"
+                Padding="20px" FontSize="25px" FontWeight="Bold"
+                Grid.Row="3" Grid.Column="2" >Exit</Button>
     </Grid>
 </UserControl>

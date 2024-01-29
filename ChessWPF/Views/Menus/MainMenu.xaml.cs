@@ -25,5 +25,10 @@ namespace ChessWPF.Views.Menus
         {
             InitializeComponent();
         }
+
+        private void exitApplicationButton_Click(object sender, RoutedEventArgs e)
+        {
+            Environment.Exit(0);
+        }
     }
 }
