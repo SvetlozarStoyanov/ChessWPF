@@ -22,10 +22,10 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label Grid.Row="0" Grid.Column="2" FontWeight="Black" FontSize="30px"
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontWeight="Black" FontSize="30px"
                HorizontalAlignment="Center" VerticalAlignment="Center">Time Controls
         </Label>
-        <Grid Grid.Row="1" Grid.RowSpan="2" Grid.Column="2" Grid.ColumnSpan="1" HorizontalAlignment="Center">
+        <Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Center">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -35,20 +35,28 @@
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
-            <timecontrols:TimeControlList Grid.Row="0" DataContext="{Binding TimeControlViewModelsSplit[Bullet]}">
+            <Grid Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <timecontrols:TimeControlList Grid.Row="0" DataContext="{Binding TimeControlViewModelsSplit[Bullet]}">
 
-            </timecontrols:TimeControlList>
-            <timecontrols:TimeControlList Grid.Row="1" DataContext="{Binding TimeControlViewModelsSplit[Blitz]}">
+                </timecontrols:TimeControlList>
+                <timecontrols:TimeControlList Grid.Row="1" DataContext="{Binding TimeControlViewModelsSplit[Blitz]}">
 
-            </timecontrols:TimeControlList>
-            <timecontrols:TimeControlList Grid.Row="2" DataContext="{Binding TimeControlViewModelsSplit[Rapid]}">
+                </timecontrols:TimeControlList>
+                <timecontrols:TimeControlList Grid.Row="2" DataContext="{Binding TimeControlViewModelsSplit[Rapid]}">
 
-            </timecontrols:TimeControlList>
-            <timecontrols:TimeControlList Grid.Row="3" DataContext="{Binding TimeControlViewModelsSplit[Classical]}">
+                </timecontrols:TimeControlList>
+                <timecontrols:TimeControlList Grid.Row="3" DataContext="{Binding TimeControlViewModelsSplit[Classical]}">
 
-            </timecontrols:TimeControlList>
+                </timecontrols:TimeControlList>
+            </Grid>
         </Grid>
-        <Button Grid.Row="3" Grid.Column="2"
+        <Button Grid.Row="4" Grid.Column="2"
                 HorizontalAlignment="Center" VerticalAlignment="Center"
                 Padding="15px"
                 FontSize="20px"
