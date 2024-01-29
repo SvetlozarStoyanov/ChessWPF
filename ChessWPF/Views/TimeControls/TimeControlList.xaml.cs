@@ -1,4 +1,5 @@
-﻿using ChessWPF.ViewModels;
+﻿using ChessWPF.HelperClasses.WindowDimensions;
+using ChessWPF.ViewModels;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -24,14 +25,18 @@ namespace ChessWPF.Views.TimeControls
         public TimeControlList()
         {
             InitializeComponent();
-            
         }
 
         private void ItemsControl_Loaded(object sender, RoutedEventArgs e)
         {
             var list = (this.DataContext as List<TimeControlViewModel>);
             itemsControl.ItemsSource = list;
-            timeControlTypeLabel.Content = list.First().TimeControl.TimeControlType;
+            timeControlTypeLabel.Content = list!.First().TimeControl.TimeControlType;
+        }
+
+        private void timeControlListGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            timeControlTypeLabel.FontSize = GlobalDimensions.Width / 70;
         }
     }
 }
