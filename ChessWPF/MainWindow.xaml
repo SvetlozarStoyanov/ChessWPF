@@ -9,7 +9,7 @@
         xmlns:views.Menus="clr-namespace:ChessWPF.Views.Menus"
         mc:Ignorable="d"
         Title="Chess" Height="800px" Width="800px" WindowState="Maximized"
-        WindowStartupLocation="CenterScreen" ResizeMode="CanResize"
+        WindowStartupLocation="CenterScreen" WindowStyle="None" ResizeMode="CanMinimize"
         Loaded="Window_Loaded">
     <ContentControl Content="{Binding CurrentViewModel,UpdateSourceTrigger=PropertyChanged}" SizeChanged="Grid_SizeChanged">
         <ContentControl.Resources>
