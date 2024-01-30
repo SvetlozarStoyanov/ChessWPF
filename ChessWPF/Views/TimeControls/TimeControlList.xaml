@@ -1,0 +1,29 @@
+﻿<UserControl x:Class="ChessWPF.Views.TimeControls.TimeControlList"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.TimeControls"
+             mc:Ignorable="d" 
+             >
+    <Grid x:Name="timeControlListGrid" SizeChanged="timeControlListGrid_SizeChanged">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"></RowDefinition>
+            <RowDefinition Height="2*"></RowDefinition>
+        </Grid.RowDefinitions>
+        <Label Grid.Row="0" x:Name="timeControlTypeLabel" FontWeight="SemiBold" HorizontalAlignment="Center"></Label>
+        <ItemsControl x:Name="itemsControl" Loaded="ItemsControl_Loaded" HorizontalAlignment="Center" VerticalAlignment="Center"
+              Grid.Row="1"  >
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3"/>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <local:TimeControl></local:TimeControl>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+    </Grid>
+</UserControl>

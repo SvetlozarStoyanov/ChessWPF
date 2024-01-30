@@ -1,4 +1,5 @@
 ﻿using ChessWPF.HelperClasses.CustomEventArgs;
+using ChessWPF.Models.Data.Options;
 using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Diagnostics;
@@ -17,11 +18,11 @@ namespace ChessWPF.Models.Data.Clocks
         private DispatcherTimer timer;
         private Stopwatch watch;
 
-        public GameClock(int increment, int startingTime, PieceColor color)
+        public GameClock(TimeControl timeControl, PieceColor color)
         {
-            this.increment = increment;
+            Increment = timeControl.ClockIncrement;
             this.color = color;
-            this.startingTime = TimeSpan.FromSeconds(startingTime);
+            this.startingTime = TimeSpan.FromSeconds(timeControl.ClockTime);
             timeLeft = this.startingTime;
             timer = new DispatcherTimer();
 
@@ -38,7 +39,7 @@ namespace ChessWPF.Models.Data.Clocks
         public int Increment
         {
             get => increment;
-            set => increment = value;
+            private set => increment = value;
         }
 
         public bool IsLowTime

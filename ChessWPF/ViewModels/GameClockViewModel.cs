@@ -1,5 +1,6 @@
 ﻿using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Clocks;
+using ChessWPF.Models.Data.Options;
 using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.ComponentModel;
@@ -20,9 +21,10 @@ namespace ChessWPF.ViewModels
         public GameClockViewModel(PieceColor color,
             Color normalRunningColor,
             Color stoppedColor,
-            Color lowTimeColor)
+            Color lowTimeColor,
+            TimeControl timeControl)
         {
-            gameClock = new GameClock(3, 300, color);
+            gameClock = new GameClock(timeControl, color);
             gameClock.ClockTick += OnClockTick;
             gameClock.TimeOut += OnTimeOut;
             NormalRunningColor = normalRunningColor;
@@ -71,36 +73,30 @@ namespace ChessWPF.ViewModels
 
         public TimeSpan TimeElapsed
         {
-            get
-            {
-                return gameClock.TimeElapsed;
-            }
-            private set
-            {
-                gameClock.TimeElapsed = value;
-            }
+            get => gameClock.TimeElapsed;
+            private set => gameClock.TimeElapsed = value;
         }
         public Color NormalRunningColor
         {
             get => normalRunningColor;
-            private set { normalRunningColor = value; }
+            private set => normalRunningColor = value;
         }
 
         public Color StoppedColor
         {
             get => stoppedColor;
-            private set { stoppedColor = value; }
+            private set => stoppedColor = value;
         }
 
         public Color LowTimeColor
         {
             get => lowTimeColor;
-            private set { lowTimeColor = value; }
+            private set => lowTimeColor = value;
         }
 
         public GameClock GameClock
         {
-            get { return gameClock; }
+            get => gameClock;
         }
 
         public SolidColorBrush ClockBrush
@@ -115,14 +111,17 @@ namespace ChessWPF.ViewModels
             {
                 ClockBrush.Color = LowTimeColor;
             }
-
-            if (timeLeft.TotalSeconds > 10)
+            if (timeLeft.TotalHours >= 1)
             {
-                this.TimeLeft = timeLeft.ToString(@"mm\:ss");
+                TimeLeft = timeLeft.ToString(@"hh\:mm\:ss");
+            }
+            else if (timeLeft.TotalSeconds > 10)
+            {
+                TimeLeft = timeLeft.ToString(@"mm\:ss");
             }
             else
             {
-                this.TimeLeft = timeLeft.ToString(@"mm\:ss\:f");
+                TimeLeft = timeLeft.ToString(@"mm\:ss\:f");
             }
         }
 

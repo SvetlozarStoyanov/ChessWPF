@@ -11,11 +11,11 @@ namespace ChessWPF
     {
         protected override void OnStartup(StartupEventArgs e)
         {
-            NavigationStore navigationStore = new NavigationStore();
-            navigationStore.CurrentViewModel = new GameViewModel(navigationStore);
+            GameStateStore gameStateStore = new GameStateStore();
+            gameStateStore.CurrentViewModel = new MainMenuViewModel(gameStateStore);
             MainWindow = new MainWindow()
             {
-                DataContext = new MainViewModel(navigationStore)
+                DataContext = new MainViewModel(gameStateStore)
             };
             MainWindow.Show();
             base.OnStartup(e);

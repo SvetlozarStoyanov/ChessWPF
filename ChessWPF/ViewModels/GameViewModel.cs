@@ -1,7 +1,7 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
+using ChessWPF.Models.Data.Options;
 using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.Stores;
 using System;
@@ -24,13 +24,13 @@ namespace ChessWPF.ViewModels
         private GameMenuViewModel menuViewModel;
         private Dictionary<string, GameClockViewModel> gameClockViewModels;
 
-        public GameViewModel(NavigationStore navigationStore)
+        public GameViewModel(GameStateStore gameStateStore)
         {
             SetupBoardViewModel();
             SetupGameMenuViewModel(BoardViewModel);
-            SetupGameClockViewModels();
+            SetupGameClockViewModels(gameStateStore.GameOptions.TimeControl);
             StartGame();
-            NavigateToMainMenuCommand = new NavigateCommand<MainMenuViewModel>(navigationStore, () => new MainMenuViewModel(navigationStore));
+            NavigateToMainMenuCommand = new NavigateCommand<MainMenuViewModel>(gameStateStore, () => new MainMenuViewModel(gameStateStore));
         }
 
         public string MoveNotation
@@ -243,17 +243,19 @@ namespace ChessWPF.ViewModels
             EndGameByTimeOut(oppositeColor);
         }
 
-        private void SetupGameClockViewModels()
+        private void SetupGameClockViewModels(TimeControl timeControl)
         {
             var whiteGameClockViewModel = new GameClockViewModel(PieceColor.White,
                 Color.FromRgb(0, 100, 0),
                 Color.FromRgb(255, 255, 255),
-                Color.FromRgb(255, 0, 0));
+                Color.FromRgb(255, 0, 0),
+                timeControl);
 
             var blackGameClockViewModel = new GameClockViewModel(PieceColor.Black,
                 Color.FromRgb(0, 100, 0),
                 Color.FromRgb(255, 255, 255),
-                Color.FromRgb(255, 0, 0));
+                Color.FromRgb(255, 0, 0),
+                timeControl);
             var gameClockViewModels = new Dictionary<string, GameClockViewModel>()
             {
                 ["White"] = whiteGameClockViewModel,
