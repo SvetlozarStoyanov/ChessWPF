@@ -22,6 +22,9 @@
             <DataTemplate DataType="{x:Type viewmodels:GameOptionsViewModel}">
                 <views.Menus:Options />
             </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:BoardConstructorViewModel}">
+                <views.Boards:ChessBoardConstructor />
+            </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
 </Window>
