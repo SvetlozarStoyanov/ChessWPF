@@ -31,7 +31,7 @@ namespace ChessWPF.Models.Data.Board
                 { PieceColor.White, new List<Piece>() },
                 { PieceColor.Black, new List<Piece>() }
             };
-            CreateCells(Cells);
+            CreateCells();
             BackupCells = new List<Cell>();
         }
 
@@ -101,13 +101,13 @@ namespace ChessWPF.Models.Data.Board
             private set => pieces = value;
         }
 
-        public void CreateCells(Cell[,] cells)
+        public void CreateCells()
         {
-            for (int row = 0; row < cells.GetLength(0); row++)
+            for (int row = 0; row < Cells.GetLength(0); row++)
             {
-                for (int col = 0; col < cells.GetLength(1); col++)
+                for (int col = 0; col < Cells.GetLength(1); col++)
                 {
-                    cells[row, col] = new Cell(row, col);
+                    Cells[row, col] = new Cell(row, col);
                 }
             }
         }

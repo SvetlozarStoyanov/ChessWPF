@@ -23,7 +23,7 @@ namespace ChessWPF.ViewModels
         private Color movedToColor;
         private Color defaultColor;
         private Cell cell = null!;
-        private SolidColorBrush backgroundBrush = new SolidColorBrush();
+        private SolidColorBrush backgroundBrush;
         private BitmapImage? cellPieceImage;
         private Dictionary<SelectorStates, string> selectors;
 

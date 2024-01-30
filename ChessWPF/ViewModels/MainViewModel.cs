@@ -5,14 +5,14 @@ namespace ChessWPF.ViewModels
 {
     public sealed class MainViewModel : ViewModelBase
     {
-        private GameStateStore navigationStore;
+        private GameStateStore gameStateStore;
         public MainViewModel(GameStateStore navigationStore)
         {
-            this.navigationStore = navigationStore;
+            this.gameStateStore = navigationStore;
             navigationStore.CurrentViewModelChanged += OnCurrentViewModelChanged;
         }
 
-        public ViewModelBase CurrentViewModel => navigationStore.CurrentViewModel;
+        public ViewModelBase CurrentViewModel => gameStateStore.CurrentViewModel;
 
         private void OnCurrentViewModelChanged()
         {

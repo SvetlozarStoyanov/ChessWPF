@@ -10,8 +10,11 @@ namespace ChessWPF.ViewModels
         {
             NavigateToGameCommand = new NavigateCommand<GameViewModel>(gameStateStore, () => new GameViewModel(gameStateStore));
             NavigateToOptionsCommand = new NavigateCommand<GameOptionsViewModel>(gameStateStore, () => new GameOptionsViewModel(gameStateStore));
+            NavigateToBoardConstructorCommand = new NavigateCommand<BoardConstructorViewModel>(gameStateStore, () => new BoardConstructorViewModel(gameStateStore));
         }
+
         public ICommand NavigateToGameCommand { get; init; }
-        public ICommand NavigateToOptionsCommand{ get; init; }
+        public ICommand NavigateToOptionsCommand { get; init; }
+        public ICommand NavigateToBoardConstructorCommand { get; init; }
     }
 }
