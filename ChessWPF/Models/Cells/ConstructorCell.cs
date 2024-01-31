@@ -44,7 +44,7 @@ namespace ChessWPF.Models.Data.Board
         public delegate void UpdateConstructorCellEventHandler(object? sender, EventArgs e);
         public event UpdateConstructorCellEventHandler Update;
 
-        public void UpdatePiece(ConstructorPiece constructorPiece)
+        public void UpdatePiece(ConstructorPiece? constructorPiece)
         {
             ConstructorPiece = constructorPiece;
             Update(this, EventArgs.Empty);

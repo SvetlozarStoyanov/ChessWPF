@@ -10,7 +10,7 @@ namespace ChessWPF.Models.Data.Pieces
         public ConstructorPiece(PieceType pieceType, PieceColor pieceColor)
         {
             PieceType = pieceType;
-            PieceColor = pieceColor;
+            Color = pieceColor;
         }
 
         public PieceType PieceType
@@ -19,7 +19,7 @@ namespace ChessWPF.Models.Data.Pieces
             set { pieceType = value; }
         }
 
-        public PieceColor PieceColor
+        public PieceColor Color
         {
             get { return pieceColor; }
             set { pieceColor = value; }
