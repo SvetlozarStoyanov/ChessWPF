@@ -79,7 +79,7 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
-            <Style x:Key="{x:Type RadioButton}" TargetType="{x:Type RadioButton}">
+            <Style x:Key="timeControlRadioButton" TargetType="{x:Type RadioButton}">
                 <Setter Property="SnapsToDevicePixels" Value="true"/>
                 <Setter Property="OverridesDefaultStyle" Value="true"/>
                 <Setter Property="FocusVisualStyle" Value="{StaticResource RadioButtonFocusVisual}"/>
@@ -126,6 +126,54 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="boardConstructorPieceRadioButton" TargetType="{x:Type RadioButton}">
+                <Setter Property="SnapsToDevicePixels" Value="true"/>
+                <Setter Property="OverridesDefaultStyle" Value="true"/>
+                <Setter Property="FocusVisualStyle" Value="{StaticResource RadioButtonFocusVisual}"/>
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="{x:Type RadioButton}">
+                            <BulletDecorator Background="Transparent">
+                                <BulletDecorator.Bullet>
+                                    <Grid>
+                                        <Ellipse x:Name="Border"  
+    Fill="Transparent"
+    StrokeThickness="1"
+    Stroke="Transparent" />
+                                        <Ellipse x:Name="CheckMark"
+    Margin="0"
+    Fill="Transparent" />
+                                    </Grid>
+                                </BulletDecorator.Bullet>
+                                <ContentPresenter Name="PART_Content"
+Margin="0,0,0,0"
+VerticalAlignment="Center"
+HorizontalAlignment="Left"
+RecognizesAccessKey="True"/>
+                            </BulletDecorator>
+                            <ControlTemplate.Triggers>
+                                <Trigger Property="IsChecked" Value="false">
+                                    <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
+                                    
+                                </Trigger>
+                                <Trigger Property="IsMouseOver" Value="true">
+                                    <Setter TargetName="Border" Property="Fill" Value="Black" />
+                                </Trigger>
+                                <Trigger Property="IsPressed" Value="true">
+                                    <Setter TargetName="Border" Property="Fill" Value="Black" />
+                                    <Setter TargetName="Border" Property="Stroke" Value="Black" />
+                                </Trigger>
+                                <Trigger Property="IsEnabled" Value="false">
+                                    <Setter TargetName="Border" Property="Fill" Value="Gray" />
+                                    <Setter TargetName="Border" Property="Stroke" Value="#40000000" />
+                                    <Setter Property="Foreground" Value="#80000000"/>
+                                </Trigger>
+                            </ControlTemplate.Triggers>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+
         </ResourceDictionary>
     </Application.Resources>
 
