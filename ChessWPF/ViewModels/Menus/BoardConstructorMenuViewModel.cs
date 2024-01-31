@@ -1,15 +1,18 @@
-﻿using ChessWPF.Stores;
-using System.Windows.Input;
+﻿using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
 {
     public class BoardConstructorMenuViewModel : ViewModelBase
     {
-        public BoardConstructorMenuViewModel(GameStateStore gameStateStore)
+        public BoardConstructorMenuViewModel()
         {
-            
+
         }
-        public ICommand NavigateToMainMenuCommand { get; init; }
-        public ICommand NavigateToGameCommand { get; init; }
+
+        public ICommand SelectPieceCommand { get; init; }
+        public ICommand ClearBoardCommand { get; init; }
+        public ICommand SetEnPassantSquareCommand { get; set; }
+        public ICommand SetCastilingRightsCommand { get; set; }
+
     }
 }
