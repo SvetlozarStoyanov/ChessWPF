@@ -9,14 +9,18 @@
     <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="9*" />
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="9*"/>
+            <RowDefinition Height="1*" />
             <RowDefinition Height="2*" />
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="2*"/>
+            <ColumnDefinition Width="1.50*"/>
             <ColumnDefinition Width="2.0*"/>
         </Grid.ColumnDefinitions>
-        <menus:BoardConstructorMenu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"></menus:BoardConstructorMenu>
-        <local:ConstructorBoard DataContext="{Binding ConstructorCellViewModels}" Grid.Row="1" Grid.Column="0"></local:ConstructorBoard>
+        <menus:BoardConstructorNavigationMenu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"></menus:BoardConstructorNavigationMenu>
+        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorPieceViewModels[Black]}"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
+        <local:ConstructorBoard DataContext="{Binding ConstructorCellViewModels}" Grid.Row="2" Grid.Column="0" Margin="20,80,20,0"/>
+        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorPieceViewModels[White]}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
     </Grid>
 </UserControl>

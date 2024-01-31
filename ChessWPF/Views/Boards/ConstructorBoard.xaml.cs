@@ -1,4 +1,5 @@
 ﻿using ChessWPF.HelperClasses.ControlGetters;
+using ChessWPF.HelperClasses.WindowDimensions;
 using ChessWPF.ViewModels;
 using ChessWPF.Views.Cells;
 using System.Collections.Generic;
@@ -18,6 +19,18 @@ namespace ChessWPF.Views.Boards
         {
             InitializeComponent();
             cellAnnotationTextBlocks = ControlChildElementsFetcher.GetChildrenOfType<TextBlock>(mainGrid);
+        }
+
+        private void mainGrid_Loaded(object sender, RoutedEventArgs e)
+        {
+            var cellAnnotationFontSize = GlobalDimensions.Width / 64;
+            cellAnnotationTextBlocks.ForEach(block => block.FontSize = cellAnnotationFontSize);
+        }
+
+        private void mainGrid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            var cellAnnotationFontSize = GlobalDimensions.Width / 64;
+            cellAnnotationTextBlocks.ForEach(block => block.FontSize = cellAnnotationFontSize);
         }
 
         private void cellGrid_Loaded(object sender, RoutedEventArgs e)
@@ -40,5 +53,7 @@ namespace ChessWPF.Views.Boards
                 }
             }
         }
+
+
     }
 }
