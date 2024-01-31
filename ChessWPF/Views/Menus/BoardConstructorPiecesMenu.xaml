@@ -1,0 +1,40 @@
+﻿<UserControl x:Class="ChessWPF.Views.Menus.BoardConstructorPiecesMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.Menus"
+             xmlns:pieces="clr-namespace:ChessWPF.Views.Pieces"
+             mc:Ignorable="d" 
+             >
+    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+
+        <RadioButton x:Name="selectPieceRadioButton"
+            GroupName="constructorPieceGroup" 
+                     Style="{StaticResource boardConstructorPieceRadioButton}"
+                     Command="{Binding DataContext.SelectPieceSelectorCommand, RelativeSource={RelativeSource AncestorLevel=2,AncestorType={x:Type UserControl}}}"
+                     Checked="selectPieceRadioButton_Checked" Unchecked="selectPieceRadioButton_Unchecked"
+                     >
+            <Image x:Name="selectImage"></Image>
+        </RadioButton>
+
+        <ItemsControl x:Name="constructorPiecesItemControl" Loaded="constructorPiecesItemControl_Loaded">
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <StackPanel Orientation="Horizontal"></StackPanel>
+                </ItemsPanelTemplate>
+            </ItemsControl.ItemsPanel>
+            <ItemsControl.ItemTemplate>
+                <DataTemplate>
+                    <pieces:ConstructorPieceRadioButton></pieces:ConstructorPieceRadioButton>
+                </DataTemplate>
+            </ItemsControl.ItemTemplate>
+        </ItemsControl>
+        <RadioButton x:Name="deletePieceRadioButton" GroupName="constructorPieceGroup" Style="{StaticResource boardConstructorPieceRadioButton}" 
+            Command="{Binding DataContext.SelectDeletePieceCommand,
+            RelativeSource={RelativeSource AncestorLevel=2,AncestorType={x:Type UserControl}}}" 
+             Checked="deletePieceRadioButton_Checked" Unchecked="deletePieceRadioButton_Unchecked">
+            <Image x:Name="deleteImage"></Image>
+        </RadioButton>
+    </StackPanel>
+</UserControl>
