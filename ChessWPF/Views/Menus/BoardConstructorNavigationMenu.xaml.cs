@@ -18,9 +18,9 @@ namespace ChessWPF.Views.Menus
     /// <summary>
     /// Interaction logic for BoardConstructorMenu.xaml
     /// </summary>
-    public partial class BoardConstructorMenu : UserControl
+    public partial class BoardConstructorNavigationMenu : UserControl
     {
-        public BoardConstructorMenu()
+        public BoardConstructorNavigationMenu()
         {
             InitializeComponent();
         }
