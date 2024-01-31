@@ -11,7 +11,47 @@ namespace ChessWPF.Views.Cells
         public ChessConstructorCell()
         {
             InitializeComponent();
-            updatePieceBtn.Style = this.FindResource("defaultBtn") as Style;
+
+            Panel.SetZIndex(updateCellBtn, 2);
+            Panel.SetZIndex(imgPiece, 1);
+
+            this.Width = this.Height;
+            this.MaxWidth = this.MaxHeight;
+            this.MinWidth = this.MinHeight;
+            updateCellBtn.Style = this.FindResource("defaultBtn") as Style;
+            selectCellPieceBtn.Style = this.FindResource("defaultBtn") as Style;
+        }
+
+        private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            imgPiece.Height = this.ActualHeight - 1;
+            imgPiece.Width = this.ActualWidth - 1;
+        }
+
+        private void selectCellPieceBtn_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (selectCellPieceBtn.IsEnabled)
+            {
+                updateCellBtn.IsEnabled = false;
+                Panel.SetZIndex(selectCellPieceBtn, 2);
+                Panel.SetZIndex(updateCellBtn, -1);
+            }
+            else
+            {
+                updateCellBtn.IsEnabled = true;
+                Panel.SetZIndex(selectCellPieceBtn, -1);
+                Panel.SetZIndex(updateCellBtn, 2);
+            }
+        }
+
+        private void updateCellBtn_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void selectCellPieceBtn_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }
