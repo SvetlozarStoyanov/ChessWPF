@@ -1,17 +1,22 @@
-﻿using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Contracts.Pieces;
+using ChessWPF.Models.Data.Pieces.Enums;
 
 namespace ChessWPF.Models.Data.Pieces
 {
-    public class ConstructorPiece
+    public class ConstructorBoardPiece : IConstructorPiece
     {
         private PieceType pieceType;
         private PieceColor pieceColor;
 
-        public ConstructorPiece(PieceType pieceType, PieceColor pieceColor)
+        public ConstructorBoardPiece(int row, int col, PieceColor pieceColor, PieceType pieceType)
         {
+            Row = row;
+            Col = col;
             PieceType = pieceType;
             Color = pieceColor;
         }
+        public int Row { get; set; }
+        public int Col { get; set; }
 
         public PieceType PieceType
         {
