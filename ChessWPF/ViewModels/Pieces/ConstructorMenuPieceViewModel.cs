@@ -1,20 +1,18 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
-using ChessWPF.ViewModels.Enums;
+using ChessWPF.Models.Pieces;
 using System;
 using System.Windows.Input;
 using System.Windows.Media.Imaging;
 
 namespace ChessWPF.ViewModels.Pieces
 {
-    public class ConstructorPieceViewModel : ViewModelBase
+    public class ConstructorMenuPieceViewModel : ViewModelBase
     {
         private BitmapImage pieceImage;
-        private ConstructorPiece constructorPiece;
+        private ConstructorMenuPiece constructorPiece;
 
-        public ConstructorPieceViewModel(ConstructorPiece constructorPiece)
+        public ConstructorMenuPieceViewModel(ConstructorMenuPiece constructorPiece)
         {
             ConstructorPiece = constructorPiece;
             SelectPieceFromPieceMenuCommand = new SelectPieceFromPieceMenuCommand(this);
@@ -22,7 +20,7 @@ namespace ChessWPF.ViewModels.Pieces
         }
 
         public event SelectConstructorPieceEventHandler SelectConstructorPiece;
-        public delegate void SelectConstructorPieceEventHandler(object? sender, SelectConstructorPieceEventArgs e);
+        public delegate void SelectConstructorPieceEventHandler(object? sender, SelectMenuPieceEventArgs e);
 
         public ICommand SelectPieceFromPieceMenuCommand { get; init; }
 
@@ -36,7 +34,7 @@ namespace ChessWPF.ViewModels.Pieces
             }
         }
 
-        public ConstructorPiece ConstructorPiece
+        public ConstructorMenuPiece ConstructorPiece
         {
             get => constructorPiece;
             private set => constructorPiece = value;
@@ -51,7 +49,7 @@ namespace ChessWPF.ViewModels.Pieces
 
         public void Select()
         {
-            SelectConstructorPiece(null, new SelectConstructorPieceEventArgs(ConstructorPiece));
+            SelectConstructorPiece(null, new SelectMenuPieceEventArgs(ConstructorPiece));
         }
     }
 }
