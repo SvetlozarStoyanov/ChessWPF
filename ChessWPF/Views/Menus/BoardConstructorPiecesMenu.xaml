@@ -8,15 +8,18 @@
              mc:Ignorable="d" 
              >
     <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+        <Grid x:Name="selectPieceGrid">
 
-        <RadioButton x:Name="selectPieceRadioButton"
+            <RadioButton x:Name="selectPieceRadioButton"
             GroupName="constructorPieceGroup" 
                      Style="{StaticResource boardConstructorPieceRadioButton}"
                      Command="{Binding DataContext.SelectPieceSelectorCommand, RelativeSource={RelativeSource AncestorLevel=2,AncestorType={x:Type UserControl}}}"
-                     Checked="selectPieceRadioButton_Checked" Unchecked="selectPieceRadioButton_Unchecked"
+                     IsChecked="True"
+                         Checked="selectPieceRadioButton_Checked" Unchecked="selectPieceRadioButton_Unchecked"
                      >
-            <Image x:Name="selectImage"></Image>
-        </RadioButton>
+                <Image x:Name="selectImage"></Image>
+            </RadioButton>
+        </Grid>
 
         <ItemsControl x:Name="constructorPiecesItemControl" Loaded="constructorPiecesItemControl_Loaded">
             <ItemsControl.ItemsPanel>
@@ -30,11 +33,13 @@
                 </DataTemplate>
             </ItemsControl.ItemTemplate>
         </ItemsControl>
-        <RadioButton x:Name="deletePieceRadioButton" GroupName="constructorPieceGroup" Style="{StaticResource boardConstructorPieceRadioButton}" 
+        <Grid x:Name="deletePieceGrid">
+            <RadioButton x:Name="deletePieceRadioButton" GroupName="constructorPieceGroup" Style="{StaticResource boardConstructorPieceRadioButton}" 
             Command="{Binding DataContext.SelectDeletePieceCommand,
             RelativeSource={RelativeSource AncestorLevel=2,AncestorType={x:Type UserControl}}}" 
              Checked="deletePieceRadioButton_Checked" Unchecked="deletePieceRadioButton_Unchecked">
-            <Image x:Name="deleteImage"></Image>
-        </RadioButton>
+                <Image x:Name="deleteImage"></Image>
+            </RadioButton>
+        </Grid>
     </StackPanel>
 </UserControl>

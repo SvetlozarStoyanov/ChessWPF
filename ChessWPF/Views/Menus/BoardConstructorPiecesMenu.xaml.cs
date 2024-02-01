@@ -28,28 +28,28 @@ namespace ChessWPF.Views.Menus
 
         private void constructorPiecesItemControl_Loaded(object sender, RoutedEventArgs e)
         {
-            var pieces = this.DataContext as HashSet<ConstructorPieceViewModel>;
+            var pieces = this.DataContext as HashSet<ConstructorMenuPieceViewModel>;
             constructorPiecesItemControl.ItemsSource = pieces;
         }
 
         private void selectPieceRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            selectPieceRadioButton.Background = Brushes.Green;
+            selectPieceGrid.Background = Brushes.Green;
         }
 
         private void selectPieceRadioButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            selectPieceRadioButton.Background = null;
+            selectPieceGrid.Background = null;
         }
 
         private void deletePieceRadioButton_Checked(object sender, RoutedEventArgs e)
         {
-            deletePieceRadioButton.Background = Brushes.Red;
+            deletePieceGrid.Background = Brushes.Red;
         }
 
         private void deletePieceRadioButton_Unchecked(object sender, RoutedEventArgs e)
         {
-            deletePieceRadioButton.Background = null;
+            deletePieceGrid.Background = null;
         }
     }
 }
