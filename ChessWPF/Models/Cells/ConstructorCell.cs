@@ -1,4 +1,5 @@
-﻿using ChessWPF.Models.Data.Pieces;
+﻿using ChessWPF.Contracts.Pieces;
+using ChessWPF.Models.Data.Pieces;
 using System;
 
 namespace ChessWPF.Models.Data.Board
@@ -7,7 +8,7 @@ namespace ChessWPF.Models.Data.Board
     {
         private int row;
         private int col;
-        private ConstructorPiece? constructorPiece;
+        private ConstructorBoardPiece? constructorPiece;
 
         public ConstructorCell(int row, int col)
         {
@@ -15,9 +16,9 @@ namespace ChessWPF.Models.Data.Board
             Col = col;
         }
 
-        public ConstructorCell(int row, int col, ConstructorPiece? constructorPiece) : this(row, col)
+        public ConstructorCell(int row, int col, ConstructorBoardPiece? constructorPiece) : this(row, col)
         {
-            ConstructorPiece = constructorPiece;
+            ConstructorBoardPiece = constructorPiece;
         }
 
         public int Row
@@ -32,7 +33,7 @@ namespace ChessWPF.Models.Data.Board
             init { col = value; }
         }
 
-        public ConstructorPiece? ConstructorPiece
+        public ConstructorBoardPiece? ConstructorBoardPiece
         {
             get { return constructorPiece; }
             private set
@@ -44,9 +45,21 @@ namespace ChessWPF.Models.Data.Board
         public delegate void UpdateConstructorCellEventHandler(object? sender, EventArgs e);
         public event UpdateConstructorCellEventHandler Update;
 
-        public void UpdatePiece(ConstructorPiece? constructorPiece)
+        public void UpdatePiece(IConstructorPiece? constructorPiece)
         {
-            ConstructorPiece = constructorPiece;
+            if (constructorPiece == null)
+            {
+                ConstructorBoardPiece = null;
+            }
+            else if (ConstructorBoardPiece == null && constructorPiece != null)
+            {
+                ConstructorBoardPiece = new ConstructorBoardPiece(this.Row, this.Col, constructorPiece.Color, constructorPiece.PieceType);
+            }
+            else if (ConstructorBoardPiece != null && constructorPiece != null)
+            {
+                ConstructorBoardPiece.PieceType = constructorPiece.PieceType;
+                ConstructorBoardPiece.Color = constructorPiece.Color;
+            }
             Update(this, EventArgs.Empty);
         }
     }

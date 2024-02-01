@@ -5,9 +5,9 @@ namespace ChessWPF.Commands
 {
     public class SelectPieceFromPieceMenuCommand : CommandBase
     {
-        private readonly ConstructorPieceViewModel constructorPieceViewModel;
+        private readonly ConstructorMenuPieceViewModel constructorPieceViewModel;
 
-        public SelectPieceFromPieceMenuCommand(ConstructorPieceViewModel constructorPieceViewModel)
+        public SelectPieceFromPieceMenuCommand(ConstructorMenuPieceViewModel constructorPieceViewModel)
         {
             this.constructorPieceViewModel = constructorPieceViewModel;
         }

@@ -5,7 +5,7 @@ namespace ChessWPF.HelperClasses.CustomEventArgs
 {
     public class SelectPieceFromConstructorCellViewModelEventArgs : EventArgs
     {
-        public SelectPieceFromConstructorCellViewModelEventArgs(int row, int col, ConstructorPiece constructorPiece)
+        public SelectPieceFromConstructorCellViewModelEventArgs(int row, int col, ConstructorBoardPiece constructorPiece)
         {
             Row = row;
             Col = col;
@@ -14,6 +14,6 @@ namespace ChessWPF.HelperClasses.CustomEventArgs
 
         public int Row { get; init; }
         public int Col { get; init; }
-        public ConstructorPiece ConstructorPiece { get; init; }
+        public ConstructorBoardPiece ConstructorPiece { get; init; }
     }
 }

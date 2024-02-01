@@ -1,6 +1,8 @@
-﻿using ChessWPF.Game;
+﻿using ChessWPF.Contracts.Pieces;
+using ChessWPF.Game;
 using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Positions;
 using System;
 using System.Collections.Generic;
@@ -11,7 +13,7 @@ namespace ChessWPF.Models.Data.Board
     public sealed class BoardConstructor
     {
         private PieceColor turnColor;
-        private Dictionary<PieceColor, HashSet<ConstructorPiece>> constructorPieces;
+        private Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> menuPieces;
         private ConstructorCell[,] constructorCells;
 
         public BoardConstructor()
@@ -26,10 +28,10 @@ namespace ChessWPF.Models.Data.Board
             set { turnColor = value; }
         }
 
-        public Dictionary<PieceColor, HashSet<ConstructorPiece>> ConstructorPieces
+        public Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> ConstructorPieces
         {
-            get { return constructorPieces; }
-            private set { constructorPieces = value; }
+            get { return menuPieces; }
+            private set { menuPieces = value; }
         }
         public ConstructorCell[,] ConstructorCells
         {
@@ -53,7 +55,7 @@ namespace ChessWPF.Models.Data.Board
         {
             foreach (var piece in position.Pieces.Keys.SelectMany(color => position.Pieces[color]))
             {
-                ConstructorCells[piece.Row, piece.Col].UpdatePiece(new ConstructorPiece(piece.PieceType, piece.Color));
+                ConstructorCells[piece.Row, piece.Col].UpdatePiece(new ConstructorBoardPiece(piece.Row, piece.Col, piece.Color, piece.PieceType));
             }
         }
 
@@ -65,27 +67,27 @@ namespace ChessWPF.Models.Data.Board
             return position;
         }
 
-        public void UpdateCellPiece(int row, int col, ConstructorPiece? constructorPiece)
+        public void UpdateCellPiece(int row, int col, IConstructorPiece? constructorPiece)
         {
-            ConstructorCells[row,col].UpdatePiece(constructorPiece);
+            ConstructorCells[row, col].UpdatePiece(constructorPiece);
         }
 
         private void CreateConstructorPieces()
         {
-            ConstructorPieces = new Dictionary<PieceColor, HashSet<ConstructorPiece>>
+            ConstructorPieces = new Dictionary<PieceColor, HashSet<ConstructorMenuPiece>>
             {
                 { PieceColor.White, CreatePieceCollection(PieceColor.White) },
                 { PieceColor.Black, CreatePieceCollection(PieceColor.Black) }
             };
         }
 
-        private HashSet<ConstructorPiece> CreatePieceCollection(PieceColor color)
+        private HashSet<ConstructorMenuPiece> CreatePieceCollection(PieceColor color)
         {
-            var pieces = new HashSet<ConstructorPiece>();
+            var pieces = new HashSet<ConstructorMenuPiece>();
             var pieceTypes = Enum.GetValues<PieceType>().ToList();
             foreach (var pieceType in pieceTypes)
             {
-                pieces.Add(new ConstructorPiece(pieceType, color));
+                pieces.Add(new ConstructorMenuPiece(pieceType, color));
             }
             return pieces;
         }
@@ -98,11 +100,11 @@ namespace ChessWPF.Models.Data.Board
                 [PieceColor.Black] = new List<Piece>()
             };
             var constructorCellsFlattened = ConstructorCells.Cast<ConstructorCell>().ToArray();
-            foreach (var cell in constructorCellsFlattened.Where(c => c.ConstructorPiece != null))
+            foreach (var cell in constructorCellsFlattened.Where(c => c.ConstructorBoardPiece != null))
             {
-                pieces[cell.ConstructorPiece.Color].Add(PieceConstructor.ConstructPieceByType(
-                    cell.ConstructorPiece.PieceType,
-                    cell.ConstructorPiece.Color,
+                pieces[cell.ConstructorBoardPiece.Color].Add(PieceConstructor.ConstructPieceByType(
+                    cell.ConstructorBoardPiece.PieceType,
+                    cell.ConstructorBoardPiece.Color,
                     cell.Row,
                     cell.Col));
             }
