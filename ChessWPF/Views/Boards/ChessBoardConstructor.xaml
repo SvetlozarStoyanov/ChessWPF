@@ -19,8 +19,8 @@
             <ColumnDefinition Width="2.0*"/>
         </Grid.ColumnDefinitions>
         <menus:BoardConstructorNavigationMenu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"></menus:BoardConstructorNavigationMenu>
-        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorPieceViewModels[Black]}"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
+        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[Black]}"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
         <local:ConstructorBoard DataContext="{Binding ConstructorCellViewModels}" Grid.Row="2" Grid.Column="0" Margin="20,80,20,0"/>
-        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorPieceViewModels[White]}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
+        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[White]}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
     </Grid>
 </UserControl>
