@@ -12,8 +12,9 @@ namespace ChessWPF.Views.Cells
         {
             InitializeComponent();
 
-            Panel.SetZIndex(updateCellBtn, 2);
             Panel.SetZIndex(imgPiece, 1);
+            Panel.SetZIndex(selectCellPieceBtn, 2);
+
 
             this.Width = this.Height;
             this.MaxWidth = this.MaxHeight;
