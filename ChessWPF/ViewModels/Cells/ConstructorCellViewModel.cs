@@ -73,9 +73,9 @@ namespace ChessWPF.ViewModels
 
         public void UpdateCellImage(object? sender, EventArgs e)
         {
-            if (constructorCell.ConstructorPiece != null)
+            if (constructorCell.ConstructorBoardPiece != null)
             {
-                var imageUrl = $"/Graphics/Chess Pieces/{ConstructorCell.ConstructorPiece.Color} {ConstructorCell.ConstructorPiece.PieceType}.png";
+                var imageUrl = $"/Graphics/Chess Pieces/{ConstructorCell.ConstructorBoardPiece.Color} {ConstructorCell.ConstructorBoardPiece.PieceType}.png";
                 var pieceImageUri = new Uri(@$"pack://application:,,,{imageUrl}");
                 CellImage = new BitmapImage(pieceImageUri);
             }
@@ -94,14 +94,15 @@ namespace ChessWPF.ViewModels
         {
             SelectPieceFromConstructorCellViewModelCell(null,new SelectPieceFromConstructorCellViewModelEventArgs(ConstructorCell.Row,
                 ConstructorCell.Col,
-                ConstructorCell.ConstructorPiece!));
+                ConstructorCell.ConstructorBoardPiece!));
         }
 
-        public void UpdateCanBeSelected(Type type)
+        
+        public void UpdateCanBeSelected(Type type, bool canBeSelected)
         {
             if (type.Equals(typeof(BoardConstructorViewModel)))
             {
-                CanBeSelected = !CanBeSelected;
+                CanBeSelected = canBeSelected;
             }
             else
             {
