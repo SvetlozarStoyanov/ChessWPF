@@ -50,7 +50,7 @@
         <TextBlock Grid.Row="8" Grid.Column="5" Text="E" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
         <TextBlock Grid.Row="8" Grid.Column="6" Text="F" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
         <TextBlock Grid.Row="8" Grid.Column="7" Text="G" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
-        <TextBlock Grid.Row="8" Grid.Column="8" Text="H" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,0,0,0"/>
+        <TextBlock Grid.Row="8" Grid.Column="8" Text="H" FontSize="25" VerticalAlignment="Center" HorizontalAlignment="Center" Margin="0,10,0,0"/>
         
         <Grid x:Name="cellGrid" Loaded="cellGrid_Loaded" Grid.Row="0" Grid.Column="1" Grid.RowSpan="8" Grid.ColumnSpan="8"
               >
