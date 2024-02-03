@@ -13,33 +13,29 @@ namespace ChessWPF.Game
         public static Dictionary<string, List<Cell>> GetLegalMovesAndProtectedCells(Piece piece, Board board)
         {
             var legalMovesAndProtectedSquares = new Dictionary<string, List<Cell>>();
-            if (piece.PieceType == PieceType.Pawn)
+            switch (piece.PieceType)
             {
-                legalMovesAndProtectedSquares = GetPawnLegalMovesAndProtectedCells(piece, board);
-            }
-            else if (piece.PieceType == PieceType.Bishop)
-            {
-                legalMovesAndProtectedSquares = GetBishopLegalMovesAndProtectedCells(piece, board);
-            }
-            else if (piece.PieceType == PieceType.Knight)
-            {
-                legalMovesAndProtectedSquares = GetKnightLegalMovesAndProtectedCells(piece, board);
-            }
-            else if (piece.PieceType == PieceType.Rook)
-            {
-                legalMovesAndProtectedSquares = GetRookLegalMovesAndProtectedCells(piece, board);
-            }
-            else if (piece.PieceType == PieceType.Queen)
-            {
-                legalMovesAndProtectedSquares = GetQueenLegalMovesAndProtectedCells(piece, board);
-            }
-            else if (piece.PieceType == PieceType.Knook)
-            {
-                legalMovesAndProtectedSquares = GetKnookLegalMovesAndProtectedCells(piece, board);
-            }
-            else if (piece.PieceType == PieceType.King)
-            {
-                legalMovesAndProtectedSquares = GetKingLegalMovesAndProtectedCells(piece, board);
+                case PieceType.Pawn:
+                    legalMovesAndProtectedSquares = GetPawnLegalMovesAndProtectedCells(piece, board);
+                    break;
+                case PieceType.Bishop:
+                    legalMovesAndProtectedSquares = GetBishopLegalMovesAndProtectedCells(piece, board);
+                    break;
+                case PieceType.Knight:
+                    legalMovesAndProtectedSquares = GetKnightLegalMovesAndProtectedCells(piece, board);
+                    break;
+                case PieceType.Rook:
+                    legalMovesAndProtectedSquares = GetRookLegalMovesAndProtectedCells(piece, board);
+                    break;
+                case PieceType.Queen:
+                    legalMovesAndProtectedSquares = GetQueenLegalMovesAndProtectedCells(piece, board);
+                    break;
+                case PieceType.Knook:
+                    legalMovesAndProtectedSquares = GetKnookLegalMovesAndProtectedCells(piece, board);
+                    break;
+                case PieceType.King:
+                    legalMovesAndProtectedSquares = GetKingLegalMovesAndProtectedCells(piece, board);
+                    break;
             }
             return legalMovesAndProtectedSquares;
         }
