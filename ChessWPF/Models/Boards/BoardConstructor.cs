@@ -14,39 +14,49 @@ namespace ChessWPF.Models.Data.Board
     {
         private PieceColor turnColor;
         private Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> menuPieces;
+        private char[,] simplifiedCells;
         private ConstructorCell[,] constructorCells;
 
         public BoardConstructor()
         {
-            CreateConstructorCells();
+            CreateCells();
             CreateConstructorPieces();
         }
 
         public PieceColor TurnColor
         {
-            get { return turnColor; }
-            set { turnColor = value; }
+            get => turnColor;
+            set => turnColor = value;
         }
 
         public Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> ConstructorPieces
         {
-            get { return menuPieces; }
-            private set { menuPieces = value; }
-        }
-        public ConstructorCell[,] ConstructorCells
-        {
-            get { return constructorCells; }
-            private set { constructorCells = value; }
+            get => menuPieces;
+            private set => menuPieces = value;
         }
 
-        public void CreateConstructorCells()
+        public char[,] SimplifiedCells
+        {
+            get => simplifiedCells;
+            private set => simplifiedCells = value;
+        }
+
+        public ConstructorCell[,] ConstructorCells
+        {
+            get => constructorCells;
+            private set => constructorCells = value;
+        }
+
+        public void CreateCells()
         {
             ConstructorCells = new ConstructorCell[8, 8];
+            SimplifiedCells = new char[8, 8];
             for (int row = 0; row < ConstructorCells.GetLength(0); row++)
             {
                 for (int col = 0; col < ConstructorCells.GetLength(1); col++)
                 {
                     ConstructorCells[row, col] = new ConstructorCell(row, col);
+                    SimplifiedCells[row, col] = '.';
                 }
             }
         }
@@ -56,7 +66,43 @@ namespace ChessWPF.Models.Data.Board
             foreach (var piece in position.Pieces.Keys.SelectMany(color => position.Pieces[color]))
             {
                 ConstructorCells[piece.Row, piece.Col].UpdatePiece(new ConstructorBoardPiece(piece.Row, piece.Col, piece.Color, piece.PieceType));
+                var simplifiedPiece = GetSimplifedPiece(piece.Color, piece.PieceType);
+                SimplifiedCells[piece.Row, piece.Col] = simplifiedPiece;
             }
+        }
+
+        private char GetSimplifedPiece(PieceColor color, PieceType pieceType)
+        {
+            var character = ' ';
+            switch (pieceType)
+            {
+                case PieceType.Pawn:
+                    character = 'p';
+                    break;
+                case PieceType.Knight:
+                    character = 'n';
+                    break;
+                case PieceType.Bishop:
+                    character = 'b';
+                    break;
+                case PieceType.Rook:
+                    character = 'r';
+                    break;
+                case PieceType.Queen:
+                    character = 'q';
+                    break;
+                case PieceType.Knook:
+                    character = 'o';
+                    break;
+                case PieceType.King:
+                    character = 'k';
+                    break;
+            }
+            if (color == PieceColor.White)
+            {
+                character = Convert.ToChar(character - 32);
+            }
+            return character;
         }
 
         public Position ExportPosition()
@@ -70,6 +116,14 @@ namespace ChessWPF.Models.Data.Board
         public void UpdateCellPiece(int row, int col, IConstructorPiece? constructorPiece)
         {
             ConstructorCells[row, col].UpdatePiece(constructorPiece);
+            if (constructorPiece == null)
+            {
+                SimplifiedCells[row, col] = '.';
+            }
+            else
+            {
+                SimplifiedCells[row, col] = GetSimplifedPiece(constructorPiece.Color, constructorPiece.PieceType);
+            }
         }
 
         private void CreateConstructorPieces()
@@ -108,7 +162,6 @@ namespace ChessWPF.Models.Data.Board
                     cell.Row,
                     cell.Col));
             }
-
             return pieces;
         }
     }
