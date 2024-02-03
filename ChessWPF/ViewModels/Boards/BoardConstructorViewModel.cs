@@ -22,13 +22,6 @@ namespace ChessWPF.ViewModels
         private ConstructorCellViewModel[][] constructorCellViewModels;
         private Dictionary<PieceColor, HashSet<ConstructorMenuPieceViewModel>> constructorMenuPieceViewModels;
 
-        public Dictionary<PieceColor, HashSet<ConstructorMenuPieceViewModel>> ConstructorMenuPieceViewModels
-        {
-            get { return constructorMenuPieceViewModels; }
-            private set { constructorMenuPieceViewModels = value; }
-        }
-
-
         public BoardConstructorViewModel(GameStateStore gameStateStore)
         {
             GameStateStore = gameStateStore;
@@ -43,8 +36,6 @@ namespace ChessWPF.ViewModels
             BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel();
             EnableSelectingPiecesFromBoard();
         }
-
-
 
         public IConstructorPiece? SelectedPiece
         {
@@ -68,6 +59,12 @@ namespace ChessWPF.ViewModels
         {
             get => gameStateStore;
             private init => gameStateStore = value;
+        }
+
+        public Dictionary<PieceColor, HashSet<ConstructorMenuPieceViewModel>> ConstructorMenuPieceViewModels
+        {
+            get { return constructorMenuPieceViewModels; }
+            private set { constructorMenuPieceViewModels = value; }
         }
 
         public ConstructorCellViewModel[][] ConstructorCellViewModels
