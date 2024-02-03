@@ -1,7 +1,4 @@
-﻿using ChessWPF.Models.Data.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Models.Positions;
-using System.Collections.Generic;
+﻿using ChessWPF.Models.Positions;
 
 namespace ChessWPF.Game
 {
@@ -11,7 +8,6 @@ namespace ChessWPF.Game
         {
             var fenAnnotation = "rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1";
             var position = FenAnnotationReader.GetPosition(fenAnnotation);
-            position.FenAnnotation = fenAnnotation;
 
             return position;
         }
