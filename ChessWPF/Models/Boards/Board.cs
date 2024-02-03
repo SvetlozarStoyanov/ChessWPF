@@ -168,7 +168,7 @@ namespace ChessWPF.Models.Data.Board
 
         public void UpdateFenAnnotation()
         {
-            FenAnnotation = FenAnnotationWriter.WriteFenAnnotation(this);
+            FenAnnotation = FenAnnotationWriter.WriteFenAnnotationFromBoard(this);
         }
 
         public Move MovePiece(Cell movedToCell, Cell selectedCell)
