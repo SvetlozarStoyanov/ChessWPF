@@ -15,7 +15,52 @@ namespace ChessWPF.Game
             var rows = fenAnnotationSplit[0];
             position.Pieces = GetPieces(rows);
             position.TurnColor = fenAnnotationSplit[1] == "w" ? PieceColor.White : PieceColor.Black;
+            position.CastlingRights = GetCastlingRights(fenAnnotationSplit[2]);
+            position.EnPassantCoordinates = fenAnnotationSplit[3] != "-" ? GetEnPassantCoordinates(fenAnnotationSplit[4]) : null;
+            position.HalfMoveCount = int.Parse(fenAnnotationSplit[4]);
+            position.MoveNumber = int.Parse(fenAnnotationSplit[5]);
+            position.FenAnnotation = fenAnnotation;
             return position;
+        }
+
+        private static ValueTuple<bool, bool, bool, bool> GetCastlingRights(string castlingRightsAnnotation)
+        {
+            var castlingRights = new ValueTuple<bool, bool, bool, bool>();
+
+            if (castlingRightsAnnotation == "-")
+            {
+                return castlingRights;
+            }
+            foreach (char character in castlingRightsAnnotation)
+            {
+                switch (character)
+                {
+                    case 'K':
+                        castlingRights.Item1 = true;
+                        break;
+                    case 'Q':
+                        castlingRights.Item2 = true;
+                        break;
+                    case 'k':
+                        castlingRights.Item3 = true;
+                        break;
+                    case 'q':
+                        castlingRights.Item4 = true;
+                        break;
+                }
+            }
+
+            return castlingRights;
+        }
+
+        private static ValueTuple<int, int> GetEnPassantCoordinates(string enPassantAnnotation)
+        {
+            var coordinates = new ValueTuple<int, int>();
+
+            coordinates.Item1 = enPassantAnnotation[1] - 97;
+            coordinates.Item2 = (int)enPassantAnnotation[0] - 97;
+
+            return coordinates;
         }
 
         private static Dictionary<PieceColor, List<Piece>> GetPieces(string rows)
