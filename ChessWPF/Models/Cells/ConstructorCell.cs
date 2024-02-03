@@ -8,7 +8,7 @@ namespace ChessWPF.Models.Data.Board
     {
         private int row;
         private int col;
-        private ConstructorBoardPiece? constructorPiece;
+        private ConstructorBoardPiece? constructorBoardPiece;
 
         public ConstructorCell(int row, int col)
         {
@@ -35,10 +35,10 @@ namespace ChessWPF.Models.Data.Board
 
         public ConstructorBoardPiece? ConstructorBoardPiece
         {
-            get { return constructorPiece; }
+            get { return constructorBoardPiece; }
             private set
             {
-                constructorPiece = value;
+                constructorBoardPiece = value;
             }
         }
 
