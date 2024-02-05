@@ -1,5 +1,4 @@
-﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
+﻿using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using System;
 using System.Collections.Generic;
@@ -15,6 +14,7 @@ namespace ChessWPF.Models.Positions
         private ValueTuple<bool,bool,bool,bool> castlingRights;
         private ValueTuple<int, int>? enPassantCoordinates;
         private Dictionary<PieceColor, List<Piece>> pieces;
+        private char[,] simplifiedCells;
 
         public Position()
         {
@@ -61,6 +61,12 @@ namespace ChessWPF.Models.Positions
         {
             get => pieces;
             set => pieces = value;
+        }
+
+        public char[,] SimplifiedCells
+        {
+            get { return simplifiedCells; }
+            set { simplifiedCells = value; }
         }
 
     }
