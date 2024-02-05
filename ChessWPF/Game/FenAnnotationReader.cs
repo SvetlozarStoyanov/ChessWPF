@@ -13,7 +13,9 @@ namespace ChessWPF.Game
             var position = new Position();
             var fenAnnotationSplit = fenAnnotation.Split(' ', StringSplitOptions.RemoveEmptyEntries);
             var rows = fenAnnotationSplit[0];
-            position.Pieces = GetPieces(rows);
+            var piecesAndSimplifiedCells = GetPiecesAndSimplifiedCells(rows);
+            position.Pieces = piecesAndSimplifiedCells.Item1;
+            position.SimplifiedCells = piecesAndSimplifiedCells.Item2;
             position.TurnColor = fenAnnotationSplit[1] == "w" ? PieceColor.White : PieceColor.Black;
             position.CastlingRights = GetCastlingRights(fenAnnotationSplit[2]);
             position.EnPassantCoordinates = fenAnnotationSplit[3] != "-" ? GetEnPassantCoordinates(fenAnnotationSplit[4]) : null;
@@ -63,32 +65,42 @@ namespace ChessWPF.Game
             return coordinates;
         }
 
-        private static Dictionary<PieceColor, List<Piece>> GetPieces(string rows)
+        private static ValueTuple<Dictionary<PieceColor, List<Piece>>, char[,]> GetPiecesAndSimplifiedCells(string rows)
         {
             var pieces = new Dictionary<PieceColor, List<Piece>>()
             {
                 [PieceColor.White] = new List<Piece>(),
                 [PieceColor.Black] = new List<Piece>()
             };
+            var simplifiedCells = new char[8, 8];
 
             var rowsSplit = rows.Split('/', StringSplitOptions.RemoveEmptyEntries);
             for (int row = 0; row < rowsSplit.Length; row++)
             {
                 var currRow = rowsSplit[row];
-                for (int col = 0; col < currRow.Length; col++)
+                var col = 0;
+                for (int rowIndex = 0; rowIndex < currRow.Length; rowIndex++)
                 {
-                    if (char.IsNumber(currRow[col]))
+                    if (char.IsNumber(currRow[rowIndex]))
                     {
-                        col += currRow[col] - 48;
+                        var emptyCols = currRow[rowIndex] - 48;
+                        while (emptyCols > 0)
+                        {
+                            simplifiedCells[row, col] = '.';
+                            col++;
+                            emptyCols--;
+                        }
                     }
                     else
                     {
-                        var piece = CreatePieceFromLetter(currRow[col], row, col);
+                        simplifiedCells[row, col] = currRow[rowIndex];
+                        var piece = CreatePieceFromLetter(currRow[rowIndex], row, col);
                         pieces[piece.Color].Add(piece);
+                        col++;
                     }
                 }
             }
-            return pieces;
+            return (pieces, simplifiedCells);
         }
 
         private static Piece CreatePieceFromLetter(char letter, int row, int col)
