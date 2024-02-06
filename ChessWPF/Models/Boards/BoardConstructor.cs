@@ -94,6 +94,11 @@ namespace ChessWPF.Models.Data.Board
             }
         }
 
+        public void UpdateCastlingRights(bool[] castlingRights)
+        {
+            CastlingRights = (castlingRights[0], castlingRights[1], castlingRights[2], castlingRights[3]);
+        }
+
         private char GetSimplifedPiece(PieceColor color, PieceType pieceType)
         {
             var character = ' ';
