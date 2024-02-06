@@ -154,6 +154,11 @@ namespace ChessWPF.Models.Data.Board
             }
         }
 
+        public void UpdateTurnColor(PieceColor turnColor)
+        {
+            TurnColor = turnColor;
+        }
+
         private void CreateConstructorPieces()
         {
             ConstructorPieces = new Dictionary<PieceColor, HashSet<ConstructorMenuPiece>>
