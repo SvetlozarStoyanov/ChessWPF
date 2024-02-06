@@ -92,6 +92,9 @@ namespace ChessWPF.Models.Data.Board
                 var simplifiedPiece = GetSimplifedPiece(piece.Color, piece.PieceType);
                 SimplifiedCells[piece.Row, piece.Col] = simplifiedPiece;
             }
+            CastlingRights = position.CastlingRights;
+            CastlingPosibilities = new bool[4];
+            UpdateCastlingPosibilities();
         }
 
         public void UpdateCastlingRights(bool[] castlingRights)
