@@ -13,6 +13,9 @@ namespace ChessWPF.Models.Data.Board
     public sealed class BoardConstructor
     {
         private PieceColor turnColor;
+        private ValueTuple<int, int>? enPassantCoordinates;
+        private ValueTuple<bool, bool, bool, bool> castlingRights;
+        private bool[] castlingPosibilities;
         private Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> menuPieces;
         private char[,] simplifiedCells;
         private ConstructorCell[,] constructorCells;
@@ -27,6 +30,23 @@ namespace ChessWPF.Models.Data.Board
         {
             get => turnColor;
             set => turnColor = value;
+        }
+
+        public ValueTuple<int, int>? EnPassantCoordinates
+        {
+            get => enPassantCoordinates;
+            private set => enPassantCoordinates = value;
+        }
+
+        public ValueTuple<bool, bool, bool, bool> CastlingRights
+        {
+            get => castlingRights;
+            private set => castlingRights = value;
+        }
+        public bool[] CastlingPosibilities
+        {
+            get { return castlingPosibilities; }
+            private set { castlingPosibilities = value; }
         }
 
         public Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> ConstructorPieces
