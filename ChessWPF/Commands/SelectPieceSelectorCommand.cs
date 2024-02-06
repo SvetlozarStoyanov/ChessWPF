@@ -14,7 +14,7 @@ namespace ChessWPF.Commands
 
         public override void Execute(object? parameter)
         {
-            boardConstructorViewModel.EnableSelectingPiecesFromBoard();
+            boardConstructorViewModel.SelectPieceSelector();
         }
     }
 }
