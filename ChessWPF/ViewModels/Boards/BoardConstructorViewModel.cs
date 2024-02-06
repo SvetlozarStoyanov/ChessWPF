@@ -6,6 +6,7 @@ using ChessWPF.Models.Data.Pieces;
 using ChessWPF.Models.Data.Pieces.Enums;
 using ChessWPF.Stores;
 using ChessWPF.ViewModels.Pieces;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows.Input;
@@ -33,7 +34,11 @@ namespace ChessWPF.ViewModels
             NavigateToGameCommand = new NavigateCommand<GameViewModel>(gameStateStore, () => new GameViewModel(gameStateStore));
             SelectDeletePieceCommand = new SelectDeletePieceCommand(this);
             SelectPieceSelectorCommand = new SelectPieceSelectorCommand(this);
-            BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel();
+            BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel(GetCastlingRightsFromBoardConstructor(),
+                BoardConstructor.CastlingPosibilities);
+            BoardConstructorMenuViewModel.CastlingRightsUpdate += UpdateCastlingRights;
+            BoardConstructor.CastlingPosibilitiesUpdate += UpdateCastlingPosibilities;
+            BoardConstructorMenuViewModel.TurnColorUpdate += UpdateTurnColor;
             EnableSelectingPiecesFromBoard();
         }
 
@@ -87,6 +92,12 @@ namespace ChessWPF.ViewModels
             DisableSelectingPiecesFromBoard();
         }
 
+        public void SelectPieceSelector()
+        {
+            ChangeSelectedPiece(null);
+            EnableSelectingPiecesFromBoard();
+        }
+
         public void EnableSelectingPiecesFromBoard()
         {
             ChangeSelectedPiece(null);
@@ -98,6 +109,28 @@ namespace ChessWPF.ViewModels
         {
             var flattenedCells = ConstructorCellViewModels.SelectMany(fc => fc).ToList();
             flattenedCells.Where(fc => fc.ConstructorCell.ConstructorBoardPiece != null).ToList().ForEach(fc => fc.UpdateCanBeSelected(this.GetType(), false));
+        }
+
+
+
+        private bool[] GetCastlingRightsFromBoardConstructor()
+        {
+            return new bool[] { BoardConstructor.CastlingRights.Item1, BoardConstructor.CastlingRights.Item2, BoardConstructor.CastlingRights.Item3, BoardConstructor.CastlingRights.Item4 };
+        }
+
+        private void UpdateTurnColor(object? sender, TurnColorChangedEventArgs e)
+        {
+            BoardConstructor.UpdateTurnColor(e.TurnColor);
+        }
+
+        private void UpdateCastlingRights(object? sender, EventArgs e)
+        {
+            boardConstructor.UpdateCastlingRights((sender as BoardConstructorMenuViewModel)!.CastlingRights);
+        }
+
+        private void UpdateCastlingPosibilities(object? sender, EventArgs e)
+        {
+            BoardConstructorMenuViewModel.UpdateCastlingPosiblities(BoardConstructor.CastlingPosibilities);
         }
 
         private void CreateConstructorCellPieceViewModels()
@@ -178,12 +211,11 @@ namespace ChessWPF.ViewModels
                     BoardConstructor.UpdateCellPiece(constructorBoardPiece.Row, constructorBoardPiece.Col, null);
                     EnableSelectingPiecesFromBoard();
                 }
-            }
-            else
-            {
-                DisableSelectingPiecesFromBoard();
+                else
+                {
+                    DisableSelectingPiecesFromBoard();
+                }
             }
         }
-
     }
 }
