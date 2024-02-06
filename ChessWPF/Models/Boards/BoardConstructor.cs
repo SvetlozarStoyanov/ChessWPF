@@ -152,6 +152,10 @@ namespace ChessWPF.Models.Data.Board
             {
                 SimplifiedCells[row, col] = GetSimplifedPiece(constructorPiece.Color, constructorPiece.PieceType);
             }
+            if ((row == 0 || row == 7) && (col == 0 || col == 4 || col == 7))
+            {
+                UpdateCastlingPosibilities();
+            }
         }
 
         public void UpdateTurnColor(PieceColor turnColor)
