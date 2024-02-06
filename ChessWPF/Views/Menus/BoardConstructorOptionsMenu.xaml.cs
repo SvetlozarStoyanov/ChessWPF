@@ -1,17 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using ChessWPF.ViewModels;
 using System.Windows;
 using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
 
 namespace ChessWPF.Views.Menus
 {
@@ -23,6 +12,19 @@ namespace ChessWPF.Views.Menus
         public BoardConstructorOptionsMenu()
         {
             InitializeComponent();
+        }
+
+        private void CheckBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            var checkbox = sender as CheckBox;
+            checkbox!.IsChecked = false;
+            checkbox.Command?.Execute(null);
+        }
+
+        private void turnColorsComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            turnColorsComboBox.Items.Clear();
+            turnColorsComboBox.ItemsSource = (DataContext as BoardConstructorMenuViewModel)!.TurnColors;
         }
     }
 }

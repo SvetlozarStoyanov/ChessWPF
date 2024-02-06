@@ -5,8 +5,89 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Menus"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
+             >
+    <Grid Background="LightGray">
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label
+               Grid.Row="0" FontSize="40"
+               HorizontalAlignment="Center" VerticalAlignment="Center"
+               FontWeight="Bold">
+            Additional
+        </Label>
+        <StackPanel Grid.Row="1" Orientation="Horizontal">
+            <Label FontSize="25" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center">TurnColor</Label>
+            <ComboBox x:Name="turnColorsComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="100"
+                      Loaded="turnColorsComboBox_Loaded"
+                      SelectedItem="{Binding SelectedTurnColor}">
+                <ComboBoxItem>
+                    <DataTemplate>
+                        <TextBlock Text="{Binding item}"></TextBlock>
+                    </DataTemplate>
+                </ComboBoxItem>
+            </ComboBox>
+        </StackPanel>
+        <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
+               FontSize="20px" FontWeight="DemiBold">
+            Castling Rights
+        </Label>
+        <Grid Grid.Row="3">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
+                <Label FontSize="25">White</Label>
+                <CheckBox Command="{Binding SetCastlingRightsCommand}"
+                          IsChecked="{Binding CastlingRights[0], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                          IsEnabled="{Binding CastlingPosibilities[0]}"
+                          IsEnabledChanged="CheckBox_IsEnabledChanged"
+                          VerticalAlignment="Center" HorizontalAlignment="Center">
+                    0-0-0</CheckBox>
+                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
+                          IsChecked="{Binding CastlingRights[1], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                          IsEnabled="{Binding CastlingPosibilities[1]}"
+                          IsEnabledChanged="CheckBox_IsEnabledChanged"
+                          VerticalAlignment="Center" HorizontalAlignment="Center">
+                    0-0</CheckBox>
+            </StackPanel>
+        </Grid>
+        <Grid Grid.Row="4">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
+                <Label  FontSize="25">Black</Label>
+                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
+                          IsChecked="{Binding CastlingRights[2], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                          IsEnabled="{Binding CastlingPosibilities[2]}"
+                          IsEnabledChanged="CheckBox_IsEnabledChanged"
+                          VerticalAlignment="Center" HorizontalAlignment="Center">
+                    0-0-0</CheckBox>
+                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
+                          IsChecked="{Binding CastlingRights[3], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                          IsEnabled="{Binding CastlingPosibilities[3]}"
+                          IsEnabledChanged="CheckBox_IsEnabledChanged"
+                          VerticalAlignment="Center" HorizontalAlignment="Center">
+                    0-0</CheckBox>
+            </StackPanel>
+        </Grid>
+        <StackPanel Grid.Row="5" Orientation="Horizontal">
+
+            <Label HorizontalAlignment="Left" VerticalAlignment="Center"  FontSize="25px" FontWeight="DemiBold" >En Passant</Label>
+            <ComboBox VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"></ComboBox>
+        </StackPanel>
     </Grid>
 </UserControl>

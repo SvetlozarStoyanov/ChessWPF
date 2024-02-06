@@ -22,5 +22,6 @@
         <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[Black]}"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
         <local:ConstructorBoard DataContext="{Binding ConstructorCellViewModels}" Grid.Row="2" Grid.Column="0" Margin="20,80,20,0"/>
         <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[White]}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
+        <menus:BoardConstructorOptionsMenu DataContext="{Binding BoardConstructorMenuViewModel}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"></menus:BoardConstructorOptionsMenu>
     </Grid>
 </UserControl>
