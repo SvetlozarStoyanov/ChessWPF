@@ -26,6 +26,9 @@ namespace ChessWPF.Models.Data.Board
             CreateConstructorPieces();
         }
 
+        public event UpdateCastlingPosibilitiesEventHandler CastlingPosibilitiesUpdate;
+        public delegate void UpdateCastlingPosibilitiesEventHandler(object? sender, EventArgs e);
+
         public PieceColor TurnColor
         {
             get => turnColor;
@@ -184,5 +187,44 @@ namespace ChessWPF.Models.Data.Board
             }
             return pieces;
         }
+
+        private void UpdateCastlingPosibilities()
+        {
+            var isChanged = false;
+            var condition = simplifiedCells[7, 4] == 'K' && simplifiedCells[7, 7] == 'R';
+            if (CastlingPosibilities[0] != condition)
+            {
+                CastlingPosibilities[0] = condition;
+                isChanged = true;
+            }
+
+            condition = simplifiedCells[7, 4] == 'K' && simplifiedCells[7, 7] == 'R';
+            if (CastlingPosibilities[1] != condition)
+            {
+                CastlingPosibilities[1] = condition;
+                isChanged = true;
+            }
+
+            condition = simplifiedCells[0, 4] == 'k' && simplifiedCells[0, 7] == 'r';
+            if (CastlingPosibilities[2] != condition)
+            {
+                CastlingPosibilities[2] = condition;
+                isChanged = true;
+            }
+
+            condition = simplifiedCells[0, 4] == 'k' && simplifiedCells[0, 0] == 'r';
+            if (CastlingPosibilities[3] != condition)
+            {
+                CastlingPosibilities[3] = condition;
+                isChanged = true;
+            }
+
+            if (isChanged)
+            {
+                CastlingPosibilitiesUpdate?.Invoke(null, EventArgs.Empty);
+            }
+        }
+
+
     }
 }
