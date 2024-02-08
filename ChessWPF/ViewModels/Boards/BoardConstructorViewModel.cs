@@ -1,9 +1,9 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.Contracts.Pieces;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Boards;
+using ChessWPF.Models.Pieces;
+using ChessWPF.Models.Pieces.Enums;
 using ChessWPF.Stores;
 using ChessWPF.ViewModels.Pieces;
 using System;
@@ -35,11 +35,23 @@ namespace ChessWPF.ViewModels
             SelectDeletePieceCommand = new SelectDeletePieceCommand(this);
             SelectPieceSelectorCommand = new SelectPieceSelectorCommand(this);
             BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel(GetCastlingRightsFromBoardConstructor(),
-                BoardConstructor.CastlingPosibilities);
+                BoardConstructor.CastlingPossibilities, BoardConstructor.EnPassantPossibilities);
             BoardConstructorMenuViewModel.CastlingRightsUpdate += UpdateCastlingRights;
             BoardConstructor.CastlingPosibilitiesUpdate += UpdateCastlingPosibilities;
+            BoardConstructor.EnPassantPosibilitiesUpdate += UpdateEnPassantPosibilities;
             BoardConstructorMenuViewModel.TurnColorUpdate += UpdateTurnColor;
+            BoardConstructorMenuViewModel.EnPassantCoordinatesUpdate += UpdateEnPassantCoordinates;
             EnableSelectingPiecesFromBoard();
+        }
+
+        private void UpdateEnPassantPosibilities(object? sender, EventArgs e)
+        {
+            BoardConstructorMenuViewModel.UpdateEnPassantPosibilities(BoardConstructor.EnPassantPossibilities);
+        }
+
+        private void UpdateEnPassantCoordinates(object? sender, EnPassantCoordinatesChangedEventArgs e)
+        {
+            BoardConstructor.UpdateEnPassantCoordinates(e.CellCoordinates);
         }
 
         public IConstructorPiece? SelectedPiece
@@ -98,20 +110,18 @@ namespace ChessWPF.ViewModels
             EnableSelectingPiecesFromBoard();
         }
 
-        public void EnableSelectingPiecesFromBoard()
+        private void EnableSelectingPiecesFromBoard()
         {
             ChangeSelectedPiece(null);
             var flattenedCells = ConstructorCellViewModels.SelectMany(fc => fc).ToList();
             flattenedCells.Where(fc => fc.ConstructorCell.ConstructorBoardPiece != null).ToList().ForEach(fc => fc.UpdateCanBeSelected(this.GetType(), true));
         }
 
-        public void DisableSelectingPiecesFromBoard()
+        private void DisableSelectingPiecesFromBoard()
         {
             var flattenedCells = ConstructorCellViewModels.SelectMany(fc => fc).ToList();
             flattenedCells.Where(fc => fc.ConstructorCell.ConstructorBoardPiece != null).ToList().ForEach(fc => fc.UpdateCanBeSelected(this.GetType(), false));
         }
-
-
 
         private bool[] GetCastlingRightsFromBoardConstructor()
         {
@@ -130,7 +140,7 @@ namespace ChessWPF.ViewModels
 
         private void UpdateCastlingPosibilities(object? sender, EventArgs e)
         {
-            BoardConstructorMenuViewModel.UpdateCastlingPosiblities(BoardConstructor.CastlingPosibilities);
+            BoardConstructorMenuViewModel.UpdateCastlingPosiblities(BoardConstructor.CastlingPossibilities);
         }
 
         private void CreateConstructorCellPieceViewModels()
@@ -148,7 +158,7 @@ namespace ChessWPF.ViewModels
             foreach (var piece in BoardConstructor.ConstructorPieces[color])
             {
                 var constructorPieceViewModel = new ConstructorMenuPieceViewModel(piece);
-                constructorPieceViewModel.SelectConstructorPiece += SelectConstructorPieceChanged;
+                constructorPieceViewModel.SelectConstructorPiece += SelectFromMenuChanged;
                 viewModels.Add(constructorPieceViewModel);
             }
             return viewModels;
@@ -180,18 +190,19 @@ namespace ChessWPF.ViewModels
         {
             ConstructorCellViewModels[row][col] = new ConstructorCellViewModel(BoardConstructor.ConstructorCells[row, col], color);
             ConstructorCellViewModels[row][col].UpdateConstructorCellViewModel += UpdateConstructionCellViewModel;
-            ConstructorCellViewModels[row][col].SelectPieceFromConstructorCellViewModelCell += SelectPieceFromConstructorCellViewModel;
+            ConstructorCellViewModels[row][col].SelectPieceFromConstructorCellViewModelCell += SelectPieceFromBoardChanged;
         }
 
-        private void SelectPieceFromConstructorCellViewModel(object? sender, SelectPieceFromConstructorCellViewModelEventArgs e)
+        private void SelectPieceFromBoardChanged(object? sender, SelectPieceFromConstructorCellViewModelEventArgs e)
         {
             ChangeSelectedPiece(e.ConstructorPiece);
             DisableSelectingPiecesFromBoard();
         }
 
-        private void SelectConstructorPieceChanged(object? sender, SelectMenuPieceEventArgs e)
+        private void SelectFromMenuChanged(object? sender, SelectMenuPieceEventArgs e)
         {
             ChangeSelectedPiece(e.MenuPiece);
+            DisableSelectingPiecesFromBoard();
         }
 
         private void ChangeSelectedPiece(IConstructorPiece? constructorPiece)
@@ -201,20 +212,39 @@ namespace ChessWPF.ViewModels
 
         private void UpdateConstructionCellViewModel(object? sender, UpdateConstructorCellViewModelEventArgs e)
         {
-            BoardConstructor.UpdateCellPiece(e.Row, e.Col, SelectedPiece);
-
-            if (SelectedPiece != null && SelectedPiece is ConstructorBoardPiece)
+            if (SelectedPiece != null)
             {
-                var constructorBoardPiece = SelectedPiece as ConstructorBoardPiece;
-                if (constructorBoardPiece!.Row != e.Row || constructorBoardPiece.Col != e.Col)
+                if (SelectedPiece is ConstructorBoardPiece)
                 {
-                    BoardConstructor.UpdateCellPiece(constructorBoardPiece.Row, constructorBoardPiece.Col, null);
-                    EnableSelectingPiecesFromBoard();
+                    BoardConstructor.UpdateCellPiece(e.Row, e.Col, SelectedPiece);
+                    var constructorBoardPiece = SelectedPiece as ConstructorBoardPiece;
+                    if (constructorBoardPiece!.Row != e.Row || constructorBoardPiece.Col != e.Col)
+                    {
+                        BoardConstructor.UpdateCellPiece(constructorBoardPiece.Row, constructorBoardPiece.Col, null);
+                        EnableSelectingPiecesFromBoard();
+                    }
+                    else
+                    {
+                        DisableSelectingPiecesFromBoard();
+                    }
                 }
-                else
+                if (SelectedPiece is ConstructorMenuPiece)
                 {
-                    DisableSelectingPiecesFromBoard();
+                    var constructorMenuPiece = SelectedPiece as ConstructorMenuPiece;
+                    if (constructorMenuPiece!.Color == BoardConstructor.ConstructorCells[e.Row, e.Col].ConstructorBoardPiece?.Color
+                        && constructorMenuPiece.PieceType == BoardConstructor.ConstructorCells[e.Row, e.Col].ConstructorBoardPiece?.PieceType)
+                    {
+                        BoardConstructor.UpdateCellPiece(e.Row, e.Col, null);
+                    }
+                    else
+                    {
+                        BoardConstructor.UpdateCellPiece(e.Row, e.Col, SelectedPiece);
+                    }
                 }
+            }
+            else
+            {
+                BoardConstructor.UpdateCellPiece(e.Row, e.Col, null);
             }
         }
     }

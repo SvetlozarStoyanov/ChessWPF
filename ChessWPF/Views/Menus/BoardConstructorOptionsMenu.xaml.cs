@@ -26,5 +26,11 @@ namespace ChessWPF.Views.Menus
             turnColorsComboBox.Items.Clear();
             turnColorsComboBox.ItemsSource = (DataContext as BoardConstructorMenuViewModel)!.TurnColors;
         }
+
+        private void enPassantComboBox_Loaded(object sender, RoutedEventArgs e)
+        {
+            enPassantComboBox.Items.Clear();
+            enPassantComboBox.ItemsSource = (DataContext as BoardConstructorMenuViewModel)!.EnPassantPossibilities;
+        }
     }
 }

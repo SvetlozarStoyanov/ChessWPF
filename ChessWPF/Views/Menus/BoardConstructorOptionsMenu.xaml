@@ -50,16 +50,16 @@
                 <Label FontSize="25">White</Label>
                 <CheckBox Command="{Binding SetCastlingRightsCommand}"
                           IsChecked="{Binding CastlingRights[0], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                          IsEnabled="{Binding CastlingPosibilities[0]}"
-                          IsEnabledChanged="CheckBox_IsEnabledChanged"
-                          VerticalAlignment="Center" HorizontalAlignment="Center">
-                    0-0-0</CheckBox>
-                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
-                          IsChecked="{Binding CastlingRights[1], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                          IsEnabled="{Binding CastlingPosibilities[1]}"
+                          IsEnabled="{Binding CastlingPossibilities[0]}"
                           IsEnabledChanged="CheckBox_IsEnabledChanged"
                           VerticalAlignment="Center" HorizontalAlignment="Center">
                     0-0</CheckBox>
+                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
+                          IsChecked="{Binding CastlingRights[1], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                          IsEnabled="{Binding CastlingPossibilities[1]}"
+                          IsEnabledChanged="CheckBox_IsEnabledChanged"
+                          VerticalAlignment="Center" HorizontalAlignment="Center">
+                    0-0-0</CheckBox>
             </StackPanel>
         </Grid>
         <Grid Grid.Row="4">
@@ -72,22 +72,34 @@
                 <Label  FontSize="25">Black</Label>
                 <CheckBox Command="{Binding SetCastlingRightsCommand}" 
                           IsChecked="{Binding CastlingRights[2], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                          IsEnabled="{Binding CastlingPosibilities[2]}"
-                          IsEnabledChanged="CheckBox_IsEnabledChanged"
-                          VerticalAlignment="Center" HorizontalAlignment="Center">
-                    0-0-0</CheckBox>
-                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
-                          IsChecked="{Binding CastlingRights[3], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
-                          IsEnabled="{Binding CastlingPosibilities[3]}"
+                          IsEnabled="{Binding CastlingPossibilities[2]}"
                           IsEnabledChanged="CheckBox_IsEnabledChanged"
                           VerticalAlignment="Center" HorizontalAlignment="Center">
                     0-0</CheckBox>
+                <CheckBox Command="{Binding SetCastlingRightsCommand}" 
+                          IsChecked="{Binding CastlingRights[3], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
+                          IsEnabled="{Binding CastlingPossibilities[3]}"
+                          IsEnabledChanged="CheckBox_IsEnabledChanged"
+                          VerticalAlignment="Center" HorizontalAlignment="Center">
+                    0-0-0</CheckBox>
             </StackPanel>
         </Grid>
         <StackPanel Grid.Row="5" Orientation="Horizontal">
 
             <Label HorizontalAlignment="Left" VerticalAlignment="Center"  FontSize="25px" FontWeight="DemiBold" >En Passant</Label>
-            <ComboBox VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"></ComboBox>
+            <ComboBox x:Name="enPassantComboBox" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"
+                      Loaded="enPassantComboBox_Loaded" SelectedItem="{Binding SelectedEnPassantCoordinates}"
+                      
+                      >
+                <ComboBox.ItemTemplate>
+                    <DataTemplate>
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="{Binding AsText}"></TextBlock>
+                        </StackPanel>
+                    </DataTemplate>
+                </ComboBox.ItemTemplate>
+                
+            </ComboBox>
         </StackPanel>
     </Grid>
 </UserControl>

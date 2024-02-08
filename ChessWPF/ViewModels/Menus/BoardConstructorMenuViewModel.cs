@@ -1,8 +1,11 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Cells;
+using ChessWPF.Models.Pieces.Enums;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
@@ -10,27 +13,33 @@ namespace ChessWPF.ViewModels
     public class BoardConstructorMenuViewModel : ViewModelBase
     {
         private PieceColor selectedTurnColor;
+        private CellCoordinates? selectedEnPassantCoordinates;
         private ObservableCollection<PieceColor> turnColors;
+        private ObservableCollection<CellCoordinates?> enPassantPossibilities;
         private bool[] castlingRights;
-        private bool[] castlingPosibilities;
+        private bool[] castlingPossibilities;
 
-        public BoardConstructorMenuViewModel(bool[] castlingRights, bool[] castlingPosibilities)
+        public BoardConstructorMenuViewModel(bool[] castlingRights,
+            bool[] castlingPosibilities,
+            HashSet<CellCoordinates?> enPassantPossibilities)
         {
             CastlingRights = castlingRights;
-            CastlingPosibilities = castlingPosibilities;
+            CastlingPossibilities = castlingPosibilities;
             TurnColors = new ObservableCollection<PieceColor>()
             {
                 PieceColor.White,
                 PieceColor.Black
             };
             SetCastlingRightsCommand = new SetCastlingRightsCommand(this);
+            InitializeEnPassantPossibilities(enPassantPossibilities);
         }
 
         public event UpdateTurnColorEventHandler TurnColorUpdate;
         public delegate void UpdateTurnColorEventHandler(object? sender, TurnColorChangedEventArgs e);
         public event UpdateCastlingRightsEventHandler CastlingRightsUpdate;
         public delegate void UpdateCastlingRightsEventHandler(object? sender, EventArgs e);
-
+        public event UpdateEnPassantCoordinatesEventHandler EnPassantCoordinatesUpdate;
+        public delegate void UpdateEnPassantCoordinatesEventHandler(object? sender, EnPassantCoordinatesChangedEventArgs e);
 
         public PieceColor SelectedTurnColor
         {
@@ -41,7 +50,32 @@ namespace ChessWPF.ViewModels
                 {
                     selectedTurnColor = value;
                     OnPropertyChanged(nameof(SelectedTurnColor));
-                    TurnColorUpdate(null,new TurnColorChangedEventArgs(selectedTurnColor));
+                    TurnColorUpdate(null, new TurnColorChangedEventArgs(selectedTurnColor));
+                }
+            }
+        }
+
+        public CellCoordinates? SelectedEnPassantCoordinates
+        {
+            get { return selectedEnPassantCoordinates; }
+            set
+            {
+                if (value.HasValue && value!.Value.Row == -1 && value.Value.Row == -1)
+                {
+                    selectedEnPassantCoordinates = null;
+                }
+                else
+                {
+                    selectedEnPassantCoordinates = value;
+                }
+                OnPropertyChanged(nameof(SelectedEnPassantCoordinates));
+                if (selectedEnPassantCoordinates.HasValue)
+                {
+                    EnPassantCoordinatesUpdate(null, new EnPassantCoordinatesChangedEventArgs(selectedEnPassantCoordinates.Value));
+                }
+                else
+                {
+                    EnPassantCoordinatesUpdate(null, new EnPassantCoordinatesChangedEventArgs(null));
                 }
             }
         }
@@ -56,13 +90,13 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public bool[] CastlingPosibilities
+        public bool[] CastlingPossibilities
         {
-            get => castlingPosibilities;
+            get => castlingPossibilities;
             private set
             {
-                castlingPosibilities = value;
-                OnPropertyChanged(nameof(CastlingPosibilities));
+                castlingPossibilities = value;
+                OnPropertyChanged(nameof(CastlingPossibilities));
             }
         }
 
@@ -72,11 +106,16 @@ namespace ChessWPF.ViewModels
             private set => turnColors = value;
         }
 
+        public ObservableCollection<CellCoordinates?> EnPassantPossibilities
+        {
+            get => enPassantPossibilities;
+            private set => enPassantPossibilities = value;
+        }
+
         public ICommand SetTurnColorCommand { get; init; }
         public ICommand ClearBoardCommand { get; init; }
         public ICommand SetCastlingRightsCommand { get; init; }
-        public ICommand SetEnPassantSquareCommand { get; init; }
-
+        public ICommand SetEnPassantCoordinatesCommand { get; init; }
 
         public void UpdateCastlingRights()
         {
@@ -85,7 +124,70 @@ namespace ChessWPF.ViewModels
 
         public void UpdateCastlingPosiblities(bool[] castlingPosibilities)
         {
-            CastlingPosibilities = castlingPosibilities;
+            CastlingPossibilities = castlingPosibilities;
+        }
+
+        public void UpdateEnPassantPosibilities(HashSet<CellCoordinates?> enPassantPosibilities)
+        {
+            foreach (var item in enPassantPosibilities)
+            {
+                if (!EnPassantPossibilities.Contains(item))
+                {
+                    try
+                    {
+                        EnPassantPossibilities.Add(item);
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
+            }
+            var cellCoordinatesToRemove = new HashSet<CellCoordinates?>();
+            foreach (var item in EnPassantPossibilities)
+            {
+                if (item!.Value.Row != -1 && !enPassantPosibilities.Contains(item))
+                {
+                    cellCoordinatesToRemove.Add(item);
+                }
+            }
+
+            foreach (var item in cellCoordinatesToRemove)
+            {
+                try
+                {
+                    EnPassantPossibilities.Remove(item);
+                }
+                catch (Exception ex)
+                {
+
+                }
+            }
+
+            if (SelectedEnPassantCoordinates != null && !EnPassantPossibilities.Any(cc => cc.Equals(SelectedEnPassantCoordinates)))
+            {
+                SelectedEnPassantCoordinates = null;
+            }
+        }
+
+        private void InitializeEnPassantPossibilities(HashSet<CellCoordinates?> enPassantPosibilities)
+        {
+            EnPassantPossibilities = new ObservableCollection<CellCoordinates?>()
+            {
+                new CellCoordinates(-1,-1)
+            };
+            foreach (var item in enPassantPosibilities)
+            {
+                try
+                {
+                    EnPassantPossibilities.Add(item);
+                }
+                catch (Exception ex)
+                {
+
+                    throw;
+                }
+            }
         }
     }
 }
