@@ -1,7 +1,7 @@
 ﻿using ChessWPF.Contracts.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Pieces.Enums;
 
-namespace ChessWPF.Models.Data.Pieces
+namespace ChessWPF.Models.Pieces
 {
     public class ConstructorBoardPiece : IConstructorPiece
     {

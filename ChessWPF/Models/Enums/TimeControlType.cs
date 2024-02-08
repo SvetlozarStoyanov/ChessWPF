@@ -1,4 +1,4 @@
-﻿namespace ChessWPF.Models.Data.Enums
+﻿namespace ChessWPF.Models.Enums
 {
     public enum TimeControlType
     {

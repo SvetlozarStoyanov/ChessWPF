@@ -1,7 +1,7 @@
 ﻿using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Clocks;
-using ChessWPF.Models.Data.Options;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Clocks;
+using ChessWPF.Models.Options;
+using ChessWPF.Models.Pieces.Enums;
 using System;
 using System.ComponentModel;
 using System.Windows.Media;

@@ -1,4 +1,4 @@
-﻿using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Models.Pieces.Enums;
 using ChessWPF.Models.Positions;
 using System;
 using System.Linq;

@@ -1,6 +1,7 @@
-﻿using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Models.Cells;
+using ChessWPF.Models.Pieces.Enums;
 
-namespace ChessWPF.Models.Data.Board
+namespace ChessWPF.Models.Moves
 {
     public sealed class Move
     {

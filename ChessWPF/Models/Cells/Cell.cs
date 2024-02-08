@@ -1,8 +1,8 @@
 ﻿using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Pieces;
+using ChessWPF.Models.Pieces;
 using System;
 
-namespace ChessWPF.Models.Data.Board
+namespace ChessWPF.Models.Cells
 {
     public sealed class Cell
     {

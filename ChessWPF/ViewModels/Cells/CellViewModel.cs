@@ -1,6 +1,6 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Board;
+using ChessWPF.Models.Cells;
 using ChessWPF.ViewModels.Enums;
 using System;
 using System.Collections.Generic;

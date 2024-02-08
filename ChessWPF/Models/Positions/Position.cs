@@ -1,5 +1,5 @@
-﻿using ChessWPF.Models.Data.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Models.Pieces;
+using ChessWPF.Models.Pieces.Enums;
 using System;
 using System.Collections.Generic;
 

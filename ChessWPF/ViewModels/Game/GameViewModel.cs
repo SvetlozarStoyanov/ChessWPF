@@ -1,8 +1,9 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Options;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Boards;
+using ChessWPF.Models.Moves;
+using ChessWPF.Models.Options;
+using ChessWPF.Models.Pieces.Enums;
 using ChessWPF.Stores;
 using System;
 using System.Collections.Generic;

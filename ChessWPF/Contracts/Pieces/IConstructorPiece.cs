@@ -1,4 +1,4 @@
-﻿using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Models.Pieces.Enums;
 
 namespace ChessWPF.Contracts.Pieces
 {

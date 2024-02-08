@@ -1,9 +1,8 @@
-﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Models.Pieces.Enums;
 using System;
 using System.Collections.Generic;
 
-namespace ChessWPF.Models.Data.Pieces
+namespace ChessWPF.Models.Pieces
 {
     public sealed class King : Piece
     {

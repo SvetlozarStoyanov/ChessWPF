@@ -1,5 +1,5 @@
 ﻿using ChessWPF.Game;
-using ChessWPF.Models.Data.Options;
+using ChessWPF.Models.Options;
 using ChessWPF.Models.Positions;
 using ChessWPF.ViewModels;
 using System;

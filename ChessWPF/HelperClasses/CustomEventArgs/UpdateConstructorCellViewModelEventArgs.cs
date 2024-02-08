@@ -1,6 +1,4 @@
-﻿using ChessWPF.Models.Data.Pieces;
-
-namespace ChessWPF.HelperClasses.CustomEventArgs
+﻿namespace ChessWPF.HelperClasses.CustomEventArgs
 {
     public class UpdateConstructorCellViewModelEventArgs
     {

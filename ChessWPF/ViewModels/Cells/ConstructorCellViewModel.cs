@@ -1,7 +1,6 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
+using ChessWPF.Models.Cells;
 using System;
 using System.Windows.Input;
 using System.Windows.Media;
@@ -106,7 +105,7 @@ namespace ChessWPF.ViewModels
             }
             else
             {
-                throw new InvalidOperationException("Can only call from BoardConstructorViewModel");
+                throw new InvalidOperationException($"Can only be called from {nameof(BoardConstructorViewModel)}");
             }
         }
     }

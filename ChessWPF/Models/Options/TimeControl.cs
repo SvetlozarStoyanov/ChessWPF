@@ -1,7 +1,7 @@
 ﻿using ChessWPF.HelperClasses.Exceptions;
-using ChessWPF.Models.Data.Enums;
+using ChessWPF.Models.Enums;
 
-namespace ChessWPF.Models.Data.Options
+namespace ChessWPF.Models.Options
 {
     public class TimeControl
     {

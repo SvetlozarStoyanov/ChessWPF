@@ -1,10 +1,12 @@
-﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces.Enums;
-using ChessWPF.Models.Data.Pieces;
+﻿
 using System.Collections.Generic;
 using System.Text;
 using System;
 using System.Linq;
+using ChessWPF.Models.Moves;
+using ChessWPF.Models.Pieces.Enums;
+using ChessWPF.Models.Pieces;
+using ChessWPF.Models.Cells;
 
 namespace ChessWPF.Game
 {

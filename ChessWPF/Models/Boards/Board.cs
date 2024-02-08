@@ -1,12 +1,14 @@
 ﻿using ChessWPF.Constants;
 using ChessWPF.Game;
-using ChessWPF.Models.Data.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Cells;
+using ChessWPF.Models.Moves;
+using ChessWPF.Models.Pieces;
+using ChessWPF.Models.Pieces.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 
-namespace ChessWPF.Models.Data.Board
+namespace ChessWPF.Models.Boards
 {
     public sealed class Board
     {

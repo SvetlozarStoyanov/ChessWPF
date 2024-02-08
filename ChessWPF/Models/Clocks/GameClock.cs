@@ -1,11 +1,12 @@
 ﻿using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Options;
-using ChessWPF.Models.Data.Pieces.Enums;
+using ChessWPF.Models.Options;
+using ChessWPF.Models.Enums;
 using System;
 using System.Diagnostics;
 using System.Windows.Threading;
+using ChessWPF.Models.Pieces.Enums;
 
-namespace ChessWPF.Models.Data.Clocks
+namespace ChessWPF.Models.Clocks
 {
     public sealed class GameClock
     {

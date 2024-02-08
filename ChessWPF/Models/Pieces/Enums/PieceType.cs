@@ -1,4 +1,4 @@
-﻿namespace ChessWPF.Models.Data.Pieces.Enums
+﻿namespace ChessWPF.Models.Pieces.Enums
 {
     public enum PieceType
     {

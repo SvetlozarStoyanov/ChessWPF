@@ -1,8 +1,7 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.Models.Data.Enums;
-using ChessWPF.Models.Data.Options;
-using System;
+using ChessWPF.Models.Enums;
+using ChessWPF.Models.Options;
 using System.Windows.Input;
 
 namespace ChessWPF.ViewModels
