@@ -16,6 +16,7 @@ namespace ChessWPF.ViewModels
 {
     public class BoardConstructorViewModel : ViewModelBase
     {
+        private bool deleteEnabled;
         private IConstructorPiece? selectedPiece;
         private readonly BoardConstructor boardConstructor;
         private readonly GameStateStore gameStateStore;
@@ -44,14 +45,16 @@ namespace ChessWPF.ViewModels
             EnableSelectingPiecesFromBoard();
         }
 
-        private void UpdateEnPassantPosibilities(object? sender, EventArgs e)
+        public bool SelectorEnabled
         {
-            BoardConstructorMenuViewModel.UpdateEnPassantPosibilities(BoardConstructor.EnPassantPossibilities);
+            get => selectorEnabled;
+            private set => selectorEnabled = value;
         }
 
-        private void UpdateEnPassantCoordinates(object? sender, EnPassantCoordinatesChangedEventArgs e)
+        public bool DeleteEnabled
         {
-            BoardConstructor.UpdateEnPassantCoordinates(e.CellCoordinates);
+            get => deleteEnabled;
+            private set => deleteEnabled = value;
         }
 
         public IConstructorPiece? SelectedPiece
@@ -100,12 +103,16 @@ namespace ChessWPF.ViewModels
 
         public void SelectDeletePiece()
         {
+            SelectorEnabled = false;
+            DeleteEnabled = true;
             ChangeSelectedPiece(null);
             DisableSelectingPiecesFromBoard();
         }
 
         public void SelectPieceSelector()
         {
+            SelectorEnabled = true;
+            DeleteEnabled = false;
             ChangeSelectedPiece(null);
             EnableSelectingPiecesFromBoard();
         }
