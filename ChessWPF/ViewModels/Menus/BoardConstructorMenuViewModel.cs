@@ -129,9 +129,23 @@ namespace ChessWPF.ViewModels
             CastlingRightsUpdate(this, EventArgs.Empty);
         }
 
-        public void UpdateCastlingPosiblities(bool[] castlingPosibilities)
+        public void UpdateCastlingRightsBackend(bool[] castlingRights)
         {
-            CastlingPossibilities = castlingPosibilities;
+            for (int i = 0; i < CastlingRights.Count; i++)
+            {
+                CastlingRights[i] = castlingRights[i];
+            }
+            //OnPropertyChanged(nameof(CastlingRights));
+        }
+
+        public void UpdateCastlingPossiblities(bool[] castlingPossibilities)
+        {
+            for (int i = 0; i < CastlingPossibilities.Count; i++)
+            {
+                CastlingPossibilities[i] = castlingPossibilities[i];
+            }
+            //OnPropertyChanged(nameof(CastlingPossibilities));
+            //CastlingPossibilities = castlingPossibilities;
         }
 
         public void UpdateEnPassantPosibilities(HashSet<CellCoordinates?> enPassantPosibilities)
