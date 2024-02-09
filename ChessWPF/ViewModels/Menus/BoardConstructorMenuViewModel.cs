@@ -20,8 +20,9 @@ namespace ChessWPF.ViewModels
         private ObservableCollection<bool> castlingPossibilities;
 
         public BoardConstructorMenuViewModel(bool[] castlingRights,
-            bool[] castlingPosibilities,
-            HashSet<CellCoordinates?> enPassantPossibilities)
+            bool[] castlingPossibilities,
+            HashSet<CellCoordinates?> enPassantPossibilities,
+            PieceColor turnColor)
         {
             CastlingRights = new ObservableCollection<bool>(castlingRights);
             CastlingPossibilities = new ObservableCollection<bool>(castlingPossibilities);
@@ -30,6 +31,7 @@ namespace ChessWPF.ViewModels
                 PieceColor.White,
                 PieceColor.Black
             };
+            SelectedTurnColor = turnColor;
             SetCastlingRightsCommand = new SetCastlingRightsCommand(this);
             ResetBoardToDefaultCommand = new ResetBoardToDefaultCommand(this);
             InitializeEnPassantPossibilities(enPassantPossibilities);
