@@ -17,8 +17,11 @@ namespace ChessWPF.Views.Menus
         private void CheckBox_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             var checkbox = sender as CheckBox;
-            checkbox!.IsChecked = false;
-            checkbox.Command?.Execute(null);
+            if (!checkbox!.IsEnabled)
+            {
+                checkbox!.IsChecked = false;
+                checkbox.Command?.Execute(null);
+            }
         }
 
         private void turnColorsComboBox_Loaded(object sender, RoutedEventArgs e)
