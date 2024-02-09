@@ -18,7 +18,7 @@ namespace ChessWPF.Game
             position.SimplifiedCells = piecesAndSimplifiedCells.Item2;
             position.TurnColor = fenAnnotationSplit[1] == "w" ? PieceColor.White : PieceColor.Black;
             position.CastlingRights = GetCastlingRights(fenAnnotationSplit[2]);
-            position.EnPassantCoordinates = fenAnnotationSplit[3] != "-" ? GetEnPassantCoordinates(fenAnnotationSplit[4]) : null;
+            position.EnPassantCoordinates = fenAnnotationSplit[3] != "-" ? GetEnPassantCoordinates(fenAnnotationSplit[3]) : null;
             position.HalfMoveCount = int.Parse(fenAnnotationSplit[4]);
             position.MoveNumber = int.Parse(fenAnnotationSplit[5]);
             position.FenAnnotation = fenAnnotation;
