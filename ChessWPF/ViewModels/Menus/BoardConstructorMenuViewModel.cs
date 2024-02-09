@@ -55,7 +55,7 @@ namespace ChessWPF.ViewModels
                 {
                     selectedTurnColor = value;
                     OnPropertyChanged(nameof(SelectedTurnColor));
-                    TurnColorUpdate(null, new TurnColorChangedEventArgs(selectedTurnColor));
+                    TurnColorUpdate?.Invoke(null, new TurnColorChangedEventArgs(selectedTurnColor));
                 }
             }
         }
@@ -118,7 +118,6 @@ namespace ChessWPF.ViewModels
         }
 
         public ICommand SetTurnColorCommand { get; init; }
-        public ICommand ClearBoardCommand { get; init; }
         public ICommand SetCastlingRightsCommand { get; init; }
         public ICommand SetEnPassantCoordinatesCommand { get; init; }
         public ICommand ResetBoardToDefaultCommand { get; init; }
