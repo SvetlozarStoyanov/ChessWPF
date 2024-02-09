@@ -17,6 +17,7 @@ namespace ChessWPF.ViewModels
     public class BoardConstructorViewModel : ViewModelBase
     {
         private bool deleteEnabled;
+        private bool selectorEnabled = true;
         private IConstructorPiece? selectedPiece;
         private readonly BoardConstructor boardConstructor;
         private readonly GameStateStore gameStateStore;
@@ -115,6 +116,22 @@ namespace ChessWPF.ViewModels
             DeleteEnabled = false;
             ChangeSelectedPiece(null);
             EnableSelectingPiecesFromBoard();
+        }
+
+        private void ResetBoard(object? sender, EventArgs e)
+        {
+            DisableSelectingPiecesFromBoard();
+            BoardConstructor.ResetBoardToDefault();
+            if (SelectorEnabled)
+            {
+                SelectPieceSelector();
+            }
+            else if (DeleteEnabled)
+            {
+                SelectDeletePiece();
+            }
+
+            BoardConstructorMenuViewModel.SelectedTurnColor = BoardConstructor.TurnColor;
         }
 
         private void EnableSelectingPiecesFromBoard()
