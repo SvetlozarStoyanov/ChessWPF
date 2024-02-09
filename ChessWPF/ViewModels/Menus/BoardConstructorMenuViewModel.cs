@@ -16,15 +16,15 @@ namespace ChessWPF.ViewModels
         private CellCoordinates? selectedEnPassantCoordinates;
         private ObservableCollection<PieceColor> turnColors;
         private ObservableCollection<CellCoordinates?> enPassantPossibilities;
-        private bool[] castlingRights;
-        private bool[] castlingPossibilities;
+        private ObservableCollection<bool> castlingRights;
+        private ObservableCollection<bool> castlingPossibilities;
 
         public BoardConstructorMenuViewModel(bool[] castlingRights,
             bool[] castlingPosibilities,
             HashSet<CellCoordinates?> enPassantPossibilities)
         {
-            CastlingRights = castlingRights;
-            CastlingPossibilities = castlingPosibilities;
+            CastlingRights = new ObservableCollection<bool>(castlingRights);
+            CastlingPossibilities = new ObservableCollection<bool>(castlingPossibilities);
             TurnColors = new ObservableCollection<PieceColor>()
             {
                 PieceColor.White,
@@ -80,7 +80,7 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public bool[] CastlingRights
+        public ObservableCollection<bool> CastlingRights
         {
             get => castlingRights;
             private set
@@ -90,7 +90,7 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public bool[] CastlingPossibilities
+        public ObservableCollection<bool> CastlingPossibilities
         {
             get => castlingPossibilities;
             private set
