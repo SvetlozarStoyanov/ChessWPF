@@ -31,6 +31,7 @@ namespace ChessWPF.ViewModels
                 PieceColor.Black
             };
             SetCastlingRightsCommand = new SetCastlingRightsCommand(this);
+            ResetBoardToDefaultCommand = new ResetBoardToDefaultCommand(this);
             InitializeEnPassantPossibilities(enPassantPossibilities);
         }
 
@@ -40,6 +41,8 @@ namespace ChessWPF.ViewModels
         public delegate void UpdateCastlingRightsEventHandler(object? sender, EventArgs e);
         public event UpdateEnPassantCoordinatesEventHandler EnPassantCoordinatesUpdate;
         public delegate void UpdateEnPassantCoordinatesEventHandler(object? sender, EnPassantCoordinatesChangedEventArgs e);
+        public event ResetBoardEventHandler ResetToDefault;
+        public delegate void ResetBoardEventHandler(object? sender, EventArgs e);
 
         public PieceColor SelectedTurnColor
         {
@@ -116,6 +119,8 @@ namespace ChessWPF.ViewModels
         public ICommand ClearBoardCommand { get; init; }
         public ICommand SetCastlingRightsCommand { get; init; }
         public ICommand SetEnPassantCoordinatesCommand { get; init; }
+        public ICommand ResetBoardToDefaultCommand { get; init; }
+        public ICommand ClearBoardCommand { get; init; }
 
         public void UpdateCastlingRights()
         {
@@ -168,6 +173,11 @@ namespace ChessWPF.ViewModels
             {
                 SelectedEnPassantCoordinates = null;
             }
+        }
+
+        public void ResetBoard()
+        {
+            ResetToDefault?.Invoke(this, EventArgs.Empty);
         }
 
         private void InitializeEnPassantPossibilities(HashSet<CellCoordinates?> enPassantPosibilities)
