@@ -1,5 +1,6 @@
 ﻿using ChessWPF.Contracts.Pieces;
 using ChessWPF.Game;
+using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Cells;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
@@ -28,8 +29,10 @@ namespace ChessWPF.Models.Boards
             EnPassantPossibilities = new HashSet<CellCoordinates?>();
         }
 
-        public event UpdateCastlingPosibilitiesEventHandler CastlingPosibilitiesUpdate;
+        public event UpdateCastlingPosibilitiesEventHandler CastlingPossibilitiesUpdate;
         public delegate void UpdateCastlingPosibilitiesEventHandler(object? sender, EventArgs e);
+        public event UpdateCastlingRightsEventHandler CastlingRightsUpdate;
+        public delegate void UpdateCastlingRightsEventHandler(object? sender, UpdateCastlingRightsEventArgs e);
         public event UpdateEnPassantPosibilitiesEventHandler EnPassantPosibilitiesUpdate;
         public delegate void UpdateEnPassantPosibilitiesEventHandler(object? sender, EventArgs e);
 
@@ -95,6 +98,28 @@ namespace ChessWPF.Models.Boards
             }
         }
 
+        public void ResetBoardToDefault()
+        {
+            var position = PositionCreator.CreateDefaultPosition();
+            ClearBoard();
+            ImportPosition(position);
+            UpdateTurnColor(position.TurnColor);
+            UpdateCastlingRightsBackend();
+            CastlingPossibilitiesUpdate?.Invoke(null, EventArgs.Empty);
+        }
+
+        public void ClearBoard()
+        {
+            for (int row = 0; row < ConstructorCells.GetLength(0); row++)
+            {
+                for (int col = 0; col < ConstructorCells.GetLength(1); col++)
+                {
+                    ConstructorCells[row, col].UpdatePiece(null);
+                    SimplifiedCells[row, col] = '.';
+                }
+            }
+        }
+
         public void ImportPosition(Position position)
         {
             foreach (var piece in position.Pieces.Keys.SelectMany(color => position.Pieces[color]))
@@ -105,13 +130,9 @@ namespace ChessWPF.Models.Boards
             }
             CastlingRights = position.CastlingRights;
             CastlingPossibilities = new bool[4];
-            UpdateCastlingPosibilities();
-            UpdateEnPassantPosibilities();
-        }
-
-        public void UpdateCastlingRights(bool[] castlingRights)
-        {
-            CastlingRights = (castlingRights[0], castlingRights[1], castlingRights[2], castlingRights[3]);
+            UpdateTurnColor(position.TurnColor);
+            UpdateCastlingPossibilities();
+            UpdateEnPassantPossibilities();
         }
 
         public Position ExportPosition()
@@ -120,6 +141,11 @@ namespace ChessWPF.Models.Boards
             position.Pieces = FindPieces();
 
             return position;
+        }
+
+        public void UpdateCastlingRightsFromUI(bool[] castlingRights)
+        {
+            CastlingRights = (castlingRights[0], castlingRights[1], castlingRights[2], castlingRights[3]);
         }
 
         public void UpdateCellPiece(int row, int col, IConstructorPiece? constructorPiece)
@@ -135,19 +161,19 @@ namespace ChessWPF.Models.Boards
             }
             if ((row == 0 || row == 7) && (col == 0 || col == 4 || col == 7))
             {
-                UpdateCastlingPosibilities();
+                UpdateCastlingPossibilities();
             }
             if (((row == 3 || row == 2 || row == 1) && TurnColor == PieceColor.White)
                 || ((row == 4 || row == 5 || row == 6) && TurnColor == PieceColor.Black))
             {
-                UpdateEnPassantPosibilities();
+                UpdateEnPassantPossibilities();
             }
         }
 
         public void UpdateTurnColor(PieceColor turnColor)
         {
             TurnColor = turnColor;
-            UpdateEnPassantPosibilities();
+            UpdateEnPassantPossibilities();
         }
 
         public void UpdateEnPassantCoordinates(CellCoordinates? cellCoordinates)
@@ -228,44 +254,57 @@ namespace ChessWPF.Models.Boards
             return pieces;
         }
 
-        private void UpdateCastlingPosibilities()
+        private void UpdateCastlingPossibilities()
         {
             var isChanged = false;
             var condition = simplifiedCells[7, 4] == 'K' && simplifiedCells[7, 7] == 'R';
             if (CastlingPossibilities[0] != condition)
             {
-                CastlingPossibilities[0] = condition;
                 isChanged = true;
             }
+            CastlingPossibilities[0] = condition;
 
             condition = simplifiedCells[7, 4] == 'K' && simplifiedCells[7, 0] == 'R';
             if (CastlingPossibilities[1] != condition)
             {
-                CastlingPossibilities[1] = condition;
                 isChanged = true;
             }
+            CastlingPossibilities[1] = condition;
 
             condition = simplifiedCells[0, 4] == 'k' && simplifiedCells[0, 7] == 'r';
             if (CastlingPossibilities[2] != condition)
             {
-                CastlingPossibilities[2] = condition;
                 isChanged = true;
             }
+            CastlingPossibilities[2] = condition;
 
             condition = simplifiedCells[0, 4] == 'k' && simplifiedCells[0, 0] == 'r';
             if (CastlingPossibilities[3] != condition)
             {
-                CastlingPossibilities[3] = condition;
                 isChanged = true;
             }
+            CastlingPossibilities[3] = condition;
 
             if (isChanged)
             {
-                CastlingPosibilitiesUpdate?.Invoke(null, EventArgs.Empty);
+                CastlingPossibilitiesUpdate?.Invoke(null, EventArgs.Empty);
             }
         }
 
-        private void UpdateEnPassantPosibilities()
+        private void UpdateCastlingRightsBackend()
+        {
+            CastlingRightsUpdate?.Invoke(
+                null,
+                new UpdateCastlingRightsEventArgs(new bool[4]
+            {
+                CastlingRights.Item1,
+                CastlingRights.Item2,
+                CastlingRights.Item3,
+                CastlingRights.Item4
+            }));
+        }
+
+        private void UpdateEnPassantPossibilities()
         {
             EnPassantPossibilities.Clear();
             if (TurnColor == PieceColor.White)
@@ -296,6 +335,7 @@ namespace ChessWPF.Models.Boards
             }
             EnPassantPosibilitiesUpdate?.Invoke(null, EventArgs.Empty);
         }
+
 
     }
 }
