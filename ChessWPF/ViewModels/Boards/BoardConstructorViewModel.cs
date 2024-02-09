@@ -201,7 +201,7 @@ namespace ChessWPF.ViewModels
             foreach (var piece in BoardConstructor.ConstructorPieces[color])
             {
                 var constructorPieceViewModel = new ConstructorMenuPieceViewModel(piece);
-                constructorPieceViewModel.SelectConstructorPiece += SelectFromMenuChanged;
+                constructorPieceViewModel.SelectConstructorPiece += SelectPieceFromMenuChanged;
                 viewModels.Add(constructorPieceViewModel);
             }
             return viewModels;
@@ -242,8 +242,10 @@ namespace ChessWPF.ViewModels
             DisableSelectingPiecesFromBoard();
         }
 
-        private void SelectFromMenuChanged(object? sender, SelectMenuPieceEventArgs e)
+        private void SelectPieceFromMenuChanged(object? sender, SelectMenuPieceEventArgs e)
         {
+            SelectorEnabled = false;
+            DeleteEnabled = false;
             ChangeSelectedPiece(e.MenuPiece);
             DisableSelectingPiecesFromBoard();
         }
