@@ -37,12 +37,16 @@ namespace ChessWPF.ViewModels
             SelectDeletePieceCommand = new SelectDeletePieceCommand(this);
             SelectPieceSelectorCommand = new SelectPieceSelectorCommand(this);
             BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel(GetCastlingRightsFromBoardConstructor(),
-                BoardConstructor.CastlingPossibilities, BoardConstructor.EnPassantPossibilities);
-            BoardConstructorMenuViewModel.CastlingRightsUpdate += UpdateCastlingRights;
-            BoardConstructor.CastlingPosibilitiesUpdate += UpdateCastlingPosibilities;
+                BoardConstructor.CastlingPossibilities,
+                BoardConstructor.EnPassantPossibilities,
+                BoardConstructor.TurnColor);
+            BoardConstructorMenuViewModel.CastlingRightsUpdate += UpdateCastlingRightsUI;
+            BoardConstructor.CastlingPossibilitiesUpdate += UpdateCastlingPosibilities;
+            BoardConstructor.CastlingRightsUpdate += UpdateCastlingRightsBackend;
             BoardConstructor.EnPassantPosibilitiesUpdate += UpdateEnPassantPosibilities;
             BoardConstructorMenuViewModel.TurnColorUpdate += UpdateTurnColor;
             BoardConstructorMenuViewModel.EnPassantCoordinatesUpdate += UpdateEnPassantCoordinates;
+            BoardConstructorMenuViewModel.ResetToDefault += ResetBoard;
             EnableSelectingPiecesFromBoard();
         }
 
@@ -157,14 +161,29 @@ namespace ChessWPF.ViewModels
             BoardConstructor.UpdateTurnColor(e.TurnColor);
         }
 
-        private void UpdateCastlingRights(object? sender, EventArgs e)
+        private void UpdateCastlingRightsUI(object? sender, EventArgs e)
         {
-            boardConstructor.UpdateCastlingRights((sender as BoardConstructorMenuViewModel)!.CastlingRights);
+            BoardConstructor.UpdateCastlingRightsFromUI((sender as BoardConstructorMenuViewModel)!.CastlingRights.ToArray());
+        }
+
+        private void UpdateCastlingRightsBackend(object? sender, UpdateCastlingRightsEventArgs e)
+        {
+            BoardConstructorMenuViewModel.UpdateCastlingRightsBackend(e.CastlingRights);
         }
 
         private void UpdateCastlingPosibilities(object? sender, EventArgs e)
         {
-            BoardConstructorMenuViewModel.UpdateCastlingPosiblities(BoardConstructor.CastlingPossibilities);
+            BoardConstructorMenuViewModel.UpdateCastlingPossiblities(BoardConstructor.CastlingPossibilities);
+        }
+
+        private void UpdateEnPassantPosibilities(object? sender, EventArgs e)
+        {
+            BoardConstructorMenuViewModel.UpdateEnPassantPosibilities(BoardConstructor.EnPassantPossibilities);
+        }
+
+        private void UpdateEnPassantCoordinates(object? sender, EnPassantCoordinatesChangedEventArgs e)
+        {
+            BoardConstructor.UpdateEnPassantCoordinates(e.CellCoordinates);
         }
 
         private void CreateConstructorCellPieceViewModels()
