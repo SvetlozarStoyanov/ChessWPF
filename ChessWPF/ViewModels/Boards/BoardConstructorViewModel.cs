@@ -46,9 +46,11 @@ namespace ChessWPF.ViewModels
             BoardConstructor.EnPassantPosibilitiesUpdate += UpdateEnPassantPosibilities;
             BoardConstructorMenuViewModel.TurnColorUpdate += UpdateTurnColor;
             BoardConstructorMenuViewModel.EnPassantCoordinatesUpdate += UpdateEnPassantCoordinates;
-            BoardConstructorMenuViewModel.ResetToDefault += ResetBoard;
+            BoardConstructorMenuViewModel.ResetBoardToDefault += ResetBoard;
+            BoardConstructorMenuViewModel.ClearBoard += ClearBoard;
             EnableSelectingPiecesFromBoard();
         }
+
 
         public bool SelectorEnabled
         {
@@ -136,6 +138,16 @@ namespace ChessWPF.ViewModels
             }
 
             BoardConstructorMenuViewModel.SelectedTurnColor = BoardConstructor.TurnColor;
+        }
+
+        private void ClearBoard(object? sender, EventArgs e)
+        {
+            if (SelectorEnabled)
+            {
+                ChangeSelectedPiece(null);
+                DisableSelectingPiecesFromBoard();
+            }
+            BoardConstructor.ClearBoard();
         }
 
         private void EnableSelectingPiecesFromBoard()
