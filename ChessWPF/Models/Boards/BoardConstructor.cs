@@ -345,6 +345,16 @@ namespace ChessWPF.Models.Boards
             EnPassantPosibilitiesUpdate?.Invoke(null, EventArgs.Empty);
         }
 
+        private void ClearCastlingPossibilities()
+        {
+            Array.Fill(CastlingPossibilities, false);
+            CastlingPossibilitiesUpdate?.Invoke(null, EventArgs.Empty);
+        }
 
+        private void ClearEnPassantPossibilities()
+        {
+            EnPassantPossibilities.Clear();
+            EnPassantPosibilitiesUpdate?.Invoke(null, EventArgs.Empty);
+        }
     }
 }
