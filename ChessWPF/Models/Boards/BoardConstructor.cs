@@ -101,7 +101,7 @@ namespace ChessWPF.Models.Boards
         public void ResetBoardToDefault()
         {
             var position = PositionCreator.CreateDefaultPosition();
-            ClearBoard();
+            ClearAllPieces();
             ImportPosition(position);
             UpdateTurnColor(position.TurnColor);
             UpdateCastlingRightsBackend();
@@ -109,6 +109,15 @@ namespace ChessWPF.Models.Boards
         }
 
         public void ClearBoard()
+        {
+            ClearAllPieces();
+            ClearCastlingPossibilities();
+            CastlingRights = (false, false, false, false);
+            ClearEnPassantPossibilities();
+            UpdateCastlingRightsBackend();
+        }
+
+        public void ClearAllPieces()
         {
             for (int row = 0; row < ConstructorCells.GetLength(0); row++)
             {
