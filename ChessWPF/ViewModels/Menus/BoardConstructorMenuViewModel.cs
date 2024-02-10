@@ -34,6 +34,7 @@ namespace ChessWPF.ViewModels
             SelectedTurnColor = turnColor;
             SetCastlingRightsCommand = new SetCastlingRightsCommand(this);
             ResetBoardToDefaultCommand = new ResetBoardToDefaultCommand(this);
+            ClearBoardCommand = new ClearBoardCommand(this);
             InitializeEnPassantPossibilities(enPassantPossibilities);
         }
 
@@ -43,8 +44,11 @@ namespace ChessWPF.ViewModels
         public delegate void UpdateCastlingRightsEventHandler(object? sender, EventArgs e);
         public event UpdateEnPassantCoordinatesEventHandler EnPassantCoordinatesUpdate;
         public delegate void UpdateEnPassantCoordinatesEventHandler(object? sender, EnPassantCoordinatesChangedEventArgs e);
-        public event ResetBoardEventHandler ResetToDefault;
+        public event ResetBoardEventHandler ResetBoardToDefault;
         public delegate void ResetBoardEventHandler(object? sender, EventArgs e);
+        public event ResetBoardEventHandler ClearBoard;
+        public delegate void ClearBoardEventHandler(object? sender, EventArgs e);
+
 
         public PieceColor SelectedTurnColor
         {
@@ -134,7 +138,6 @@ namespace ChessWPF.ViewModels
             {
                 CastlingRights[i] = castlingRights[i];
             }
-            //OnPropertyChanged(nameof(CastlingRights));
         }
 
         public void UpdateCastlingPossiblities(bool[] castlingPossibilities)
@@ -143,8 +146,6 @@ namespace ChessWPF.ViewModels
             {
                 CastlingPossibilities[i] = castlingPossibilities[i];
             }
-            //OnPropertyChanged(nameof(CastlingPossibilities));
-            //CastlingPossibilities = castlingPossibilities;
         }
 
         public void UpdateEnPassantPosibilities(HashSet<CellCoordinates?> enPassantPosibilities)
@@ -192,7 +193,13 @@ namespace ChessWPF.ViewModels
 
         public void ResetBoard()
         {
-            ResetToDefault?.Invoke(this, EventArgs.Empty);
+            ResetBoardToDefault?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void ClearPieces()
+        {
+            //SelectedEnPassantCoordinates = null;
+            ClearBoard?.Invoke(null, EventArgs.Empty);
         }
 
         private void InitializeEnPassantPossibilities(HashSet<CellCoordinates?> enPassantPosibilities)
