@@ -129,6 +129,7 @@ namespace ChessWPF.Models.Boards
             }
         }
 
+
         public void ImportPosition(Position position)
         {
             foreach (var piece in position.Pieces.Keys.SelectMany(color => position.Pieces[color]))
