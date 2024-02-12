@@ -11,14 +11,31 @@ namespace ChessWPF.Models.Positions
         private int moveNumber;
         private string fenAnnotation;
         private PieceColor turnColor;
-        private ValueTuple<bool,bool,bool,bool> castlingRights;
+        private ValueTuple<bool, bool, bool, bool> castlingRights;
         private ValueTuple<int, int>? enPassantCoordinates;
         private Dictionary<PieceColor, List<Piece>> pieces;
         private char[,] simplifiedCells;
 
         public Position()
         {
-            
+
+        }
+
+        public Position(char[,] simplifiedCells,
+            PieceColor turnColor,
+            string fenAnnotation,
+            (bool, bool, bool, bool) castlingRights,
+            (int, int)? enPassantCoordinates,
+            int halfMoveCount = 0,
+            int moveNumber = 1)
+        {
+            SimplifiedCells = simplifiedCells;
+            TurnColor = turnColor;
+            FenAnnotation = fenAnnotation;
+            CastlingRights = castlingRights;
+            EnPassantCoordinates = enPassantCoordinates;
+            HalfMoveCount = halfMoveCount;
+            MoveNumber = moveNumber;
         }
 
         public int HalfMoveCount
