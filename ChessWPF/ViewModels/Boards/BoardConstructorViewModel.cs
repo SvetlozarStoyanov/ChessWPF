@@ -48,9 +48,9 @@ namespace ChessWPF.ViewModels
             BoardConstructorMenuViewModel.EnPassantCoordinatesUpdate += UpdateEnPassantCoordinates;
             BoardConstructorMenuViewModel.ResetBoardToDefault += ResetBoard;
             BoardConstructorMenuViewModel.ClearBoard += ClearBoard;
+            BoardConstructorMenuViewModel.SaveCurrentPosition += SaveCurrentPosition;
             EnableSelectingPiecesFromBoard();
         }
-
 
         public bool SelectorEnabled
         {
@@ -148,6 +148,19 @@ namespace ChessWPF.ViewModels
                 DisableSelectingPiecesFromBoard();
             }
             BoardConstructor.ClearBoard();
+        }
+
+        private void SaveCurrentPosition(object? sender, EventArgs e)
+        {
+            try
+            {
+                var position = BoardConstructor.ExportPosition();
+                gameStateStore.CurrentPosition = position;
+            }
+            catch (Exception ex)
+            {
+                   
+            }
         }
 
         private void EnableSelectingPiecesFromBoard()
