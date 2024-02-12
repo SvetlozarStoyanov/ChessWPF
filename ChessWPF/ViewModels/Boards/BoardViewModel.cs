@@ -4,6 +4,7 @@ using ChessWPF.Models.Cells;
 using ChessWPF.Models.Moves;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
+using ChessWPF.Models.Positions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -19,16 +20,12 @@ namespace ChessWPF.ViewModels
         private CellViewModel[][] cellViewModels;
         private List<Cell> legalMoves;
 
-
-
-        public BoardViewModel()
+        public BoardViewModel(Position position)
         {
-            Board = new Board();
-            CellViewModels = new CellViewModel[8][];
-            MatchCellViewModelsToCells();
-            Board.SetupPieces();
+            Board = new Board(position);
+            CreateCellViewModels();
+            Board.ImportPosition(position);
             LegalMoves = new List<Cell>();
-            PromotionIsUnderway = false;
         }
 
         public delegate void MoveEventHandler(object sender, MovedToCellViewModelEventArgs args);
@@ -125,12 +122,14 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        public void MatchCellViewModelsToCells()
+        public void CreateCellViewModels()
         {
             var oddTileColor = (Color)new ColorConverter().ConvertFrom("#14691B")!;
             var evenTileColor = (Color)new ColorConverter().ConvertFrom("#FAE8C8")!;
             var oddTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#315375")!;
             var evenTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#5693D1")!;
+
+            CellViewModels = new CellViewModel[8][];
 
             for (int row = 0; row < Board.Cells.GetLength(0); row++)
             {
@@ -219,7 +218,7 @@ namespace ChessWPF.ViewModels
             }
             else
             {
-                var move = Board.Moves.Peek();
+                //var move = Board.Moves.Peek();
 
                 Board.UndoMove();
                 if (!Board.Moves.Any())
@@ -233,7 +232,7 @@ namespace ChessWPF.ViewModels
                 }
                 if (Board.Moves.Any())
                 {
-                    move = Board.Moves.Peek();
+                    //move = Board.Moves.Peek();
                 }
                 PrepareForNextTurn();
             }
@@ -346,6 +345,7 @@ namespace ChessWPF.ViewModels
         {
             CellViewModels[row][col] = new CellViewModel(Board.Cells[row, col], defaultColor, movedToColor);
             var cellViewModel = CellViewModels[row][col];
+            //cellViewModel.UpdateCellImage();
             cellViewModel.Select += OnCellViewModelSelect;
             cellViewModel.MovedTo += OnCellViewModelMovedTo;
             cellViewModel.PromotedTo += OnCellViewModelPromotedTo;
@@ -365,6 +365,7 @@ namespace ChessWPF.ViewModels
         private void ResetMatchCellViewModelToCell(int row, int col)
         {
             var cellViewModel = CellViewModels[row][col];
+            cellViewModel.UpdateCellImage();
             cellViewModel.CanBeMovedTo = false;
             cellViewModel.CanBeSelected = false;
             cellViewModel.IsSelected = false;
