@@ -3,9 +3,9 @@ using ChessWPF.Models.Pieces.Enums;
 
 namespace ChessWPF.Game
 {
-    public static class PieceConstructor
+    public static class PieceCreator
     {
-        public static Piece ConstructPieceByType(PieceType pieceType, PieceColor color, int row, int col)
+        public static Piece CreatePieceByProperties(PieceType pieceType, PieceColor color, int row, int col)
         {
             switch (pieceType)
             {
@@ -22,11 +22,37 @@ namespace ChessWPF.Game
                 case PieceType.Knook:
                     return new Knook(color, row, col);
                 default:
-                    return new King(color, row, col); 
+                    return new King(color, row, col);
             }
         }
 
-        public static Piece ConstructPieceForPromotion(PieceType pieceType, PieceColor Color)
+        public static Piece CreatePieceByLetterAndCoordinates(char letter, int row, int col)
+        {
+            var color = char.IsUpper(letter) ? PieceColor.White : PieceColor.Black;
+            if (color == PieceColor.White)
+            {
+                letter = (char)(letter + 32);
+            }
+            switch (letter)
+            {
+                case 'p':
+                    return new Pawn(color, row, col);
+                case 'n':
+                    return new Knight(color, row, col);
+                case 'b':
+                    return new Bishop(color, row, col);
+                case 'r':
+                    return new Rook(color, row, col);
+                case 'q':
+                    return new Queen(color, row, col);
+                case 'o':
+                    return new Knook(color, row, col);
+                default:
+                    return new King(color, row, col);
+            }
+        }
+
+        public static Piece CreatePieceForPromotion(PieceType pieceType, PieceColor Color)
         {
             switch (pieceType)
             {
