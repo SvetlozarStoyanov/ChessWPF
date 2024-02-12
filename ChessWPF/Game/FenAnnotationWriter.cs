@@ -24,6 +24,10 @@ namespace ChessWPF.Game
             {
                 AnnotatePossibleEnPassant(sb, board.Moves.Peek());
             }
+            else
+            {
+                sb.Append("-");
+            }
             sb.Append(" ");
             AnnotateHalfMoveCount(sb, board);
             sb.Append(" ");
@@ -139,7 +143,8 @@ namespace ChessWPF.Game
 
             if (!hasWhiteKingMoved)
             {
-                if (!board.Moves.Any(m =>
+                if (board.StartingPosition.CastlingRights.Item1 &&
+                    !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 7) ||
                 (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 7))) &&
                 (board.Cells[7, 7].Piece != null && board.Cells[7, 7].Piece!.PieceType == PieceType.Rook &&
@@ -147,7 +152,8 @@ namespace ChessWPF.Game
                 {
                     castlingRights.Item1 = true;
                 }
-                if (!board.Moves.Any(m =>
+                if (board.StartingPosition.CastlingRights.Item2 &&
+                    !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 0) ||
                 (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 0))) &&
                 (board.Cells[7, 0].Piece != null && board.Cells[7, 0].Piece!.PieceType == PieceType.Rook &&
@@ -159,7 +165,8 @@ namespace ChessWPF.Game
 
             if (!hasBlackKingMoved)
             {
-                if (!board.Moves.Any(m =>
+                if (board.StartingPosition.CastlingRights.Item3 &&
+                    !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 7) ||
                 (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 7))) &&
                 (board.Cells[0, 7].Piece != null && board.Cells[0, 7].Piece!.PieceType == PieceType.Rook &&
@@ -167,7 +174,8 @@ namespace ChessWPF.Game
                 {
                     castlingRights.Item3 = true;
                 }
-                if (!board.Moves.Any(m =>
+                if (board.StartingPosition.CastlingRights.Item4 &&
+                    !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 0) ||
                 (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 0))) &&
                 (board.Cells[0, 0].Piece != null && board.Cells[0, 0].Piece!.PieceType == PieceType.Rook &&
@@ -205,8 +213,8 @@ namespace ChessWPF.Game
 
         private static void AnnotateEnPassant(StringBuilder sb, ValueTuple<int, int>? enPassantCoordinates)
         {
-            var row = enPassantCoordinates!.Value.Item2 - 1;
-            var col = (char)(enPassantCoordinates!.Value.Item1 + 97);
+            var row = 8 - enPassantCoordinates!.Value.Item1;
+            var col = (char)(enPassantCoordinates!.Value.Item2 + 97);
             sb.Append($"{col}{row}");
         }
 
