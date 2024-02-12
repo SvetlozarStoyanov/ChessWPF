@@ -1,6 +1,7 @@
 ﻿using ChessWPF.Contracts.Pieces;
 using ChessWPF.Game;
 using ChessWPF.HelperClasses.CustomEventArgs;
+using ChessWPF.HelperClasses.Exceptions;
 using ChessWPF.Models.Cells;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
@@ -13,6 +14,7 @@ namespace ChessWPF.Models.Boards
 {
     public sealed class BoardConstructor
     {
+        private string fenAnnotation;
         private PieceColor turnColor;
         private ValueTuple<int, int>? enPassantCoordinates;
         private ValueTuple<bool, bool, bool, bool> castlingRights;
@@ -35,6 +37,12 @@ namespace ChessWPF.Models.Boards
         public delegate void UpdateCastlingRightsEventHandler(object? sender, UpdateCastlingRightsEventArgs e);
         public event UpdateEnPassantPosibilitiesEventHandler EnPassantPosibilitiesUpdate;
         public delegate void UpdateEnPassantPosibilitiesEventHandler(object? sender, EventArgs e);
+
+        public string FenAnnotation
+        {
+            get => fenAnnotation;
+            private set => fenAnnotation = value;
+        }
 
         public PieceColor TurnColor
         {
@@ -106,6 +114,7 @@ namespace ChessWPF.Models.Boards
             UpdateTurnColor(position.TurnColor);
             UpdateCastlingRightsBackend();
             CastlingPossibilitiesUpdate?.Invoke(null, EventArgs.Empty);
+            UpdateFenAnnotation();
         }
 
         public void ClearBoard()
@@ -115,6 +124,7 @@ namespace ChessWPF.Models.Boards
             CastlingRights = (false, false, false, false);
             ClearEnPassantPossibilities();
             UpdateCastlingRightsBackend();
+            UpdateFenAnnotation();
         }
 
         public void ClearAllPieces()
@@ -129,7 +139,6 @@ namespace ChessWPF.Models.Boards
             }
         }
 
-
         public void ImportPosition(Position position)
         {
             foreach (var piece in position.Pieces.Keys.SelectMany(color => position.Pieces[color]))
@@ -143,19 +152,32 @@ namespace ChessWPF.Models.Boards
             UpdateTurnColor(position.TurnColor);
             UpdateCastlingPossibilities();
             UpdateEnPassantPossibilities();
+            FenAnnotation = position.FenAnnotation;
         }
 
         public Position ExportPosition()
         {
-            var position = new Position();
+            var position = new Position(
+                SimplifiedCells,
+                TurnColor,
+                FenAnnotation,
+                CastlingRights,
+                EnPassantCoordinates,
+                0,
+                1);
             position.Pieces = FindPieces();
-
+            var positionIsValid = PositionValidator.ValidatePosition(position);
+            if (!positionIsValid)
+            {
+                throw new InvalidPositionException("Position is invalid");
+            }
             return position;
         }
 
         public void UpdateCastlingRightsFromUI(bool[] castlingRights)
         {
             CastlingRights = (castlingRights[0], castlingRights[1], castlingRights[2], castlingRights[3]);
+            UpdateFenAnnotation();
         }
 
         public void UpdateCellPiece(int row, int col, IConstructorPiece? constructorPiece)
@@ -178,17 +200,30 @@ namespace ChessWPF.Models.Boards
             {
                 UpdateEnPassantPossibilities();
             }
+            UpdateFenAnnotation();
         }
 
         public void UpdateTurnColor(PieceColor turnColor)
         {
             TurnColor = turnColor;
             UpdateEnPassantPossibilities();
+            UpdateFenAnnotation();
         }
 
         public void UpdateEnPassantCoordinates(CellCoordinates? cellCoordinates)
         {
             EnPassantCoordinates = cellCoordinates.HasValue ? (cellCoordinates!.Value.Row, cellCoordinates.Value.Col) : null;
+            UpdateFenAnnotation();
+        }
+
+        private void UpdateFenAnnotation()
+        {
+            FenAnnotation = FenAnnotationWriter.WriteFenAnnotationFromBoardConstructor(SimplifiedCells,
+               TurnColor,
+               CastlingRights,
+               EnPassantCoordinates,
+               0,
+               1);
         }
 
         private void CreateConstructorPieces()
@@ -255,7 +290,7 @@ namespace ChessWPF.Models.Boards
             var constructorCellsFlattened = ConstructorCells.Cast<ConstructorCell>().ToArray();
             foreach (var cell in constructorCellsFlattened.Where(c => c.ConstructorBoardPiece != null))
             {
-                pieces[cell.ConstructorBoardPiece.Color].Add(PieceConstructor.ConstructPieceByType(
+                pieces[cell.ConstructorBoardPiece.Color].Add(PieceCreator.CreatePieceByProperties(
                     cell.ConstructorBoardPiece.PieceType,
                     cell.ConstructorBoardPiece.Color,
                     cell.Row,
