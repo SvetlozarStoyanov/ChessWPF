@@ -64,28 +64,28 @@ namespace ChessWPF.Models.Cells
         public void UpdateCell(Piece? piece)
         {
             this.Piece = piece;
-            Update(this, new UpdateCellEventArgs(piece));
+            Update?.Invoke(this, new UpdateCellEventArgs(piece));
         }
 
         public void UpdateCellForPromotion(Piece piece)
         {
             this.Piece = piece;
-            UpdateForPromotion(this, new UpdateCellEventArgs(piece));
+            UpdateForPromotion?.Invoke(this, new UpdateCellEventArgs(piece));
         }
 
         public void MarkAsChecked()
         {
-            Check(this, EventArgs.Empty);
+            Check?.Invoke(this, EventArgs.Empty);
         }
 
         public void MarkAsUnchecked()
         {
-            UnCheck(this, EventArgs.Empty);
+            UnCheck?.Invoke(this, EventArgs.Empty);
         }
 
         public void UpdateMarkAsMovedTo()
         {
-            UpdateMovedTo(this, EventArgs.Empty);
+            UpdateMovedTo?.Invoke(this, EventArgs.Empty);
         }
     }
 }
