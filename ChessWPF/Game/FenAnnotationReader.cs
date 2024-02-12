@@ -133,7 +133,7 @@ namespace ChessWPF.Game
                     break;
             }
 
-            var piece = PieceConstructor.ConstructPieceByType(
+            var piece = PieceCreator.CreatePieceByProperties(
                 pieceType,
                 color,
                 row,
