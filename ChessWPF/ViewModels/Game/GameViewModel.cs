@@ -4,6 +4,7 @@ using ChessWPF.Models.Boards;
 using ChessWPF.Models.Moves;
 using ChessWPF.Models.Options;
 using ChessWPF.Models.Pieces.Enums;
+using ChessWPF.Models.Positions;
 using ChessWPF.Stores;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace ChessWPF.ViewModels
 
         public GameViewModel(GameStateStore gameStateStore)
         {
-            SetupBoardViewModel();
+            SetupBoardViewModel(gameStateStore.CurrentPosition);
             SetupGameMenuViewModel(BoardViewModel);
             SetupGameClockViewModels(gameStateStore.GameOptions.TimeControl);
             StartGame();
@@ -181,9 +182,9 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        private void SetupBoardViewModel()
+        private void SetupBoardViewModel(Position position)
         {
-            BoardViewModel = new BoardViewModel();
+            BoardViewModel = new BoardViewModel(position);
             BoardViewModel.MovedPiece += MovePiece;
             BoardViewModel.UndoLastMove += UndoMove;
             BoardViewModel.Reset += ResetBoard;
