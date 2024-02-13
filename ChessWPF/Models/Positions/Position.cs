@@ -1,4 +1,5 @@
-﻿using ChessWPF.Models.Pieces;
+﻿using ChessWPF.Models.Cells;
+using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
 using System;
 using System.Collections.Generic;
@@ -12,7 +13,7 @@ namespace ChessWPF.Models.Positions
         private string fenAnnotation;
         private PieceColor turnColor;
         private ValueTuple<bool, bool, bool, bool> castlingRights;
-        private ValueTuple<int, int>? enPassantCoordinates;
+        private CellCoordinates? enPassantCoordinates;
         private Dictionary<PieceColor, List<Piece>> pieces;
         private char[,] simplifiedCells;
 
@@ -25,7 +26,7 @@ namespace ChessWPF.Models.Positions
             PieceColor turnColor,
             string fenAnnotation,
             (bool, bool, bool, bool) castlingRights,
-            (int, int)? enPassantCoordinates,
+            CellCoordinates? enPassantCoordinates,
             int halfMoveCount = 0,
             int moveNumber = 1)
         {
@@ -62,7 +63,7 @@ namespace ChessWPF.Models.Positions
             set => turnColor = value;
         }
 
-        public ValueTuple<int, int>? EnPassantCoordinates
+        public CellCoordinates? EnPassantCoordinates
         {
             get => enPassantCoordinates;
             set => enPassantCoordinates = value;
