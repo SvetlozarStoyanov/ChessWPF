@@ -272,8 +272,9 @@ namespace ChessWPF.Models.Boards
             }
             else
             {
-                HalfMoveCount = 0;
-                UpdateFenAnnotation();
+                HalfMoveCount = StartingPosition.HalfMoveCount;
+                FenAnnotation = StartingPosition.FenAnnotation;
+                //UpdateFenAnnotation();
             }
         }
 
@@ -781,25 +782,36 @@ namespace ChessWPF.Models.Boards
                     UpdateCellsAndPiecesOfMove(move);
                     CreatePromotionMove(move, pawn);
                 }
-                if (Moves.Count > 0)
+                //if (Moves.Count > 0)
+                //{
+                //    var lastMove = Moves.Peek();
+                //    if (Math.Abs(lastMove.CellOneBefore.Row - lastMove.CellTwoBefore.Row) == 2)
+                //    {
+                //        var lastMovedPiece = lastMove.CellTwoAfter.Piece;
+                //        if (lastMovedPiece!.PieceType == PieceType.Pawn
+                //            && movedToCell.Col == move.CellTwoAfter.Piece.Col
+                //            && move.CellTwoBefore.Piece == null
+                //            && Math.Abs(lastMovedPiece.Col - move.CellOneBefore.Col) == 1
+                //            && lastMovedPiece.Col == move.CellTwoBefore.Col
+                //            && lastMovedPiece.Row == move.CellOneBefore.Row)
+                //        {
+                //            move = EnPassantMove(move);
+                //        }
+                //    }
+                //}
+                var enPassantCoordinatesAnnotation = FenAnnotation.Split(' ', StringSplitOptions.RemoveEmptyEntries)[3];
+                if (enPassantCoordinatesAnnotation != "-" && move.CellTwoBefore.HasEqualRowAndCol(GetCellByAnnotation(enPassantCoordinatesAnnotation)))
                 {
-                    var lastMove = Moves.Peek();
-                    if (Math.Abs(lastMove.CellOneBefore.Row - lastMove.CellTwoBefore.Row) == 2)
-                    {
-                        var lastMovedPiece = lastMove.CellTwoAfter.Piece;
-                        if (lastMovedPiece!.PieceType == PieceType.Pawn
-                            && movedToCell.Col == move.CellTwoAfter.Piece.Col
-                            && move.CellTwoBefore.Piece == null
-                            && Math.Abs(lastMovedPiece.Col - move.CellOneBefore.Col) == 1
-                            && lastMovedPiece.Col == move.CellTwoBefore.Col
-                            && lastMovedPiece.Row == move.CellOneBefore.Row)
-                        {
-                            move = EnPassantMove(move);
-                        }
-                    }
+                    move = EnPassantMove(move);
                 }
+
             }
             return move;
+        }
+
+        private Cell GetCellByAnnotation(string annotation)
+        {
+            return Cells[8 - (int)(annotation[1] - 48), (int)(annotation[0] - 97)];
         }
 
         private Move MoveRookInCastlingMove(Move move)

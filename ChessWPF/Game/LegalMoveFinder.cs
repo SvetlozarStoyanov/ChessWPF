@@ -49,18 +49,28 @@ namespace ChessWPF.Game
 
             var protectedCells = new List<Cell>();
             var enPassantFromFenAnnotation = board.FenAnnotation.Split(" ", StringSplitOptions.RemoveEmptyEntries)[3];
-            Cell? enPassantMoveCell = enPassantFromFenAnnotation != "-" ? GetCellFromAnnotation(board, enPassantFromFenAnnotation) : null;
+            var enPassantMove = enPassantFromFenAnnotation != "-" ? GetCellFromAnnotation(board, enPassantFromFenAnnotation) : null;
             if (board.Moves.Count > 0)
             {
-                enPassantMoveCell =
-                   board.Moves.Peek().CellOneBefore.Piece!.PieceType == PieceType.Pawn
+                if (board.Moves.Peek().CellOneBefore.Piece!.PieceType == PieceType.Pawn
                    && board.Moves.Peek().CellTwoAfter.Row == pawn.Row
                    && Math.Abs(board.Moves.Peek().CellOneBefore.Row - board.Moves.Peek().CellTwoBefore.Row) == 2
-                   && Math.Abs(board.Moves.Peek().CellOneBefore.Col - pawn.Col) == 1
-                   ? board.Moves.Peek().CellTwoAfter
-                   : null;
+                   && Math.Abs(board.Moves.Peek().CellOneBefore.Col - pawn.Col) == 1)
+                {
+                    if (pawn.Color == PieceColor.White)
+                    {
+                        enPassantMove = board.Cells[board.Moves.Peek().CellTwoAfter.Row - 1, board.Moves.Peek().CellTwoAfter.Col];
+                    }
+                    else
+                    {
+                        enPassantMove = board.Cells[board.Moves.Peek().CellTwoAfter.Row + 1, board.Moves.Peek().CellTwoAfter.Col];
+                    }
+                }
             }
+            if (pawn.Row == 3 && pawn.Col == 5)
+            {
 
+            }
 
             if (pawn.Color == PieceColor.White)
             {
@@ -98,9 +108,13 @@ namespace ChessWPF.Game
                         }
                     }
                 }
-                if (enPassantMoveCell != null)
+                if (enPassantMove != null)
                 {
-                    legalMoves.Add(board.Cells[enPassantMoveCell.Row - 1, enPassantMoveCell.Col]);
+                    var colorWhichCanTakeEnPassant = enPassantMove.Row == 2 ? PieceColor.White : PieceColor.Black;
+                    if (pawn.Color == colorWhichCanTakeEnPassant && protectedCells.Any(c => c.HasEqualRowAndCol(enPassantMove)))
+                    {
+                        legalMoves.Add(board.Cells[enPassantMove.Row, enPassantMove.Col]);
+                    }
                 }
             }
             else if (pawn.Color == PieceColor.Black)
@@ -139,11 +153,12 @@ namespace ChessWPF.Game
                         }
                     }
                 }
-                if (enPassantMoveCell != null)
+                if (enPassantMove != null)
                 {
-                    if (protectedCells.Contains(enPassantMoveCell))
+                    var colorWhichCanTakeEnPassant = enPassantMove.Row == 2 ? PieceColor.White : PieceColor.Black;
+                    if (pawn.Color == colorWhichCanTakeEnPassant && protectedCells.Any(c => c.HasEqualRowAndCol(enPassantMove)))
                     {
-                        legalMoves.Add(board.Cells[enPassantMoveCell.Row, enPassantMoveCell.Col]);
+                        legalMoves.Add(board.Cells[enPassantMove.Row, enPassantMove.Col]);
                     }
                 }
             }
@@ -964,7 +979,7 @@ namespace ChessWPF.Game
 
         private static Cell GetCellFromAnnotation(Board board, string annotation)
         {
-            return board.Cells[8 - (int)(annotation[0] - 98), (int)(annotation[1] - 48)];
+            return board.Cells[8 - (int)(annotation[1] - 48), (int)(annotation[0] - 97)];
         }
     }
 }

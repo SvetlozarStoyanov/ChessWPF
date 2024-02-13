@@ -151,7 +151,7 @@ namespace ChessWPF.ViewModels
         public void StartGame()
         {
             PrepareForNextTurn();
-            Board.UpdateFenAnnotation();
+            //Board.UpdateFenAnnotation();
             FenAnnotation = Board.FenAnnotation;
         }
 
