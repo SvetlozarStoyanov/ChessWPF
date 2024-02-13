@@ -131,8 +131,8 @@ namespace ChessWPF.Game
 
         private static bool ValidateEnPassant()
         {
-            var enPassantRow = position.EnPassantCoordinates!.Value.Item1;
-            var enPassantCol = position.EnPassantCoordinates.Value.Item2;
+            var enPassantRow = position.EnPassantCoordinates!.Value.Row;
+            var enPassantCol = position.EnPassantCoordinates.Value.Col;
 
             if (enPassantRow == 2 && position.SimplifiedCells[enPassantRow, enPassantCol] == '.'
                 && position.SimplifiedCells[enPassantRow + 1, enPassantCol] == 'p'

@@ -38,7 +38,7 @@ namespace ChessWPF.Game
         public static string WriteFenAnnotationFromBoardConstructor(char[,] cells,
             PieceColor turnColor,
             ValueTuple<bool, bool, bool, bool> castlingRights,
-            ValueTuple<int, int>? enPassantCoordinates,
+            CellCoordinates? enPassantCoordinates,
             int halfMoveCount,
             int moveNumber)
         {
@@ -211,10 +211,10 @@ namespace ChessWPF.Game
             sb.Append($"{(board.Moves.Count < 2 ? 1 : board.Moves.Count(m => m.CellOneBefore.Piece!.Color == PieceColor.Black) + 1)}");
         }
 
-        private static void AnnotateEnPassant(StringBuilder sb, ValueTuple<int, int>? enPassantCoordinates)
+        private static void AnnotateEnPassant(StringBuilder sb, CellCoordinates? enPassantCoordinates)
         {
-            var row = 8 - enPassantCoordinates!.Value.Item1;
-            var col = (char)(enPassantCoordinates!.Value.Item2 + 97);
+            var row = 8 - enPassantCoordinates.Value.Row;
+            var col = (char)(enPassantCoordinates!.Value.Col + 97);
             sb.Append($"{col}{row}");
         }
 

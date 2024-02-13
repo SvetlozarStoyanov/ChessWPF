@@ -1,4 +1,5 @@
-﻿using ChessWPF.Models.Pieces;
+﻿using ChessWPF.Models.Cells;
+using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
 using ChessWPF.Models.Positions;
 using System;
@@ -55,13 +56,9 @@ namespace ChessWPF.Game
             return castlingRights;
         }
 
-        private static ValueTuple<int, int> GetEnPassantCoordinates(string enPassantAnnotation)
+        private static CellCoordinates GetEnPassantCoordinates(string enPassantAnnotation)
         {
-            var coordinates = new ValueTuple<int, int>();
-
-            coordinates.Item1 = enPassantAnnotation[1] - 97;
-            coordinates.Item2 = (int)enPassantAnnotation[0] - 97;
-
+            var coordinates = new CellCoordinates(enPassantAnnotation[1] - 97, (int)enPassantAnnotation[0] - 97);
             return coordinates;
         }
 
