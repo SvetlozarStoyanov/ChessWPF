@@ -106,9 +106,8 @@ namespace ChessWPF.Models.Boards
             }
         }
 
-        public void ResetBoardToDefault()
+        public void LoadPosition(Position position)
         {
-            var position = PositionCreator.CreateDefaultPosition();
             ClearAllPieces();
             ImportPosition(position);
             UpdateTurnColor(position.TurnColor);
