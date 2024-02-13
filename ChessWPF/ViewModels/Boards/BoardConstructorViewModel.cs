@@ -1,9 +1,11 @@
 ﻿using ChessWPF.Commands;
 using ChessWPF.Contracts.Pieces;
+using ChessWPF.Game;
 using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Boards;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
+using ChessWPF.Models.Positions;
 using ChessWPF.Stores;
 using ChessWPF.ViewModels.Pieces;
 using System;
@@ -49,6 +51,7 @@ namespace ChessWPF.ViewModels
             BoardConstructorMenuViewModel.TurnColorUpdate += UpdateTurnColor;
             BoardConstructorMenuViewModel.EnPassantCoordinatesUpdate += UpdateEnPassantCoordinates;
             BoardConstructorMenuViewModel.ResetBoardToDefault += ResetBoard;
+            BoardConstructorMenuViewModel.LoadLastSavedPosition += LoadLastSavedPosition;
             BoardConstructorMenuViewModel.ClearBoard += ClearBoard;
             BoardConstructorMenuViewModel.SaveCurrentPosition += SaveCurrentPosition;
             EnableSelectingPiecesFromBoard();
@@ -128,8 +131,18 @@ namespace ChessWPF.ViewModels
 
         private void ResetBoard(object? sender, EventArgs e)
         {
+            LoadPosition(PositionCreator.CreateDefaultPosition());
+        }
+
+        private void LoadLastSavedPosition(object? sender, EventArgs e)
+        {
+            LoadPosition(gameStateStore.CurrentPosition);
+        }
+
+        private void LoadPosition(Position position)
+        {
             DisableSelectingPiecesFromBoard();
-            BoardConstructor.ResetBoardToDefault();
+            BoardConstructor.LoadPosition(position);
             if (SelectorEnabled)
             {
                 SelectPieceSelector();
@@ -138,7 +151,7 @@ namespace ChessWPF.ViewModels
             {
                 SelectDeletePiece();
             }
-
+            BoardConstructorMenuViewModel.SelectedEnPassantCoordinates = position.EnPassantCoordinates;
             BoardConstructorMenuViewModel.SelectedTurnColor = BoardConstructor.TurnColor;
         }
 
