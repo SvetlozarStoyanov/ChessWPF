@@ -19,11 +19,13 @@ namespace ChessWPF.ViewModels
         private ObservableCollection<bool> castlingRights;
         private ObservableCollection<bool> castlingPossibilities;
 
-        public BoardConstructorMenuViewModel(bool[] castlingRights,
+        public BoardConstructorMenuViewModel(CellCoordinates? enPassantCoordinates,
+            bool[] castlingRights,
             bool[] castlingPossibilities,
             HashSet<CellCoordinates?> enPassantPossibilities,
             PieceColor turnColor)
         {
+            selectedEnPassantCoordinates = enPassantCoordinates;
             CastlingRights = new ObservableCollection<bool>(castlingRights);
             CastlingPossibilities = new ObservableCollection<bool>(castlingPossibilities);
             TurnColors = new ObservableCollection<PieceColor>()
