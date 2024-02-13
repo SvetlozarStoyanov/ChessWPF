@@ -16,7 +16,7 @@ namespace ChessWPF.Models.Boards
     {
         private string fenAnnotation;
         private PieceColor turnColor;
-        private ValueTuple<int, int>? enPassantCoordinates;
+        private CellCoordinates? enPassantCoordinates;
         private ValueTuple<bool, bool, bool, bool> castlingRights;
         private HashSet<CellCoordinates?> enPassantPosibilities;
         private bool[] castlingPosibilities;
@@ -50,7 +50,7 @@ namespace ChessWPF.Models.Boards
             set => turnColor = value;
         }
 
-        public ValueTuple<int, int>? EnPassantCoordinates
+        public CellCoordinates? EnPassantCoordinates
         {
             get => enPassantCoordinates;
             private set => enPassantCoordinates = value;
@@ -149,6 +149,8 @@ namespace ChessWPF.Models.Boards
             }
             CastlingRights = position.CastlingRights;
             CastlingPossibilities = new bool[4];
+            EnPassantCoordinates = position.EnPassantCoordinates;
+            UpdateEnPassantCoordinates(position.EnPassantCoordinates);
             UpdateTurnColor(position.TurnColor);
             UpdateCastlingPossibilities();
             UpdateEnPassantPossibilities();
@@ -212,7 +214,7 @@ namespace ChessWPF.Models.Boards
 
         public void UpdateEnPassantCoordinates(CellCoordinates? cellCoordinates)
         {
-            EnPassantCoordinates = cellCoordinates.HasValue ? (cellCoordinates!.Value.Row, cellCoordinates.Value.Col) : null;
+            EnPassantCoordinates = cellCoordinates;
             UpdateFenAnnotation();
         }
 
