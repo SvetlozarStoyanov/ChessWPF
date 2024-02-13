@@ -36,6 +36,7 @@ namespace ChessWPF.ViewModels
             SelectedTurnColor = turnColor;
             SetCastlingRightsCommand = new SetCastlingRightsCommand(this);
             ResetBoardToDefaultCommand = new ResetBoardToDefaultCommand(this);
+            LoadSavedPositionCommand = new LoadSavedPositionCommand(this);
             ClearBoardCommand = new ClearBoardCommand(this);
             SavePositionCommand = new SavePositionCommand(this);
             InitializeEnPassantPossibilities(enPassantPossibilities);
@@ -49,6 +50,8 @@ namespace ChessWPF.ViewModels
         public delegate void UpdateEnPassantCoordinatesEventHandler(object? sender, EnPassantCoordinatesChangedEventArgs e);
         public event ResetBoardEventHandler ResetBoardToDefault;
         public delegate void ResetBoardEventHandler(object? sender, EventArgs e);
+        public event LoadSavedPositionEventHandler LoadLastSavedPosition;
+        public delegate void LoadSavedPositionEventHandler(object? sender, EventArgs e);
         public event ClearBoardEventHandler ClearBoard;
         public delegate void ClearBoardEventHandler(object? sender, EventArgs e);
         public event SavePositionEventHandler SaveCurrentPosition;
@@ -131,6 +134,7 @@ namespace ChessWPF.ViewModels
         public ICommand SetCastlingRightsCommand { get; init; }
         public ICommand SetEnPassantCoordinatesCommand { get; init; }
         public ICommand ResetBoardToDefaultCommand { get; init; }
+        public ICommand LoadSavedPositionCommand { get; init; }
         public ICommand ClearBoardCommand { get; init; }
         public ICommand SavePositionCommand { get; init; }
 
@@ -232,6 +236,11 @@ namespace ChessWPF.ViewModels
                     throw;
                 }
             }
+        }
+
+        public void LoadSavedPosition()
+        {
+            LoadLastSavedPosition?.Invoke(null,EventArgs.Empty);
         }
     }
 }
