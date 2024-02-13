@@ -113,7 +113,7 @@
             <Button Grid.Row="0" Grid.Column="0" Command="{Binding ResetBoardToDefaultCommand}">Reset Board</Button>
             <Button Grid.Row="1" Grid.Column="0" Command="{Binding SavePositionCommand}">Save Position</Button>
             <Button Grid.Row="0" Grid.Column="1" Command="{Binding ClearBoardCommand}">Clear Board</Button>
-            <Button Grid.Row="1" Grid.Column="1">Load Saved Position</Button>
+            <Button Grid.Row="1" Grid.Column="1" Command="{Binding LoadSavedPositionCommand}">Load Saved Position</Button>
         </Grid>
     </Grid>
 </UserControl>
