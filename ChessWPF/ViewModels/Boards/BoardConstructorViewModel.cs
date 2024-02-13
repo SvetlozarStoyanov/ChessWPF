@@ -36,7 +36,9 @@ namespace ChessWPF.ViewModels
             NavigateToGameCommand = new NavigateCommand<GameViewModel>(gameStateStore, () => new GameViewModel(gameStateStore));
             SelectDeletePieceCommand = new SelectDeletePieceCommand(this);
             SelectPieceSelectorCommand = new SelectPieceSelectorCommand(this);
-            BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel(GetCastlingRightsFromBoardConstructor(),
+            BoardConstructorMenuViewModel = new BoardConstructorMenuViewModel(
+                BoardConstructor.EnPassantCoordinates,
+                GetCastlingRightsFromBoardConstructor(),
                 BoardConstructor.CastlingPossibilities,
                 BoardConstructor.EnPassantPossibilities,
                 BoardConstructor.TurnColor);
