@@ -169,6 +169,14 @@ namespace ChessWPF.Game
             {
                 return false;
             }
+            if (CheckForPawnAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
+            {
+                return false;
+            }
+            if (CheckForKingAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
+            {
+                return false;
+            }
 
             return true;
         }
@@ -347,12 +355,72 @@ namespace ChessWPF.Game
                 return false;
             }
 
-            if (CellIsValid(row + 1, col + 2) && isAttacker(cells[row + 1, col + 2]))
+        private static bool CheckForPawnAttackers(int row, int col, PieceColor attackerColor)
+        {
+            var cells = position.SimplifiedCells;
+            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'P' } : new char[] { 'p' };
+            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
+            if (attackerColor == PieceColor.White)
+            {
+                if (CellIsValid(row + 1, col - 1) && isAttacker(cells[row + 1, col - 1]))
+                {
+                    return true;
+                }
+                if (CellIsValid(row + 1, col + 1) && isAttacker(cells[row + 1, col + 1]))
+                {
+                    return true;
+                }
+            }
+            else
+            {
+                if (CellIsValid(row - 1, col - 1) && isAttacker(cells[row - 1, col - 1]))
+                {
+                    return true;
+                }
+                if (CellIsValid(row - 1, col + 1) && isAttacker(cells[row - 1, col + 1]))
             {
                 return false;
             }
-            if (CellIsValid(row + 1, col - 2) && isAttacker(cells[row + 1, col - 2]))
+
+        private static bool CheckForKingAttackers(int row, int col, PieceColor attackerColor)
+        {
+            var cells = position.SimplifiedCells;
+            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'K' } : new char[] { 'k' };
+            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
+
+            if (CellIsValid(row - 1, col - 1) && isAttacker(cells[row - 1, col - 1]))
             {
+                return true;
+            }
+            if (CellIsValid(row - 1, col) && isAttacker(cells[row - 1, col]))
+            {
+                return true;
+            }
+            if (CellIsValid(row - 1, col + 1) && isAttacker(cells[row - 1, col + 1]))
+            {
+                return true;
+            }
+            if (CellIsValid(row, col - 1) && isAttacker(cells[row, col - 1]))
+            {
+                return true;
+            }
+            if (CellIsValid(row, col + 1) && isAttacker(cells[row, col + 1]))
+            {
+                return true;
+            }
+            if (CellIsValid(row + 1, col + 1) && isAttacker(cells[row + 1, col + 1]))
+            {
+                return true;
+            }
+            if (CellIsValid(row + 1, col) && isAttacker(cells[row + 1, col]))
+            {
+                return true;
+            }
+            if (CellIsValid(row + 1, col + 1) && isAttacker(cells[row + 1, col + 1]))
+            {
+                return true;
+            }
+
                 return false;
             }
 
