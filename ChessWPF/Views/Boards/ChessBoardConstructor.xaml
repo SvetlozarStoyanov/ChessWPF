@@ -5,23 +5,32 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Boards" xmlns:menus="clr-namespace:ChessWPF.Views.Menus"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
+             d:DesignHeight="800" d:DesignWidth="800">
+    <Grid >
         <Grid.RowDefinitions>
             <RowDefinition Height="1*"/>
             <RowDefinition Height="1*"/>
-            <RowDefinition Height="9*"/>
-            <RowDefinition Height="1*" />
-            <RowDefinition Height="2*" />
+            <RowDefinition Height="11*"/>
+            <RowDefinition Height="1*"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1.50*"/>
-            <ColumnDefinition Width="2.0*"/>
+            <ColumnDefinition Width="6.0*"/>
+            <ColumnDefinition Width="4.0*"/>
         </Grid.ColumnDefinitions>
         <menus:BoardConstructorNavigationMenu Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2"></menus:BoardConstructorNavigationMenu>
-        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[Black]}"  Grid.Row="1" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
-        <local:ConstructorBoard DataContext="{Binding ConstructorCellViewModels}" Grid.Row="2" Grid.Column="0" Margin="20,80,20,0"/>
-        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[White]}" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center"></menus:BoardConstructorPiecesMenu>
-        <menus:BoardConstructorOptionsMenu DataContext="{Binding BoardConstructorMenuViewModel}" Grid.Row="1" Grid.RowSpan="2" Grid.Column="2"></menus:BoardConstructorOptionsMenu>
+        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[Black]}" Grid.Row="1" Grid.Column="0" Margin="0,0,0,0">
+        </menus:BoardConstructorPiecesMenu>
+        <menus:BoardConstructorPiecesMenu DataContext="{Binding ConstructorMenuPieceViewModels[White]}" Grid.Row="3" Grid.Column="0" Margin="0,0,0,0">
+        </menus:BoardConstructorPiecesMenu>
+        <local:ConstructorBoard DataContext="{Binding ConstructorCellViewModels}" Grid.Row="2" Grid.RowSpan="1" Grid.Column="0" Margin="30,20" />
+        <Grid Grid.Row="2" Grid.Column="1" Grid.RowSpan="1">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="6*"/>
+                <RowDefinition Height="1*"/>
+                <RowDefinition Height="1*"/>
+            </Grid.RowDefinitions>
+
+            <menus:BoardConstructorOptionsMenu DataContext="{Binding BoardConstructorMenuViewModel}" Grid.Row="0" Grid.RowSpan="1" Grid.Column="2"   />
+        </Grid>
     </Grid>
 </UserControl>

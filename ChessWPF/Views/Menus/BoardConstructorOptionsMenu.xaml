@@ -1,14 +1,12 @@
 ﻿<UserControl x:Class="ChessWPF.Views.Menus.BoardConstructorOptionsMenu"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:ChessWPF.Views.Menus"
-             mc:Ignorable="d" 
-             >
-    <Grid Background="LightGray">
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="d"
+             d:DesignHeight="400" d:DesignWidth="400">
+    <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
             <RowDefinition></RowDefinition>
@@ -20,14 +18,8 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Label
-               Grid.Row="0" FontSize="40"
-               HorizontalAlignment="Center" VerticalAlignment="Center"
-               FontWeight="Bold">
-            Additional
-        </Label>
-        <StackPanel Grid.Row="1" Orientation="Horizontal">
-            <Label FontSize="25" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center">TurnColor</Label>
+        <StackPanel Grid.Row="0" Orientation="Horizontal">
+            <Label FontSize="25" FontWeight="DemiBold" HorizontalAlignment="Center" VerticalAlignment="Center">Turn</Label>
             <ComboBox x:Name="turnColorsComboBox" HorizontalAlignment="Left" VerticalAlignment="Center" Width="100"
                       Loaded="turnColorsComboBox_Loaded"
                       SelectedItem="{Binding SelectedTurnColor,UpdateSourceTrigger=PropertyChanged}">
@@ -38,18 +30,18 @@
                 </ComboBoxItem>
             </ComboBox>
         </StackPanel>
-        <Label Grid.Row="2" HorizontalAlignment="Center" VerticalAlignment="Center"
-               FontSize="20px" FontWeight="DemiBold">
+        <Label Grid.Row="1" HorizontalAlignment="Left" VerticalAlignment="Center"
+               FontSize="25px" FontWeight="DemiBold">
             Castling Rights
         </Label>
-        <Grid Grid.Row="3">
+        <Grid Grid.Row="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
-                <Label FontSize="25">White</Label>
+                <Label FontSize="20" VerticalAlignment="Center">White</Label>
                 <CheckBox Command="{Binding SetCastlingRightsCommand}"
                           IsChecked="{Binding CastlingRights[0], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                           IsEnabled="{Binding CastlingPossibilities[0],UpdateSourceTrigger=PropertyChanged}"
@@ -64,14 +56,14 @@
                     0-0-0</CheckBox>
             </StackPanel>
         </Grid>
-        <Grid Grid.Row="4">
+        <Grid Grid.Row="3">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
                 <ColumnDefinition></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <StackPanel Orientation="Horizontal" Grid.ColumnSpan="3">
-                <Label  FontSize="25">Black</Label>
+                <Label FontSize="20" VerticalAlignment="Center">Black</Label>
                 <CheckBox Command="{Binding SetCastlingRightsCommand}" 
                           IsChecked="{Binding CastlingRights[2], UpdateSourceTrigger=PropertyChanged,Mode=TwoWay}"
                           IsEnabled="{Binding CastlingPossibilities[2],UpdateSourceTrigger=PropertyChanged}"
@@ -86,7 +78,7 @@
                     0-0-0</CheckBox>
             </StackPanel>
         </Grid>
-        <StackPanel Grid.Row="5" Orientation="Horizontal">
+        <StackPanel Grid.Row="4" Orientation="Horizontal">
 
             <Label HorizontalAlignment="Left" VerticalAlignment="Center"  FontSize="25px" FontWeight="DemiBold" >En Passant</Label>
             <ComboBox x:Name="enPassantComboBox" VerticalAlignment="Center" HorizontalAlignment="Center" Width="100"
@@ -101,7 +93,7 @@
                 </ComboBox.ItemTemplate>
             </ComboBox>
         </StackPanel>
-        <Grid Grid.Row="6" Grid.RowSpan="2">
+        <Grid Margin="30" Grid.Row="5" Grid.RowSpan="2">
             <Grid.RowDefinitions>
                 <RowDefinition></RowDefinition>
                 <RowDefinition></RowDefinition>
@@ -115,5 +107,11 @@
             <Button Grid.Row="0" Grid.Column="1" Command="{Binding ClearBoardCommand}">Clear Board</Button>
             <Button Grid.Row="1" Grid.Column="1" Command="{Binding LoadSavedPositionCommand}">Load Saved Position</Button>
         </Grid>
+    <Border Grid.Row="0" Grid.Column="0" Grid.RowSpan="7" Grid.ColumnSpan="1" 
+            Background="LightGray" Panel.ZIndex="-1"
+            BorderBrush="Black" BorderThickness="3"
+ CornerRadius="30">
+        
+    </Border>
     </Grid>
 </UserControl>
