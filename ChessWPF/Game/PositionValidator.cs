@@ -250,7 +250,7 @@ namespace ChessWPF.Game
             var colIncrement = 1;
             while (CellIsValid(row + rowIncrement, col + colIncrement))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row + rowIncrement, col + colIncrement]))
                 {
                     if (isAttacker(cells[row + rowIncrement, col + colIncrement]))
                     {
@@ -268,7 +268,7 @@ namespace ChessWPF.Game
             colIncrement = 1;
             while (CellIsValid(row + rowIncrement, col - colIncrement))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row + rowIncrement, col - colIncrement]))
                 {
                     if (isAttacker(cells[row + rowIncrement, col - colIncrement]))
                     {
@@ -286,7 +286,7 @@ namespace ChessWPF.Game
             colIncrement = 1;
             while (CellIsValid(row - rowIncrement, col + colIncrement))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row - rowIncrement, col + colIncrement]))
                 {
                     if (isAttacker(cells[row - rowIncrement, col + colIncrement]))
                     {
@@ -304,7 +304,7 @@ namespace ChessWPF.Game
             colIncrement = 1;
             while (CellIsValid(row - rowIncrement, col - colIncrement))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row - rowIncrement, col - colIncrement]))
                 {
                     if (isAttacker(cells[row - rowIncrement, col - colIncrement]))
                     {
