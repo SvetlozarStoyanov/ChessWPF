@@ -292,6 +292,7 @@ namespace ChessWPF.Models.Boards
             Pieces[OngoingPromotionMove.CellOneBefore.Piece.Color].Add(OngoingPromotionMove.CellOneBefore.Piece);
 
             OngoingPromotionMove = null;
+            CalculatePossibleMoves();
         }
 
         public void PromotePiece(PieceType pieceType)
@@ -339,7 +340,7 @@ namespace ChessWPF.Models.Boards
             UnCheckKing(oppositeKing);
             var king = (King)Pieces[TurnColor].First(p => p.PieceType == PieceType.King);
             king.Defenders = KingDefenderFinder.FindDefenders(king, TurnColor, this);
-
+            king.Attackers.Clear();
             foreach (var piece in Pieces[oppositeColor])
             {
                 var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
@@ -459,7 +460,7 @@ namespace ChessWPF.Models.Boards
 
         public void RestoreBackupCells()
         {
-            foreach (var cell in BackupCells.Where(c => c.Row != 7 && c.Row != 0 && !c.HasEqualRowAndCol(ongoingPromotionMove.CellOneBefore)))
+            foreach (var cell in BackupCells.Where(c => c.Row != 7 && c.Row != 0 /*&& !c.HasEqualRowAndCol(OngoingPromotionMove.CellOneBefore)*/))
             {
                 Cells[cell.Row, cell.Col].UpdateCell(cell.Piece);
             }
@@ -782,23 +783,6 @@ namespace ChessWPF.Models.Boards
                     UpdateCellsAndPiecesOfMove(move);
                     CreatePromotionMove(move, pawn);
                 }
-                //if (Moves.Count > 0)
-                //{
-                //    var lastMove = Moves.Peek();
-                //    if (Math.Abs(lastMove.CellOneBefore.Row - lastMove.CellTwoBefore.Row) == 2)
-                //    {
-                //        var lastMovedPiece = lastMove.CellTwoAfter.Piece;
-                //        if (lastMovedPiece!.PieceType == PieceType.Pawn
-                //            && movedToCell.Col == move.CellTwoAfter.Piece.Col
-                //            && move.CellTwoBefore.Piece == null
-                //            && Math.Abs(lastMovedPiece.Col - move.CellOneBefore.Col) == 1
-                //            && lastMovedPiece.Col == move.CellTwoBefore.Col
-                //            && lastMovedPiece.Row == move.CellOneBefore.Row)
-                //        {
-                //            move = EnPassantMove(move);
-                //        }
-                //    }
-                //}
                 var enPassantCoordinatesAnnotation = FenAnnotation.Split(' ', StringSplitOptions.RemoveEmptyEntries)[3];
                 if (enPassantCoordinatesAnnotation != "-" && move.CellTwoBefore.HasEqualRowAndCol(GetCellByAnnotation(enPassantCoordinatesAnnotation)))
                 {
@@ -883,7 +867,6 @@ namespace ChessWPF.Models.Boards
                         else
                         {
                             BackupCells.Add(currCell);
-
                             if (Cells[currCell.Row, currCell.Col].Piece != null)
                             {
                                 BackupCells[i].Piece = PieceCreator.CreatePieceByProperties(Cells[currCell.Row, currCell.Col].Piece!.PieceType, Cells[currCell.Row, currCell.Col].Piece!.Color, currCell.Row, currCell.Col);
