@@ -12,12 +12,12 @@ namespace ChessWPF.Game
         public static bool ValidatePosition(Position positionInput)
         {
             position = positionInput;
-            
+
             if (!ValidatePieceComposition())
             {
                 return false;
             }
-            
+
             if (!ValidateCastlingRights())
             {
                 return false;
@@ -45,7 +45,7 @@ namespace ChessWPF.Game
             var enPassantIsValid = position.EnPassantCoordinates != null ? ValidateEnPassant() : true;
             var oppositeTurnColorKingCannotBeTaken = ValidateOppositeTurnColorKingCannotBeTaken();
             return pieceCompositionIsCorrect
-                && castlingIsValid 
+                && castlingIsValid
                 && enPassantIsValid
                 && oppositeTurnColorKingCannotBeTaken;
         }
@@ -80,6 +80,10 @@ namespace ChessWPF.Game
         {
             var whitePieces = position.Pieces[PieceColor.White];
             var blackPieces = position.Pieces[PieceColor.Black];
+            if (whitePieces.Count == 1 && blackPieces.Count == 1)
+            {
+                return false;
+            }
             if (whitePieces.Count == 2 && whitePieces
                 .Any(p => p.PieceType == PieceType.Knight
                     || p.PieceType == PieceType.Bishop)
@@ -140,7 +144,7 @@ namespace ChessWPF.Game
 
             if (enPassantRow == 2 && position.SimplifiedCells[enPassantRow, enPassantCol] == '.'
                 && position.SimplifiedCells[enPassantRow + 1, enPassantCol] == 'p'
-                && position.SimplifiedCells[enPassantRow -1, enPassantCol] == '.')
+                && position.SimplifiedCells[enPassantRow - 1, enPassantCol] == '.')
             {
                 return true;
             }
@@ -157,15 +161,15 @@ namespace ChessWPF.Game
         {
             var oppositeTurnColor = position.TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             var oppositeTurnColorKing = position.Pieces[oppositeTurnColor].FirstOrDefault(p => p.PieceType == PieceType.King);
-            if (!CheckRowsAndColumnsForAttackers(oppositeTurnColorKing!.Row, oppositeTurnColorKing.Col, position.TurnColor))
+            if (CheckRowsAndColumnsForAttackers(oppositeTurnColorKing!.Row, oppositeTurnColorKing.Col, position.TurnColor))
             {
                 return false;
             }
-            if (!CheckDiagonalsForAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
+            if (CheckDiagonalsForAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
             {
                 return false;
             }
-            if (!CheckForKnightAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
+            if (CheckForKnightAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
             {
                 return false;
             }
@@ -184,7 +188,7 @@ namespace ChessWPF.Game
         private static bool CheckRowsAndColumnsForAttackers(int row, int col, PieceColor attackerColor)
         {
             var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'R', 'O', 'Q', 'K' } : new char[] { 'r', 'o', 'q', 'k' };
+            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'R', 'O', 'Q' } : new char[] { 'r', 'o', 'q' };
             Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
             var increment = 1;
             while (CellIsValid(row + increment, col))
@@ -193,7 +197,7 @@ namespace ChessWPF.Game
                 {
                     if (isAttacker(cells[row + increment, col]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -205,11 +209,11 @@ namespace ChessWPF.Game
             increment = 1;
             while (CellIsValid(row - increment, col))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row - increment, col]))
                 {
                     if (isAttacker(cells[row - increment, col]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -221,11 +225,11 @@ namespace ChessWPF.Game
             increment = 1;
             while (CellIsValid(row, col + increment))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row, col + increment]))
                 {
                     if (isAttacker(cells[row, col + increment]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -237,11 +241,11 @@ namespace ChessWPF.Game
             increment = 1;
             while (CellIsValid(row, col - increment))
             {
-                if (char.IsLetter(cells[row, col]))
+                if (char.IsLetter(cells[row, col - increment]))
                 {
                     if (isAttacker(cells[row, col - increment]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -250,13 +254,13 @@ namespace ChessWPF.Game
                 }
                 increment++;
             }
-            return true;
+            return false;
         }
 
         private static bool CheckDiagonalsForAttackers(int row, int col, PieceColor attackerColor)
         {
             var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'P', 'B', 'Q', 'K' } : new char[] { 'p', 'b', 'q', 'k' };
+            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'B', 'Q' } : new char[] { 'b', 'q' };
             Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
             var rowIncrement = 1;
             var colIncrement = 1;
@@ -266,7 +270,7 @@ namespace ChessWPF.Game
                 {
                     if (isAttacker(cells[row + rowIncrement, col + colIncrement]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -284,7 +288,7 @@ namespace ChessWPF.Game
                 {
                     if (isAttacker(cells[row + rowIncrement, col - colIncrement]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -302,7 +306,7 @@ namespace ChessWPF.Game
                 {
                     if (isAttacker(cells[row - rowIncrement, col + colIncrement]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -320,7 +324,7 @@ namespace ChessWPF.Game
                 {
                     if (isAttacker(cells[row - rowIncrement, col - colIncrement]))
                     {
-                        return false;
+                        return true;
                     }
                     else
                     {
@@ -330,30 +334,48 @@ namespace ChessWPF.Game
                 rowIncrement++;
                 colIncrement++;
             }
-            return true;
+            return false;
         }
 
         private static bool CheckForKnightAttackers(int row, int col, PieceColor attackerColor)
         {
             var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'N', 'O' } : new char[] { 'n', 'n' };
+            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'N', 'O' } : new char[] { 'n', 'o' };
             Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
             if (CellIsValid(row + 2, col + 1) && isAttacker(cells[row + 2, col + 1]))
             {
-                return false;
+                return true;
             }
             if (CellIsValid(row + 2, col - 1) && isAttacker(cells[row + 2, col - 1]))
             {
-                return false;
+                return true;
             }
             if (CellIsValid(row - 2, col + 1) && isAttacker(cells[row - 2, col + 1]))
             {
-                return false;
+                return true;
             }
             if (CellIsValid(row - 2, col - 1) && isAttacker(cells[row - 2, col - 1]))
             {
-                return false;
+                return true;
             }
+            if (CellIsValid(row + 1, col + 2) && isAttacker(cells[row + 1, col + 2]))
+            {
+                return true;
+            }
+            if (CellIsValid(row + 1, col - 2) && isAttacker(cells[row + 1, col - 2]))
+            {
+                return true;
+            }
+            if (CellIsValid(row - 1, col + 2) && isAttacker(cells[row - 1, col + 2]))
+            {
+                return true;
+            }
+            if (CellIsValid(row - 1, col - 2) && isAttacker(cells[row - 1, col - 2]))
+            {
+                return true;
+            }
+            return false;
+        }
 
         private static bool CheckForPawnAttackers(int row, int col, PieceColor attackerColor)
         {
@@ -378,9 +400,12 @@ namespace ChessWPF.Game
                     return true;
                 }
                 if (CellIsValid(row - 1, col + 1) && isAttacker(cells[row - 1, col + 1]))
-            {
-                return false;
+                {
+                    return true;
+                }
             }
+            return false;
+        }
 
         private static bool CheckForKingAttackers(int row, int col, PieceColor attackerColor)
         {
@@ -421,8 +446,8 @@ namespace ChessWPF.Game
                 return true;
             }
 
-                return false;
-            }
+            return false;
+        }
 
         private static bool ValidateNoPawnsAreOnFirstRank()
         {
@@ -435,9 +460,9 @@ namespace ChessWPF.Game
                 for (int col = 0; col < position.SimplifiedCells.GetLength(1); col++)
                 {
                     if (position.SimplifiedCells[row, col] == 'p' || position.SimplifiedCells[row, col] == 'P')
-            {
-                return false;
-            }
+                    {
+                        return false;
+                    }
                 }
             }
             return true;
