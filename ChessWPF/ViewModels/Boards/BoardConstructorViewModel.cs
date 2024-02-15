@@ -69,6 +69,15 @@ namespace ChessWPF.ViewModels
             private set => deleteEnabled = value;
         }
 
+        public string FenAnnotation
+        {
+            get { return BoardConstructor.FenAnnotation; }
+            set
+            {
+                OnPropertyChanged(nameof(BoardConstructor.FenAnnotation));
+            }
+        }
+
         public IConstructorPiece? SelectedPiece
         {
             get { return selectedPiece; }
@@ -153,6 +162,7 @@ namespace ChessWPF.ViewModels
             }
             BoardConstructorMenuViewModel.SelectedEnPassantCoordinates = position.EnPassantCoordinates;
             BoardConstructorMenuViewModel.SelectedTurnColor = BoardConstructor.TurnColor;
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
 
         private void ClearBoard(object? sender, EventArgs e)
@@ -174,7 +184,7 @@ namespace ChessWPF.ViewModels
             }
             catch (Exception ex)
             {
-                   
+
             }
         }
 
@@ -199,21 +209,25 @@ namespace ChessWPF.ViewModels
         private void UpdateTurnColor(object? sender, TurnColorChangedEventArgs e)
         {
             BoardConstructor.UpdateTurnColor(e.TurnColor);
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
 
         private void UpdateCastlingRightsUI(object? sender, EventArgs e)
         {
             BoardConstructor.UpdateCastlingRightsFromUI((sender as BoardConstructorMenuViewModel)!.CastlingRights.ToArray());
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
 
         private void UpdateCastlingRightsBackend(object? sender, UpdateCastlingRightsEventArgs e)
         {
             BoardConstructorMenuViewModel.UpdateCastlingRightsBackend(e.CastlingRights);
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
 
         private void UpdateCastlingPosibilities(object? sender, EventArgs e)
         {
             BoardConstructorMenuViewModel.UpdateCastlingPossiblities(BoardConstructor.CastlingPossibilities);
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
 
         private void UpdateEnPassantPosibilities(object? sender, EventArgs e)
@@ -224,6 +238,7 @@ namespace ChessWPF.ViewModels
         private void UpdateEnPassantCoordinates(object? sender, EnPassantCoordinatesChangedEventArgs e)
         {
             BoardConstructor.UpdateEnPassantCoordinates(e.CellCoordinates);
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
 
         private void CreateConstructorCellPieceViewModels()
@@ -331,6 +346,7 @@ namespace ChessWPF.ViewModels
             {
                 BoardConstructor.UpdateCellPiece(e.Row, e.Col, null);
             }
+            FenAnnotation = BoardConstructor.FenAnnotation;
         }
     }
 }
