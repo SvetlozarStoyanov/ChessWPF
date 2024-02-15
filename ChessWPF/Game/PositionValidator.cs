@@ -30,6 +30,10 @@ namespace ChessWPF.Game
             {
                 return false;
             }
+            if (!ValidateNoPawnsAreOnFirstRank())
+            {
+                return false;
+            }
             return true;
         }
 
@@ -351,13 +355,22 @@ namespace ChessWPF.Game
             {
                 return false;
             }
-            if (CellIsValid(row - 1, col + 2) && isAttacker(cells[row - 1, col + 2]))
+
+        private static bool ValidateNoPawnsAreOnFirstRank()
+        {
+            if (!(position.Pieces.Values.Any(p => p.Any(p => p.PieceType == PieceType.Pawn))))
+            {
+                return true;
+            }
+            for (int row = 0; row < position.SimplifiedCells.GetLength(0); row += 7)
+            {
+                for (int col = 0; col < position.SimplifiedCells.GetLength(1); col++)
+                {
+                    if (position.SimplifiedCells[row, col] == 'p' || position.SimplifiedCells[row, col] == 'P')
             {
                 return false;
             }
-            if (CellIsValid(row - 1, col - 2) && isAttacker(cells[row - 1, col - 2]))
-            {
-                return false;
+                }
             }
             return true;
         }
@@ -367,7 +380,5 @@ namespace ChessWPF.Game
             return row > 0 && row < position.SimplifiedCells.GetLength(0) &&
                 col > 0 && col < position.SimplifiedCells.GetLength(1);
         }
-
-
     }
 }
