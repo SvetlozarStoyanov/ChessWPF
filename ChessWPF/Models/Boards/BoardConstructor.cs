@@ -37,6 +37,8 @@ namespace ChessWPF.Models.Boards
         public delegate void UpdateCastlingRightsEventHandler(object? sender, UpdateCastlingRightsEventArgs e);
         public event UpdateEnPassantPosibilitiesEventHandler EnPassantPosibilitiesUpdate;
         public delegate void UpdateEnPassantPosibilitiesEventHandler(object? sender, EventArgs e);
+        public event UpdateFenAnnotationEventHandler FenAnnotationUpdate;
+        public delegate void UpdateFenAnnotationEventHandler(object? sender, EventArgs e);
 
         public string FenAnnotation
         {
@@ -225,6 +227,7 @@ namespace ChessWPF.Models.Boards
                EnPassantCoordinates,
                0,
                1);
+            FenAnnotationUpdate?.Invoke(null, EventArgs.Empty);
         }
 
         private void CreateConstructorPieces()
