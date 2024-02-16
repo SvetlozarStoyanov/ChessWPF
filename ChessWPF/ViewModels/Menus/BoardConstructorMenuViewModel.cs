@@ -12,6 +12,8 @@ namespace ChessWPF.ViewModels
 {
     public class BoardConstructorMenuViewModel : ViewModelBase
     {
+        private bool saveIsEnabled = true;
+        private string? positionErrorText;
         private PieceColor selectedTurnColor;
         private CellCoordinates? selectedEnPassantCoordinates;
         private ObservableCollection<PieceColor> turnColors;
@@ -57,7 +59,26 @@ namespace ChessWPF.ViewModels
         public event SavePositionEventHandler SaveCurrentPosition;
         public delegate void SavePositionEventHandler(object? sender, EventArgs e);
 
+        public bool SaveIsEnabled
+        {
+            get => saveIsEnabled;
+            set
+            {
+                saveIsEnabled = value;
+                OnPropertyChanged(nameof(SaveIsEnabled));
+            }
+        }
 
+
+        public string? PositionErrorText
+        {
+            get => positionErrorText;
+            set 
+            { 
+                positionErrorText = value;
+                OnPropertyChanged(nameof(PositionErrorText));
+            }
+        }
 
         public PieceColor SelectedTurnColor
         {
