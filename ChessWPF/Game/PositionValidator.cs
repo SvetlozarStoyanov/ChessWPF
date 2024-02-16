@@ -1,6 +1,11 @@
-﻿using ChessWPF.Models.Pieces.Enums;
+﻿using ChessWPF.Constants;
+using ChessWPF.HelperClasses.Exceptions;
+using ChessWPF.Models.Cells;
+using ChessWPF.Models.Pieces;
+using ChessWPF.Models.Pieces.Enums;
 using ChessWPF.Models.Positions;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace ChessWPF.Game
@@ -9,45 +14,39 @@ namespace ChessWPF.Game
     {
         private static Position position;
 
-        public static bool ValidatePosition(Position positionInput)
+        public static bool ValidatePositionFromFenAnnotation(string fenAnnotation)
+        {
+            position = FenAnnotationReader.GetPosition(fenAnnotation);
+            ValidatePosition(position);
+            return true;
+        }
+
+        private static bool ValidatePosition(Position positionInput)
         {
             position = positionInput;
 
             if (!ValidatePieceComposition())
             {
-                return false;
+                throw new InvalidPositionException("Invalid Piece Composition!");
             }
 
             if (!ValidateCastlingRights())
             {
-                return false;
+                throw new InvalidPositionException("Invalid castling eights!");
             }
             if (!(position.EnPassantCoordinates != null ? ValidateEnPassant() : true))
             {
-                return false;
+                throw new InvalidPositionException("Invalid en passant!");
             }
             if (!ValidateOppositeTurnColorKingCannotBeTaken())
             {
-                return false;
+                throw new InvalidPositionException($"{(position.TurnColor == PieceColor.White ? "Black" : "White")} King can be taken!");
             }
             if (!ValidateNoPawnsAreOnFirstRank())
             {
-                return false;
+                throw new InvalidPositionException("No pawns can be on the back rank!");
             }
             return true;
-        }
-
-        public static bool ValidatePositionFromFenAnnotation(string fenAnnotation)
-        {
-            position = FenAnnotationReader.GetPosition(fenAnnotation);
-            var pieceCompositionIsCorrect = ValidatePieceComposition();
-            var castlingIsValid = ValidateCastlingRights();
-            var enPassantIsValid = position.EnPassantCoordinates != null ? ValidateEnPassant() : true;
-            var oppositeTurnColorKingCannotBeTaken = ValidateOppositeTurnColorKingCannotBeTaken();
-            return pieceCompositionIsCorrect
-                && castlingIsValid
-                && enPassantIsValid
-                && oppositeTurnColorKingCannotBeTaken;
         }
 
         private static bool ValidatePieceComposition()
@@ -470,8 +469,84 @@ namespace ChessWPF.Game
 
         private static bool CellIsValid(int row, int col)
         {
-            return row > 0 && row < position.SimplifiedCells.GetLength(0) &&
-                col > 0 && col < position.SimplifiedCells.GetLength(1);
+            return row >= 0 && row < position.SimplifiedCells.GetLength(0) &&
+                col >= 0 && col < position.SimplifiedCells.GetLength(1);
         }
+
+        //public static void CalculatePossibleMoves()
+        //{
+        //    var pieces = position.Pieces;
+        //    var turnColor = position.TurnColor;
+        //    var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+        //    var oppositeKing = (King)pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
+            
+        //    var king = (King)pieces[turnColor].First(p => p.PieceType == PieceType.King);
+        //    king.Defenders = KingDefenderFinder.FindDefenders(king, turnColor, this);
+        //    king.Attackers.Clear();
+        //    foreach (var piece in pieces[oppositeColor])
+        //    {
+        //        var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
+        //        piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+        //        piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+        //        Cells[piece.Row, piece.Col].Piece = piece;
+        //        var checkedKingCell = piece.LegalMoves.FirstOrDefault(c => c.Piece != null && c.Piece.PieceType == PieceType.King);
+        //        if (checkedKingCell != null)
+        //        {
+        //            king.Attackers.Add(piece);
+        //        }
+        //    }
+        //    if (king.Attackers.Any())
+        //    {
+                
+        //        king.IsInCheck = true;
+                
+        //    }
+        //    var validMovesToStopCheck = new List<Cell>();
+        //    if (king.Attackers.Count == 1)
+        //    {
+        //        validMovesToStopCheck = LegalMovesToStopCheckFinder.GetLegalMovesToStopCheck(king, king.Attackers.First(), this);
+        //    }
+        //    if (king.Attackers.Count > 1)
+        //    {
+        //        var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king, this);
+        //        king.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+        //        foreach (var piece in pieces[TurnColor].Where(p => p.PieceType != PieceType.King))
+        //        {
+        //            piece.LegalMoves = new List<Cell>();
+        //            piece.ProtectedCells = new List<Cell>();
+        //        }
+        //    }
+        //    else
+        //    {
+        //        foreach (var piece in pieces[TurnColor])
+        //        {
+        //            var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
+        //            if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
+        //            {
+        //                legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
+        //                    .Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
+        //            }
+        //            else if (king.Defenders.Any(d => d.Item1 == piece))
+        //            {
+        //                if (king.IsInCheck)
+        //                {
+        //                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
+        //                }
+        //                var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
+        //                var movesToPreventPotentialCheck = LegalMovesToStopCheckFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, this);
+        //                movesToPreventPotentialCheck.Remove(movesToPreventPotentialCheck.FirstOrDefault(c => c.Row == currDefenderAndPotentialAttacker.Item1.Row && c.Col == currDefenderAndPotentialAttacker.Item1.Col)!);
+        //                movesToPreventPotentialCheck.Add(Cells[currDefenderAndPotentialAttacker.Item2.Row, currDefenderAndPotentialAttacker.Item2.Col]);
+        //                if (king.Attackers.Count == 1 && king.Attackers.First().PieceType == PieceType.Knight)
+        //                {
+        //                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
+        //                }
+        //                legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
+        //            }
+        //            piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
+        //            piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
+        //            Cells[piece.Row, piece.Col].Piece!.UpdateLegalMovesAndProtectedCells(piece.LegalMoves, piece.ProtectedCells);
+        //        }
+        //    }
+        //}
     }
 }
