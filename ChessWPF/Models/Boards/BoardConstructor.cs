@@ -1,7 +1,6 @@
 ﻿using ChessWPF.Contracts.Pieces;
 using ChessWPF.Game;
 using ChessWPF.HelperClasses.CustomEventArgs;
-using ChessWPF.HelperClasses.Exceptions;
 using ChessWPF.Models.Cells;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
@@ -39,6 +38,8 @@ namespace ChessWPF.Models.Boards
         public delegate void UpdateEnPassantPosibilitiesEventHandler(object? sender, EventArgs e);
         public event UpdateFenAnnotationEventHandler FenAnnotationUpdate;
         public delegate void UpdateFenAnnotationEventHandler(object? sender, EventArgs e);
+        public event UpdatePositionStatusEventHandler PositionStatusUpdate;
+        public delegate void UpdatePositionStatusEventHandler(object? sender, PositionStatusEventArgs e);
 
         public string FenAnnotation
         {
@@ -169,11 +170,7 @@ namespace ChessWPF.Models.Boards
                 0,
                 1);
             position.Pieces = FindPieces();
-            var positionIsValid = PositionValidator.ValidatePosition(position);
-            if (!positionIsValid)
-            {
-                throw new InvalidPositionException("Position is invalid");
-            }
+            
             return position;
         }
 
@@ -227,6 +224,17 @@ namespace ChessWPF.Models.Boards
                EnPassantCoordinates,
                0,
                1);
+
+            try
+            {
+                var positionIsValid = PositionValidator.ValidatePositionFromFenAnnotation(FenAnnotation);
+                PositionStatusUpdate?.Invoke(null, new PositionStatusEventArgs(null));
+            }
+            catch (Exception ex)
+            {
+                PositionStatusUpdate?.Invoke(null, new PositionStatusEventArgs(ex.Message));
+            }
+
             FenAnnotationUpdate?.Invoke(null, EventArgs.Empty);
         }
 

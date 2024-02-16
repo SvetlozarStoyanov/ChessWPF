@@ -47,8 +47,9 @@ namespace ChessWPF.ViewModels
             BoardConstructor.CastlingPossibilitiesUpdate += UpdateCastlingPosibilities;
             BoardConstructor.CastlingRightsUpdate += UpdateCastlingRightsBackend;
             BoardConstructor.FenAnnotationUpdate += UpdateFenAnnotation;
-            BoardConstructorMenuViewModel.CastlingRightsUpdate += UpdateCastlingRightsUI;
             BoardConstructor.EnPassantPosibilitiesUpdate += UpdateEnPassantPosibilities;
+            BoardConstructor.PositionStatusUpdate += UpdatePositionStatus;
+            BoardConstructorMenuViewModel.CastlingRightsUpdate += UpdateCastlingRightsUI;
             BoardConstructorMenuViewModel.TurnColorUpdate += UpdateTurnColor;
             BoardConstructorMenuViewModel.EnPassantCoordinatesUpdate += UpdateEnPassantCoordinates;
             BoardConstructorMenuViewModel.ResetBoardToDefault += ResetBoard;
@@ -58,7 +59,7 @@ namespace ChessWPF.ViewModels
             EnableSelectingPiecesFromBoard();
         }
 
-
+       
 
         public bool SelectorEnabled
         {
@@ -74,7 +75,7 @@ namespace ChessWPF.ViewModels
 
         public string FenAnnotation
         {
-            get { return BoardConstructor.FenAnnotation; }
+            get => BoardConstructor.FenAnnotation;
             set
             {
                 OnPropertyChanged(nameof(BoardConstructor.FenAnnotation));
@@ -83,20 +84,20 @@ namespace ChessWPF.ViewModels
 
         public IConstructorPiece? SelectedPiece
         {
-            get { return selectedPiece; }
-            private set { selectedPiece = value; }
+            get => selectedPiece;
+            private set => selectedPiece = value;
         }
 
         public BoardConstructor BoardConstructor
         {
-            get { return boardConstructor; }
-            init { boardConstructor = value; }
+            get => boardConstructor;
+            init => boardConstructor = value;
         }
 
         public BoardConstructorMenuViewModel BoardConstructorMenuViewModel
         {
-            get { return boardConstructorMenuViewModel; }
-            init { boardConstructorMenuViewModel = value; }
+            get => boardConstructorMenuViewModel;
+            init => boardConstructorMenuViewModel = value;
         }
 
         public GameStateStore GameStateStore
@@ -107,14 +108,14 @@ namespace ChessWPF.ViewModels
 
         public Dictionary<PieceColor, HashSet<ConstructorMenuPieceViewModel>> ConstructorMenuPieceViewModels
         {
-            get { return constructorMenuPieceViewModels; }
-            private set { constructorMenuPieceViewModels = value; }
+            get => constructorMenuPieceViewModels;
+            private set => constructorMenuPieceViewModels = value;
         }
 
         public ConstructorCellViewModel[][] ConstructorCellViewModels
         {
-            get { return constructorCellViewModels; }
-            set { constructorCellViewModels = value; }
+            get => constructorCellViewModels;
+            private set => constructorCellViewModels = value;
         }
 
         public ICommand NavigateToMainMenuCommand { get; init; }
@@ -183,10 +184,13 @@ namespace ChessWPF.ViewModels
             {
                 var position = BoardConstructor.ExportPosition();
                 gameStateStore.CurrentPosition = position;
+                BoardConstructorMenuViewModel.SaveIsEnabled = true;
+                BoardConstructorMenuViewModel.PositionErrorText = null;
             }
             catch (Exception ex)
             {
-
+                BoardConstructorMenuViewModel.SaveIsEnabled = false;
+                BoardConstructorMenuViewModel.PositionErrorText = ex.Message;
             }
         }
 
@@ -237,9 +241,24 @@ namespace ChessWPF.ViewModels
         {
             BoardConstructor.UpdateEnPassantCoordinates(e.CellCoordinates);
         }
+
         private void UpdateFenAnnotation(object? sender, EventArgs e)
         {
             FenAnnotation = BoardConstructor.FenAnnotation;
+        }
+
+        private void UpdatePositionStatus(object? sender, PositionStatusEventArgs e)
+        {
+            if (e.ErrorMessage == null)
+            {
+                BoardConstructorMenuViewModel.SaveIsEnabled = true;
+                BoardConstructorMenuViewModel.PositionErrorText = null;
+            }
+            else
+            {
+                BoardConstructorMenuViewModel.SaveIsEnabled = false;
+                BoardConstructorMenuViewModel.PositionErrorText = e.ErrorMessage;
+            }
         }
 
         private void CreateConstructorCellPieceViewModels()
