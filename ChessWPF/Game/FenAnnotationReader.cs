@@ -19,7 +19,7 @@ namespace ChessWPF.Game
             position.SimplifiedCells = piecesAndSimplifiedCells.Item2;
             position.TurnColor = fenAnnotationSplit[1] == "w" ? PieceColor.White : PieceColor.Black;
             position.CastlingRights = GetCastlingRights(fenAnnotationSplit[2]);
-            position.EnPassantCoordinates = fenAnnotationSplit[3] != "-" ? GetEnPassantCoordinates(fenAnnotationSplit[3]) : null;
+            position.EnPassantCoordinates = fenAnnotationSplit[3] != "-" ? GetEnPassantCoordinatesFromAnnotation(fenAnnotationSplit[3]) : null;
             position.HalfMoveCount = int.Parse(fenAnnotationSplit[4]);
             position.MoveNumber = int.Parse(fenAnnotationSplit[5]);
             position.FenAnnotation = fenAnnotation;
@@ -56,9 +56,9 @@ namespace ChessWPF.Game
             return castlingRights;
         }
 
-        private static CellCoordinates GetEnPassantCoordinates(string enPassantAnnotation)
+        private static CellCoordinates GetEnPassantCoordinatesFromAnnotation(string enPassantAnnotation)
         {
-            var coordinates = new CellCoordinates(enPassantAnnotation[1] - 97, (int)enPassantAnnotation[0] - 97);
+            var coordinates = new CellCoordinates(8 - (int)(enPassantAnnotation[1] - 48), ((int)(enPassantAnnotation[0] - 97)));
             return coordinates;
         }
 
