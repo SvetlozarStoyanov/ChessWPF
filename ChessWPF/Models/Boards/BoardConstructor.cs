@@ -113,7 +113,6 @@ namespace ChessWPF.Models.Boards
         {
             ClearAllPieces();
             ImportPosition(position);
-            UpdateTurnColor(position.TurnColor);
             UpdateCastlingRightsBackend();
             CastlingPossibilitiesUpdate?.Invoke(null, EventArgs.Empty);
             UpdateFenAnnotation();
@@ -126,7 +125,7 @@ namespace ChessWPF.Models.Boards
             CastlingRights = (false, false, false, false);
             ClearEnPassantPossibilities();
             UpdateCastlingRightsBackend();
-            UpdateFenAnnotation();
+            //UpdateFenAnnotation();
         }
 
         public void ClearAllPieces()
@@ -153,10 +152,10 @@ namespace ChessWPF.Models.Boards
             CastlingPossibilities = new bool[4];
             EnPassantCoordinates = position.EnPassantCoordinates;
             UpdateEnPassantCoordinates(position.EnPassantCoordinates);
-            UpdateTurnColor(position.TurnColor);
+            //UpdateTurnColor(position.TurnColor);
+            TurnColor = position.TurnColor;
             UpdateCastlingPossibilities();
             UpdateEnPassantPossibilities();
-            FenAnnotation = position.FenAnnotation;
         }
 
         public Position ExportPosition()
@@ -200,7 +199,6 @@ namespace ChessWPF.Models.Boards
             {
                 UpdateEnPassantPossibilities();
             }
-            UpdateFenAnnotation();
         }
 
         public void UpdateTurnColor(PieceColor turnColor)
@@ -216,7 +214,7 @@ namespace ChessWPF.Models.Boards
             UpdateFenAnnotation();
         }
 
-        private void UpdateFenAnnotation()
+        public void UpdateFenAnnotation()
         {
             FenAnnotation = FenAnnotationWriter.WriteFenAnnotationFromBoardConstructor(SimplifiedCells,
                TurnColor,
@@ -302,7 +300,7 @@ namespace ChessWPF.Models.Boards
             var constructorCellsFlattened = ConstructorCells.Cast<ConstructorCell>().ToArray();
             foreach (var cell in constructorCellsFlattened.Where(c => c.ConstructorBoardPiece != null))
             {
-                pieces[cell.ConstructorBoardPiece.Color].Add(PieceCreator.CreatePieceByProperties(
+                pieces[cell.ConstructorBoardPiece!.Color].Add(PieceCreator.CreatePieceByProperties(
                     cell.ConstructorBoardPiece.PieceType,
                     cell.ConstructorBoardPiece.Color,
                     cell.Row,

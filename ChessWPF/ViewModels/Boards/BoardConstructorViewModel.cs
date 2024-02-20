@@ -44,7 +44,7 @@ namespace ChessWPF.ViewModels
                 BoardConstructor.CastlingPossibilities,
                 BoardConstructor.EnPassantPossibilities,
                 BoardConstructor.TurnColor);
-            BoardConstructor.CastlingPossibilitiesUpdate += UpdateCastlingPosibilities;
+            BoardConstructor.CastlingPossibilitiesUpdate += UpdateCastlingPossibilities;
             BoardConstructor.CastlingRightsUpdate += UpdateCastlingRightsBackend;
             BoardConstructor.FenAnnotationUpdate += UpdateFenAnnotation;
             BoardConstructor.EnPassantPosibilitiesUpdate += UpdateEnPassantPosibilities;
@@ -58,8 +58,6 @@ namespace ChessWPF.ViewModels
             BoardConstructorMenuViewModel.SaveCurrentPosition += SaveCurrentPosition;
             EnableSelectingPiecesFromBoard();
         }
-
-       
 
         public bool SelectorEnabled
         {
@@ -220,6 +218,7 @@ namespace ChessWPF.ViewModels
         private void UpdateCastlingRightsUI(object? sender, EventArgs e)
         {
             BoardConstructor.UpdateCastlingRightsFromUI((sender as BoardConstructorMenuViewModel)!.CastlingRights.ToArray());
+            //BoardConstructor.UpdateFenAnnotation("UpdateCastlingRightsUI from BoardConstructorViewModel");
         }
 
         private void UpdateCastlingRightsBackend(object? sender, UpdateCastlingRightsEventArgs e)
@@ -227,7 +226,7 @@ namespace ChessWPF.ViewModels
             BoardConstructorMenuViewModel.UpdateCastlingRightsBackend(e.CastlingRights);
         }
 
-        private void UpdateCastlingPosibilities(object? sender, EventArgs e)
+        private void UpdateCastlingPossibilities(object? sender, EventArgs e)
         {
             BoardConstructorMenuViewModel.UpdateCastlingPossiblities(BoardConstructor.CastlingPossibilities);
         }
@@ -366,6 +365,7 @@ namespace ChessWPF.ViewModels
             {
                 BoardConstructor.UpdateCellPiece(e.Row, e.Col, null);
             }
+            BoardConstructor.UpdateFenAnnotation();
         }
     }
 }
