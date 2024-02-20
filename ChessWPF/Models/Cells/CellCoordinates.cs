@@ -1,4 +1,6 @@
-﻿namespace ChessWPF.Models.Cells
+﻿using System;
+
+namespace ChessWPF.Models.Cells
 {
     public struct CellCoordinates
     {
@@ -9,9 +11,9 @@
         }
         public int Row { get; init; }
         public int Col { get; init; }
-        public string AsText 
-        { 
-            get => this.ToString(); 
+        public string AsText
+        {
+            get => this.ToString();
         }
         public override bool Equals(object? obj)
         {
@@ -31,6 +33,26 @@
                 return "";
             }
             return $"{(char)(Col + 97)}{7 - Row + 1}";
+        }
+
+        public int RowDifference(CellCoordinates other)
+        {
+            return Math.Abs(this.Row - other.Row);
+        }
+         
+        public int ColDifference(CellCoordinates other)
+        {
+            return Math.Abs(this.Col - other.Col);
+        }
+
+        public bool HasEqualCoordinates(int row, int col)
+        {
+            return this.Row == row && this.Col == col;
+        } 
+
+        public bool HasEqualCoordinates(CellCoordinates other)
+        {
+            return this.Row == other.Row && this.Col == other.Col;
         }
     }
 }
