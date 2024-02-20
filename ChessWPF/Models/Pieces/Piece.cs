@@ -37,12 +37,16 @@ namespace ChessWPF.Models.Pieces
                 && otherPiece.Color == this.Color;
         }
 
-        public bool HasEqualCoordinates(object? obj)
+        public bool HasEqualCoordinatesWithCell(object? obj)
         {
             var cell = obj as Cell;
             return cell!.Row == this.Row && cell.Col == this.Col;
         }
 
+        public bool HasEqualCoordinates(int row, int col)
+        {
+            return this.Row == row && this.Col == col;
+        }
 
         public bool HasEvenCoordinates()
         {
@@ -60,5 +64,7 @@ namespace ChessWPF.Models.Pieces
             this.LegalMoves = legalMoves;
             this.ProtectedCells = protectedCells;
         }
+
+
     }
 }
