@@ -1,5 +1,4 @@
-﻿using ChessWPF.Constants;
-using ChessWPF.HelperClasses.Exceptions;
+﻿using ChessWPF.HelperClasses.Exceptions;
 using ChessWPF.Models.Cells;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
@@ -27,12 +26,11 @@ namespace ChessWPF.Game
 
             if (!ValidatePieceComposition())
             {
-                throw new InvalidPositionException("Invalid Piece Composition!");
+                throw new InvalidPositionException("Invalid piece composition!");
             }
-
             if (!ValidateCastlingRights())
             {
-                throw new InvalidPositionException("Invalid castling eights!");
+                throw new InvalidPositionException("Invalid castling rights!");
             }
             if (!(position.EnPassantCoordinates != null ? ValidateEnPassant() : true))
             {
@@ -45,6 +43,10 @@ namespace ChessWPF.Game
             if (!ValidateNoPawnsAreOnFirstRank())
             {
                 throw new InvalidPositionException("No pawns can be on the back rank!");
+            }
+            if (!ValidateColorToMoveHasLegalMoves())
+            {
+                throw new InvalidPositionException("Game is already over!");
             }
             return true;
         }
@@ -160,292 +162,10 @@ namespace ChessWPF.Game
         {
             var oppositeTurnColor = position.TurnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             var oppositeTurnColorKing = position.Pieces[oppositeTurnColor].FirstOrDefault(p => p.PieceType == PieceType.King);
-            if (CheckRowsAndColumnsForAttackers(oppositeTurnColorKing!.Row, oppositeTurnColorKing.Col, position.TurnColor))
-            {
-                return false;
-            }
-            if (CheckDiagonalsForAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
-            {
-                return false;
-            }
-            if (CheckForKnightAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
-            {
-                return false;
-            }
-            if (CheckForPawnAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
-            {
-                return false;
-            }
-            if (CheckForKingAttackers(oppositeTurnColorKing.Row, oppositeTurnColorKing.Col, position.TurnColor))
-            {
-                return false;
-            }
-
-            return true;
-        }
-
-        private static bool CheckRowsAndColumnsForAttackers(int row, int col, PieceColor attackerColor)
-        {
-            var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'R', 'O', 'Q' } : new char[] { 'r', 'o', 'q' };
-            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
-            var increment = 1;
-            while (CellIsValid(row + increment, col))
-            {
-                if (char.IsLetter(cells[row + increment, col]))
-                {
-                    if (isAttacker(cells[row + increment, col]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                increment++;
-            }
-            increment = 1;
-            while (CellIsValid(row - increment, col))
-            {
-                if (char.IsLetter(cells[row - increment, col]))
-                {
-                    if (isAttacker(cells[row - increment, col]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                increment++;
-            }
-            increment = 1;
-            while (CellIsValid(row, col + increment))
-            {
-                if (char.IsLetter(cells[row, col + increment]))
-                {
-                    if (isAttacker(cells[row, col + increment]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                increment++;
-            }
-            increment = 1;
-            while (CellIsValid(row, col - increment))
-            {
-                if (char.IsLetter(cells[row, col - increment]))
-                {
-                    if (isAttacker(cells[row, col - increment]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                increment++;
-            }
-            return false;
-        }
-
-        private static bool CheckDiagonalsForAttackers(int row, int col, PieceColor attackerColor)
-        {
-            var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'B', 'Q' } : new char[] { 'b', 'q' };
-            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
-            var rowIncrement = 1;
-            var colIncrement = 1;
-            while (CellIsValid(row + rowIncrement, col + colIncrement))
-            {
-                if (char.IsLetter(cells[row + rowIncrement, col + colIncrement]))
-                {
-                    if (isAttacker(cells[row + rowIncrement, col + colIncrement]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                rowIncrement++;
-                colIncrement++;
-            }
-            rowIncrement = 1;
-            colIncrement = 1;
-            while (CellIsValid(row + rowIncrement, col - colIncrement))
-            {
-                if (char.IsLetter(cells[row + rowIncrement, col - colIncrement]))
-                {
-                    if (isAttacker(cells[row + rowIncrement, col - colIncrement]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                rowIncrement++;
-                colIncrement++;
-            }
-            rowIncrement = 1;
-            colIncrement = 1;
-            while (CellIsValid(row - rowIncrement, col + colIncrement))
-            {
-                if (char.IsLetter(cells[row - rowIncrement, col + colIncrement]))
-                {
-                    if (isAttacker(cells[row - rowIncrement, col + colIncrement]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                rowIncrement++;
-                colIncrement++;
-            }
-            rowIncrement = 1;
-            colIncrement = 1;
-            while (CellIsValid(row - rowIncrement, col - colIncrement))
-            {
-                if (char.IsLetter(cells[row - rowIncrement, col - colIncrement]))
-                {
-                    if (isAttacker(cells[row - rowIncrement, col - colIncrement]))
-                    {
-                        return true;
-                    }
-                    else
-                    {
-                        break;
-                    }
-                }
-                rowIncrement++;
-                colIncrement++;
-            }
-            return false;
-        }
-
-        private static bool CheckForKnightAttackers(int row, int col, PieceColor attackerColor)
-        {
-            var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'N', 'O' } : new char[] { 'n', 'o' };
-            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
-            if (CellIsValid(row + 2, col + 1) && isAttacker(cells[row + 2, col + 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row + 2, col - 1) && isAttacker(cells[row + 2, col - 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row - 2, col + 1) && isAttacker(cells[row - 2, col + 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row - 2, col - 1) && isAttacker(cells[row - 2, col - 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row + 1, col + 2) && isAttacker(cells[row + 1, col + 2]))
-            {
-                return true;
-            }
-            if (CellIsValid(row + 1, col - 2) && isAttacker(cells[row + 1, col - 2]))
-            {
-                return true;
-            }
-            if (CellIsValid(row - 1, col + 2) && isAttacker(cells[row - 1, col + 2]))
-            {
-                return true;
-            }
-            if (CellIsValid(row - 1, col - 2) && isAttacker(cells[row - 1, col - 2]))
-            {
-                return true;
-            }
-            return false;
-        }
-
-        private static bool CheckForPawnAttackers(int row, int col, PieceColor attackerColor)
-        {
-            var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'P' } : new char[] { 'p' };
-            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
-            if (attackerColor == PieceColor.White)
-            {
-                if (CellIsValid(row + 1, col - 1) && isAttacker(cells[row + 1, col - 1]))
-                {
-                    return true;
-                }
-                if (CellIsValid(row + 1, col + 1) && isAttacker(cells[row + 1, col + 1]))
-                {
-                    return true;
-                }
-            }
-            else
-            {
-                if (CellIsValid(row - 1, col - 1) && isAttacker(cells[row - 1, col - 1]))
-                {
-                    return true;
-                }
-                if (CellIsValid(row - 1, col + 1) && isAttacker(cells[row - 1, col + 1]))
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
-        private static bool CheckForKingAttackers(int row, int col, PieceColor attackerColor)
-        {
-            var cells = position.SimplifiedCells;
-            var attackerTypes = attackerColor == PieceColor.White ? new char[] { 'K' } : new char[] { 'k' };
-            Predicate<char> isAttacker = (attacker) => attackerTypes.Contains(attacker);
-
-            if (CellIsValid(row - 1, col - 1) && isAttacker(cells[row - 1, col - 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row - 1, col) && isAttacker(cells[row - 1, col]))
-            {
-                return true;
-            }
-            if (CellIsValid(row - 1, col + 1) && isAttacker(cells[row - 1, col + 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row, col - 1) && isAttacker(cells[row, col - 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row, col + 1) && isAttacker(cells[row, col + 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row + 1, col + 1) && isAttacker(cells[row + 1, col + 1]))
-            {
-                return true;
-            }
-            if (CellIsValid(row + 1, col) && isAttacker(cells[row + 1, col]))
-            {
-                return true;
-            }
-            if (CellIsValid(row + 1, col + 1) && isAttacker(cells[row + 1, col + 1]))
-            {
-                return true;
-            }
-
-            return false;
+            return !AttackerFinder.HasAttackers(oppositeTurnColorKing!.Row,
+                oppositeTurnColorKing.Col,
+                position.TurnColor,
+                position.SimplifiedCells);
         }
 
         private static bool ValidateNoPawnsAreOnFirstRank()
@@ -467,86 +187,139 @@ namespace ChessWPF.Game
             return true;
         }
 
+        private static bool ValidateColorToMoveHasLegalMoves()
+        {
+            return ColorHasLegalMoves(position.TurnColor);
+        }
+
         private static bool CellIsValid(int row, int col)
         {
             return row >= 0 && row < position.SimplifiedCells.GetLength(0) &&
                 col >= 0 && col < position.SimplifiedCells.GetLength(1);
         }
 
-        //public static void CalculatePossibleMoves()
-        //{
-        //    var pieces = position.Pieces;
-        //    var turnColor = position.TurnColor;
-        //    var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
-        //    var oppositeKing = (King)pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
-            
-        //    var king = (King)pieces[turnColor].First(p => p.PieceType == PieceType.King);
-        //    king.Defenders = KingDefenderFinder.FindDefenders(king, turnColor, this);
-        //    king.Attackers.Clear();
-        //    foreach (var piece in pieces[oppositeColor])
-        //    {
-        //        var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
-        //        piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
-        //        piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
-        //        Cells[piece.Row, piece.Col].Piece = piece;
-        //        var checkedKingCell = piece.LegalMoves.FirstOrDefault(c => c.Piece != null && c.Piece.PieceType == PieceType.King);
-        //        if (checkedKingCell != null)
-        //        {
-        //            king.Attackers.Add(piece);
-        //        }
-        //    }
-        //    if (king.Attackers.Any())
-        //    {
-                
-        //        king.IsInCheck = true;
-                
-        //    }
-        //    var validMovesToStopCheck = new List<Cell>();
-        //    if (king.Attackers.Count == 1)
-        //    {
-        //        validMovesToStopCheck = LegalMovesToStopCheckFinder.GetLegalMovesToStopCheck(king, king.Attackers.First(), this);
-        //    }
-        //    if (king.Attackers.Count > 1)
-        //    {
-        //        var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king, this);
-        //        king.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
-        //        foreach (var piece in pieces[TurnColor].Where(p => p.PieceType != PieceType.King))
-        //        {
-        //            piece.LegalMoves = new List<Cell>();
-        //            piece.ProtectedCells = new List<Cell>();
-        //        }
-        //    }
-        //    else
-        //    {
-        //        foreach (var piece in pieces[TurnColor])
-        //        {
-        //            var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
-        //            if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
-        //            {
-        //                legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
-        //                    .Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
-        //            }
-        //            else if (king.Defenders.Any(d => d.Item1 == piece))
-        //            {
-        //                if (king.IsInCheck)
-        //                {
-        //                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
-        //                }
-        //                var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
-        //                var movesToPreventPotentialCheck = LegalMovesToStopCheckFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, this);
-        //                movesToPreventPotentialCheck.Remove(movesToPreventPotentialCheck.FirstOrDefault(c => c.Row == currDefenderAndPotentialAttacker.Item1.Row && c.Col == currDefenderAndPotentialAttacker.Item1.Col)!);
-        //                movesToPreventPotentialCheck.Add(Cells[currDefenderAndPotentialAttacker.Item2.Row, currDefenderAndPotentialAttacker.Item2.Col]);
-        //                if (king.Attackers.Count == 1 && king.Attackers.First().PieceType == PieceType.Knight)
-        //                {
-        //                    legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
-        //                }
-        //                legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves].Where(lm => movesToPreventPotentialCheck.Contains(lm)).ToList();
-        //            }
-        //            piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
-        //            piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
-        //            Cells[piece.Row, piece.Col].Piece!.UpdateLegalMovesAndProtectedCells(piece.LegalMoves, piece.ProtectedCells);
-        //        }
-        //    }
-        //}
+        private static bool ColorHasLegalMoves(PieceColor turnColor)
+        {
+            var pieces = position.Pieces;
+            var cells = position.SimplifiedCells;
+            var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
+            var oppositeKing = (King)pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
+            //var simplifiedPieces = new Dictionary<PieceColor, List<SimplifiedPiece>>();
+            var king = (King)pieces[turnColor].First(p => p.PieceType == PieceType.King);
+            var defenders = KingDefenderFinder.FindDefendersSimplified(king, turnColor, position.Pieces, position.SimplifiedCells);
+            var attackers = AttackerFinder.GetAttackersAndInterceptingMoves(king.Row, king.Col, oppositeColor, cells, pieces);
+            var kingHasMoves = CheckIfKingHasMoves(king, oppositeColor, attackers, cells);
+            if (attackers.Count > 0)
+            {
+                if (kingHasMoves)
+                {
+                    return true;
+                }
+                if (attackers.Count < 2)
+                {
+                    var canBlockCheck = CheckIfThereAreMovesToStopCheck(turnColor,
+                        defenders,
+                        attackers,
+                        cells,
+                        pieces,
+                        position.EnPassantCoordinates);
+                    if (canBlockCheck)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+            return true;
+        }
+
+
+        private static bool CheckIfKingHasMoves(King king, PieceColor oppositeColor,
+            List<ValueTuple<Piece, List<CellCoordinates>, CellCoordinates?>> attackers,
+            char[,] cells)
+        {
+            Func<int, int, bool> canBeMovedTo = (row, col) => !AttackerFinder.HasAttackers(row, col, oppositeColor, cells)
+                && attackers.All(att => att.Item3.HasValue ? !att.Item3.Value.HasEqualCoordinates(row, col) : true)
+                && (cells[row, col] == '.'
+                || (oppositeColor == PieceColor.Black ? char.IsLower(cells[row, col]) : char.IsUpper(cells[row, col]))
+                );
+            if (CellIsValid(king.Row - 1, king.Col - 1) && canBeMovedTo(king.Row - 1, king.Col - 1))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row - 1, king.Col) && canBeMovedTo(king.Row - 1, king.Col))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row - 1, king.Col + 1) && canBeMovedTo(king.Row - 1, king.Col + 1))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row, king.Col - 1) && canBeMovedTo(king.Row, king.Col - 1))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row, king.Col + 1) && canBeMovedTo(king.Row, king.Col + 1))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row + 1, king.Col - 1) && canBeMovedTo(king.Row + 1, king.Col - 1))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row + 1, king.Col) && canBeMovedTo(king.Row + 1, king.Col))
+            {
+                return true;
+            }
+            if (CellIsValid(king.Row + 1, king.Col + 1) && canBeMovedTo(king.Row + 1, king.Col + 1))
+            {
+                return true;
+            }
+            return false;
+        }
+
+        private static bool CheckIfThereAreMovesToStopCheck(PieceColor turnColor,
+            List<(Piece, Piece)> defenders,
+            List<(Piece, List<CellCoordinates>, CellCoordinates?)> attackers,
+            char[,] cells,
+            Dictionary<PieceColor, List<Piece>> pieces,
+            CellCoordinates? enPassantCoordinates)
+        {
+            var attackerInterceptingCells = attackers.FirstOrDefault().Item2;
+            var defendingPieces = defenders.Select(x => x.Item1).ToList();
+            if (attackers.FirstOrDefault().Item1.PieceType == PieceType.Pawn)
+            {
+                if (enPassantCoordinates.HasValue
+                    && enPassantCoordinates.Value.RowDifference(attackerInterceptingCells.FirstOrDefault()) == 1)
+                {
+                    attackerInterceptingCells.Add(enPassantCoordinates.Value);
+                }
+            }
+            foreach (var cell in attackerInterceptingCells)
+            {
+                var currAttackersAndInterceptingCells = AttackerFinder.GetAttackersAndInterceptingMoves(cell.Row,
+                    cell.Col,
+                    turnColor,
+                    cells,
+                    pieces);
+                foreach (var attacker in currAttackersAndInterceptingCells.Select(a => a.Item1))
+                {
+                    if (enPassantCoordinates != null && cell.Equals(enPassantCoordinates.Value))
+                    {
+                        return true;
+                    }
+                    if (attacker.PieceType == PieceType.Pawn && cells[cell.Row, cell.Col] == '.')
+                    {
+                        continue;
+                    }
+                    if (defendingPieces.Any(p => p.HasEqualCoordinates(attacker.Row, attacker.Col)))
+                    {
+                        continue;
+                    }
+                    return true;
+                }
+            }
+            return false;
+        }
     }
 }
