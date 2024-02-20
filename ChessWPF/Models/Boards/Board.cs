@@ -228,7 +228,7 @@ namespace ChessWPF.Models.Boards
             {
                 Pieces[cellOneBefore.Piece!.Color].Add(cellOneBefore.Piece!);
                 Pieces[cellOneBefore.Piece!.Color].Remove(pieces[cellOneBefore.Piece!.Color]
-                    .First(p => p.HasEqualCoordinates(cellTwoBefore)));
+                    .First(p => p.HasEqualCoordinatesWithCell(cellTwoBefore)));
             }
             else
             {
@@ -288,7 +288,7 @@ namespace ChessWPF.Models.Boards
                 Pieces[OngoingPromotionMove.CellTwoBefore.Piece!.Color].Add(OngoingPromotionMove.CellTwoBefore.Piece!);
             }
 
-            Pieces[OngoingPromotionMove.CellOneBefore.Piece!.Color].Remove(Pieces[OngoingPromotionMove.CellOneBefore.Piece.Color].First(p => p.HasEqualCoordinates(OngoingPromotionMove.CellTwoBefore)));
+            Pieces[OngoingPromotionMove.CellOneBefore.Piece!.Color].Remove(Pieces[OngoingPromotionMove.CellOneBefore.Piece.Color].First(p => p.HasEqualCoordinatesWithCell(OngoingPromotionMove.CellTwoBefore)));
             Pieces[OngoingPromotionMove.CellOneBefore.Piece.Color].Add(OngoingPromotionMove.CellOneBefore.Piece);
 
             OngoingPromotionMove = null;
@@ -935,15 +935,15 @@ namespace ChessWPF.Models.Boards
             }
             Cells[move.CellTwoBefore.Row, move.CellTwoBefore.Col].UpdateCell(move.CellTwoAfter.Piece);
 
-            var cellTwoAfterPiece = Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinates(move.CellOneBefore))!;
+            var cellTwoAfterPiece = Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinatesWithCell(move.CellOneBefore))!;
             if (cellTwoAfterPiece == null)
             {
-                Pieces[TurnColor].Remove(Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinates(move.CellTwoAfter))!);
+                Pieces[TurnColor].Remove(Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinatesWithCell(move.CellTwoAfter))!);
                 Pieces[TurnColor].Add(move.CellTwoAfter.Piece!);
             }
             else
             {
-                Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinates(move.CellOneBefore))!.SetCoordinates(move.CellTwoBefore);
+                Pieces[TurnColor].FirstOrDefault(p => p.HasEqualCoordinatesWithCell(move.CellOneBefore))!.SetCoordinates(move.CellTwoBefore);
             }
 
 
