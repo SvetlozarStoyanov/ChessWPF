@@ -41,6 +41,173 @@ namespace ChessWPF.Game
             return legalMovesAndProtectedSquares;
         }
 
+        public static bool HasLegalMoves(Piece piece, char[,] cells,
+            CellCoordinates? enPassantCoordinates, List<CellCoordinates>? pinningPieceInterceptingCells)
+        {
+            var turnColor = piece.Color;
+            var hasLegalMoves = false;
+            switch (piece.PieceType)
+            {
+                case PieceType.Pawn:
+                    hasLegalMoves = DoesPawnHaveLegalMoves(piece.Row, piece.Col, turnColor, cells, enPassantCoordinates, pinningPieceInterceptingCells);
+                    break;
+                case PieceType.Knight:
+                    hasLegalMoves = DoesKnightHaveLegalMoves(piece.Row, piece.Col, turnColor, cells, pinningPieceInterceptingCells);
+                    break;
+                case PieceType.Bishop:
+                    hasLegalMoves = DoesBishopHaveLegalMoves(piece.Row, piece.Col, turnColor, cells, pinningPieceInterceptingCells);
+                    break;
+                case PieceType.Rook:
+                    hasLegalMoves = DoesRookHaveLegalMoves(piece.Row, piece.Col, turnColor, cells, pinningPieceInterceptingCells);
+                    break;
+                case PieceType.Queen:
+                    hasLegalMoves = DoesQueenHaveLegalMoves(piece.Row, piece.Col, turnColor, cells, pinningPieceInterceptingCells);
+                    break;
+                case PieceType.Knook:
+                    hasLegalMoves = DoesKnookHaveLegalMoves(piece.Row, piece.Col, turnColor, cells, pinningPieceInterceptingCells);
+                    break;
+            }
+            return hasLegalMoves;
+        }
+
+        private static bool DoesPawnHaveLegalMoves(int row,
+            int col,
+            PieceColor turnColor,
+            char[,] cells,
+            CellCoordinates? enPassantCoordinates,
+            List<CellCoordinates>? interceptingCells)
+        {
+            if (interceptingCells != null)
+            {
+                if (turnColor == PieceColor.White)
+                {
+                    if (cells[row - 1, col] == '.'
+                        && interceptingCells.Any(im => im.HasEqualCoordinates(row - 1, col)))
+                    {
+                        return true;
+                    }
+                    if (row == 6 && cells[row - 2, col] == '.'
+                        && interceptingCells.Any(im => im.HasEqualCoordinates(row - 2, col)))
+                    {
+                        return true;
+                    }
+                    if (IsCellValid(row - 1, col - 1, cells))
+                    {
+                        if ((char.IsLower(cells[row - 1, col - 1]) ||
+                           (enPassantCoordinates.HasValue
+                           && enPassantCoordinates.Value.HasEqualCoordinates(row - 1, col - 1)))
+                           && interceptingCells.Any(im => im.HasEqualCoordinates(row - 1, col - 1)))
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsCellValid(row - 1, col + 1, cells))
+                    {
+                        if ((char.IsLower(cells[row - 1, col + 1]) ||
+                            (enPassantCoordinates.HasValue
+                            && enPassantCoordinates.Value.HasEqualCoordinates(row - 1, col + 1)))
+                            && interceptingCells.Any(im => im.HasEqualCoordinates(row - 1, col + 1)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                else if (turnColor == PieceColor.Black)
+                {
+                    if (cells[row + 1, col] == '.'
+                        && interceptingCells.Any(im => im.HasEqualCoordinates(row + 1, col)))
+                    {
+                        return true;
+                    }
+                    if (row == 1 && cells[row + 2, col] == '.'
+                        && interceptingCells.Any(im => im.HasEqualCoordinates(row + 2, col)))
+                    {
+                        return true;
+                    }
+
+                    if (IsCellValid(row + 1, col - 1, cells))
+                    {
+                        if ((char.IsUpper(cells[row + 1, col - 1]) ||
+                            (enPassantCoordinates.HasValue
+                            && enPassantCoordinates.Value.HasEqualCoordinates(row + 1, col - 1)))
+                            && interceptingCells.Any(im => im.HasEqualCoordinates(row + 1, col - 1)))
+                        {
+                            return true;
+                        }
+                    }
+                    if (IsCellValid(row + 1, col + 1, cells))
+                    {
+                        if (char.IsUpper(cells[row + 1, col + 1]) ||
+                            (enPassantCoordinates.HasValue
+                            && enPassantCoordinates.Value.HasEqualCoordinates(row + 1, col + 1))
+                            && interceptingCells.Any(im => im.HasEqualCoordinates(row + 1, col + 1)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+            else
+            {
+                if (turnColor == PieceColor.White)
+                {
+                    if (cells[row - 1, col] == '.')
+                    {
+                        return true;
+                    }
+                    if (IsCellValid(row - 1, col - 1, cells))
+                    {
+                        if (char.IsLower(cells[row - 1, col - 1]) ||
+                           (enPassantCoordinates.HasValue
+                           && enPassantCoordinates.Value.HasEqualCoordinates(row - 1, col - 1)))
+                        {
+                            return true;
+                        }
+                    }
+
+                    if (IsCellValid(row - 1, col + 1, cells))
+                    {
+                        if (char.IsLower(cells[row - 1, col + 1]) ||
+                            (enPassantCoordinates.HasValue
+                            && enPassantCoordinates.Value.HasEqualCoordinates(row - 1, col + 1)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+
+                else if (turnColor == PieceColor.Black)
+                {
+                    if (cells[row + 1, col] == '.')
+                    {
+                        return true;
+                    }
+                    if (IsCellValid(row + 1, col - 1, cells))
+                    {
+                        if (char.IsUpper(cells[row + 1, col - 1]) ||
+                            (enPassantCoordinates.HasValue
+                            && enPassantCoordinates.Value.HasEqualCoordinates(row + 1, col - 1)))
+                        {
+                            return true;
+                        }
+                    }
+                    if (IsCellValid(row + 1, col + 1, cells))
+                    {
+                        if (char.IsUpper(cells[row + 1, col + 1]) ||
+                            (enPassantCoordinates.HasValue
+                            && enPassantCoordinates.Value.HasEqualCoordinates(row + 1, col + 1)))
+                        {
+                            return true;
+                        }
+                    }
+                }
+            }
+
+            return false;
+        }
+
         private static Dictionary<string, List<Cell>> GetPawnLegalMovesAndProtectedCells(Piece pawn, Board board)
         {
             var turnColor = board.TurnColor;
@@ -66,10 +233,6 @@ namespace ChessWPF.Game
                         enPassantMove = board.Cells[board.Moves.Peek().CellTwoAfter.Row + 1, board.Moves.Peek().CellTwoAfter.Col];
                     }
                 }
-            }
-            if (pawn.Row == 3 && pawn.Col == 5)
-            {
-
             }
 
             if (pawn.Color == PieceColor.White)
@@ -165,6 +328,51 @@ namespace ChessWPF.Game
             legalMovesAndProtectedCells.Add(LegalMovesAndProtectedCells.LegalMoves, legalMoves);
             legalMovesAndProtectedCells.Add(LegalMovesAndProtectedCells.ProtectedCells, protectedCells);
             return legalMovesAndProtectedCells;
+        }
+
+        private static bool DoesBishopHaveLegalMoves(int row, int col, PieceColor turnColor, char[,] cells, List<CellCoordinates>? interceptingCells)
+        {
+            Func<int, int, bool> isValidMove = (rowParam, colParam) => (IsCellValid(rowParam, colParam, cells) && (cells[rowParam, colParam] == '.'
+             || (turnColor == PieceColor.White ? char.IsLower(cells[rowParam, colParam]) : char.IsUpper(cells[rowParam, colParam])))
+             && (interceptingCells != null ? (interceptingCells.Any(im => im.HasEqualCoordinates(rowParam, colParam)) ? true : false) : true));
+            int increment = 1;
+
+            while (IsCellValid(row + increment, col + increment, cells))
+            {
+                if (isValidMove(row + increment, col + increment))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            increment = 1;
+            while (IsCellValid(row + increment, col - increment, cells))
+            {
+                if (isValidMove(row + increment, col - increment))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            increment = 1;
+            while (IsCellValid(row - increment, col - increment, cells))
+            {
+                if (isValidMove(row - increment, col - increment))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            increment = 1;
+            while (IsCellValid(row - increment, col + increment, cells))
+            {
+                if (isValidMove(row - increment, col + increment))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            return false;
         }
 
         private static Dictionary<string, List<Cell>> GetBishopLegalMovesAndProtectedCells(Piece bishop, Board board)
@@ -340,6 +548,50 @@ namespace ChessWPF.Game
             return legalMovesAndProtectedCells;
         }
 
+        private static bool DoesKnightHaveLegalMoves(int row,
+            int col,
+            PieceColor turnColor,
+            char[,] cells,
+            List<CellCoordinates>? interceptingCells)
+        {
+            Func<int, int, bool> isValidMove = (rowParam, colParam) => (IsCellValid(rowParam, colParam, cells) && (cells[rowParam, colParam] == '.'
+            || (turnColor == PieceColor.White ? char.IsLower(cells[rowParam, colParam]) : char.IsUpper(cells[rowParam, colParam])))
+            && (interceptingCells != null ? (interceptingCells.Any(im => im.HasEqualCoordinates(rowParam, colParam)) ? true : false) : true));
+            if (isValidMove(row - 2, col - 1))
+            {
+                return true;
+            }
+            if (isValidMove(row - 2, col + 1))
+            {
+                return true;
+            }
+            if (isValidMove(row + 2, col - 1))
+            {
+                return true;
+            }
+            if (isValidMove(row + 2, col + 1))
+            {
+                return true;
+            }
+            if (isValidMove(row - 1, col - 2))
+            {
+                return true;
+            }
+            if (isValidMove(row + 1, col - 2))
+            {
+                return true;
+            }
+            if (isValidMove(row - 1, col + 2))
+            {
+                return true;
+            }
+            if (isValidMove(row + 1, col + 2))
+            {
+                return true;
+            }
+            return false;
+        }
+
         private static Dictionary<string, List<Cell>> GetKnightLegalMovesAndProtectedCells(Piece knight, Board board)
         {
             var legalMovesAndProtectedCells = new Dictionary<string, List<Cell>>();
@@ -483,6 +735,56 @@ namespace ChessWPF.Game
             legalMovesAndProtectedCells.Add(LegalMovesAndProtectedCells.LegalMoves, legalMoves);
             legalMovesAndProtectedCells.Add(LegalMovesAndProtectedCells.ProtectedCells, protectedCells);
             return legalMovesAndProtectedCells;
+        }
+
+        private static bool DoesRookHaveLegalMoves(int row,
+            int col,
+            PieceColor turnColor,
+            char[,] cells,
+            List<CellCoordinates>? interceptingCells)
+        {
+            Func<int, int, bool> isValidMove = (rowParam, colParam) => (IsCellValid(rowParam, colParam, cells) && (cells[rowParam, colParam] == '.'
+             || (turnColor == PieceColor.White ? char.IsLower(cells[rowParam, colParam]) : char.IsUpper(cells[rowParam, colParam])))
+             && (interceptingCells != null ? (interceptingCells.Any(im => im.HasEqualCoordinates(rowParam, colParam)) ? true : false) : true));
+            var increment = 1;
+            while (IsCellValid(row + increment, col, cells))
+            {
+                if (isValidMove(row + increment, col))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            increment = 1;
+            while (IsCellValid(row - increment, col, cells))
+            {
+                if (isValidMove(row - increment, col))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            increment = 1;
+
+            while (IsCellValid(row, col + increment, cells))
+            {
+                if (isValidMove(row, col + increment))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            increment = 1;
+
+            while (IsCellValid(row, col - increment, cells))
+            {
+                if (isValidMove(row, col - increment))
+                {
+                    return true;
+                }
+                increment++;
+            }
+            return false;
         }
 
         private static Dictionary<string, List<Cell>> GetRookLegalMovesAndProtectedCells(Piece rook, Board board)
@@ -649,6 +951,11 @@ namespace ChessWPF.Game
             return legalMovesAndProtectedCells;
         }
 
+        private static bool DoesQueenHaveLegalMoves(int row, int col, PieceColor turnColor, char[,] cells, List<CellCoordinates>? interceptingCells)
+        {
+            return (DoesBishopHaveLegalMoves(row, col, turnColor, cells, interceptingCells) || DoesRookHaveLegalMoves(row, col, turnColor, cells, interceptingCells));
+        }
+
         private static Dictionary<string, List<Cell>> GetQueenLegalMovesAndProtectedCells(Piece queen, Board board)
         {
             var bishopLegalMovesAndProtectedCells = GetBishopLegalMovesAndProtectedCells(queen, board);
@@ -660,6 +967,11 @@ namespace ChessWPF.Game
             };
 
             return queenLegalMoves;
+        }
+
+        private static bool DoesKnookHaveLegalMoves(int row, int col, PieceColor turnColor, char[,] cells, List<CellCoordinates>? interceptingCells)
+        {
+            return (DoesKnightHaveLegalMoves(row, col, turnColor, cells, interceptingCells) || DoesRookHaveLegalMoves(row, col, turnColor, cells, interceptingCells));
         }
 
         private static Dictionary<string, List<Cell>> GetKnookLegalMovesAndProtectedCells(Piece knook, Board board)
@@ -975,6 +1287,11 @@ namespace ChessWPF.Game
         private static bool IsCellValid(int row, int col, Board board)
         {
             return row >= 0 && row < board.Cells.GetLength(0) && col >= 0 && col < board.Cells.GetLength(1);
+        }
+
+        private static bool IsCellValid(int row, int col, char[,] cells)
+        {
+            return row >= 0 && row < cells.GetLength(0) && col >= 0 && col < cells.GetLength(1);
         }
 
         private static Cell GetCellFromAnnotation(Board board, string annotation)
