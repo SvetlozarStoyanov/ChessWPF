@@ -204,7 +204,7 @@ namespace ChessWPF.Game
             var cells = position.SimplifiedCells;
             var oppositeColor = turnColor == PieceColor.White ? PieceColor.Black : PieceColor.White;
             var oppositeKing = (King)pieces[oppositeColor].First(p => p.PieceType == PieceType.King);
-            //var simplifiedPieces = new Dictionary<PieceColor, List<SimplifiedPiece>>();
+
             var king = (King)pieces[turnColor].First(p => p.PieceType == PieceType.King);
             var defenders = KingDefenderFinder.FindDefendersSimplified(king, turnColor, position.Pieces, position.SimplifiedCells);
             var attackers = AttackerFinder.GetAttackersAndInterceptingMoves(king.Row, king.Col, oppositeColor, cells, pieces);
@@ -230,9 +230,42 @@ namespace ChessWPF.Game
                 }
                 return false;
             }
-            return true;
+            else
+            {
+                foreach (var piece in pieces[turnColor].Where(p => p.PieceType != PieceType.King))
+                {
+                    if (defenders.Any(d => d.Item1.HasEqualCoordinates(piece.Row, piece.Col)))
+                    {
+                        var defenderAndPinningPiece = defenders.FirstOrDefault(d => d.Item1.HasEqualCoordinates(piece.Row, piece.Col));
+                        var currAttackers = AttackerFinder.GetAttackersAndInterceptingMoves(piece.Row,
+                            piece.Col,
+                            oppositeColor,
+                            cells,
+                            pieces);
+                        var pinningPiece = defenderAndPinningPiece.Item2;
+                        var pinningAttacker = currAttackers.FirstOrDefault(a => a.Item1.HasEqualCoordinates(pinningPiece.Row, pinningPiece.Col));
+                        var hasLegalMoves = LegalMoveFinder.HasLegalMoves(piece, cells, position.EnPassantCoordinates, pinningAttacker.Item2);
+                        if (hasLegalMoves)
+                        {
+                            return true;
+                        }
+                    }
+                    else
+                    {
+                        var hasLegalMoves = LegalMoveFinder.HasLegalMoves(piece, cells, position.EnPassantCoordinates, null);
+                        if (hasLegalMoves)
+                        {
+                            return true;
+                        }
+                    }
+                }
+                if (kingHasMoves)
+                {
+                    return true;
+                }
+                return false;
+            }
         }
-
 
         private static bool CheckIfKingHasMoves(King king, PieceColor oppositeColor,
             List<ValueTuple<Piece, List<CellCoordinates>, CellCoordinates?>> attackers,
@@ -287,6 +320,18 @@ namespace ChessWPF.Game
         {
             var attackerInterceptingCells = attackers.FirstOrDefault().Item2;
             var defendingPieces = defenders.Select(x => x.Item1).ToList();
+            foreach (var pawn in pieces[turnColor].Where(p => p.PieceType == PieceType.Pawn
+            && !defenders.Any(d => d.Item1.HasEqualCoordinates(p.Row, p.Col))))
+            {
+                var canStopCheck = LegalMoveFinder.HasLegalMoves(pawn,
+                    cells,
+                    enPassantCoordinates,
+                    attackerInterceptingCells);
+                if (canStopCheck)
+                {
+                    return true;
+                }
+            }
             if (attackers.FirstOrDefault().Item1.PieceType == PieceType.Pawn)
             {
                 if (enPassantCoordinates.HasValue
