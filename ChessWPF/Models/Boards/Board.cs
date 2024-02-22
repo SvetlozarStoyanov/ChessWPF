@@ -387,13 +387,13 @@ namespace ChessWPF.Models.Boards
                         legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
                             .Where(lm => validMovesToStopCheck.Contains(lm)).ToList();
                     }
-                    else if (king.Defenders.Any(d => d.Item1 == piece))
+                    else if (king.Defenders.Any(d => d.Item1.HasEqualCoordinates(piece.Row, piece.Col)))
                     {
                         if (king.IsInCheck)
                         {
                             legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
                         }
-                        var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1 == piece);
+                        var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1.HasEqualCoordinates(piece.Row,piece.Col));
                         var movesToPreventPotentialCheck = LegalMovesToStopCheckFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, this);
                         movesToPreventPotentialCheck.Remove(movesToPreventPotentialCheck.FirstOrDefault(c => c.Row == currDefenderAndPotentialAttacker.Item1.Row && c.Col == currDefenderAndPotentialAttacker.Item1.Col)!);
                         movesToPreventPotentialCheck.Add(Cells[currDefenderAndPotentialAttacker.Item2.Row, currDefenderAndPotentialAttacker.Item2.Col]);
