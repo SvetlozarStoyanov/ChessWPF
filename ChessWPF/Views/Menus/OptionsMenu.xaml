@@ -1,0 +1,66 @@
+﻿<UserControl x:Class="ChessWPF.Views.Menus.OptionsMenu"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.Menus"
+             xmlns:timecontrols="clr-namespace:ChessWPF.Views.TimeControls"
+             mc:Ignorable="d" 
+             >
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+            <RowDefinition></RowDefinition>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+            <ColumnDefinition></ColumnDefinition>
+        </Grid.ColumnDefinitions>
+        <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="5" FontWeight="Black" FontSize="30px"
+               HorizontalAlignment="Center" VerticalAlignment="Center">Time Controls
+        </Label>
+        <Grid Grid.Row="1" Grid.RowSpan="3" Grid.Column="0" Grid.ColumnSpan="5" HorizontalAlignment="Center">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Row="0" Grid.RowSpan="5" Grid.ColumnSpan="1" >
+                <Grid.RowDefinitions>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                    <RowDefinition></RowDefinition>
+                </Grid.RowDefinitions>
+                <timecontrols:TimeControlList Grid.Row="0" DataContext="{Binding TimeControlViewModelsSplit[Bullet]}">
+
+                </timecontrols:TimeControlList>
+                <timecontrols:TimeControlList Grid.Row="1" DataContext="{Binding TimeControlViewModelsSplit[Blitz]}">
+
+                </timecontrols:TimeControlList>
+                <timecontrols:TimeControlList Grid.Row="2" DataContext="{Binding TimeControlViewModelsSplit[Rapid]}">
+
+                </timecontrols:TimeControlList>
+                <timecontrols:TimeControlList Grid.Row="3" DataContext="{Binding TimeControlViewModelsSplit[Classical]}">
+
+                </timecontrols:TimeControlList>
+            </Grid>
+        </Grid>
+        <Button Grid.Row="4" Grid.Column="2"
+                HorizontalAlignment="Center" VerticalAlignment="Center"
+                Padding="15px"
+                FontSize="20px"
+                Command="{Binding NavigateToMainMenuCommand}">Back to menu
+        </Button>
+    </Grid>
+</UserControl>

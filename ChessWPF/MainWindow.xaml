@@ -20,14 +20,11 @@
                 <views.Menus:MainMenu />
             </DataTemplate>
             <DataTemplate DataType="{x:Type viewmodels:GameOptionsViewModel}">
-                <views.Menus:Options />
+                <views.Menus:OptionsMenu />
+            </DataTemplate>
+            <DataTemplate DataType="{x:Type viewmodels:BoardConstructorViewModel}">
+                <views.Boards:ChessBoardConstructor />
             </DataTemplate>
         </ContentControl.Resources>
     </ContentControl>
 </Window>
-
-<!--<Grid SizeChanged="Grid_SizeChanged">
-        <Views.Boards:GameBoard DataContext="{Binding CurrentViewModel}">
-
-        </Views.Boards:GameBoard>
-    </Grid>-->

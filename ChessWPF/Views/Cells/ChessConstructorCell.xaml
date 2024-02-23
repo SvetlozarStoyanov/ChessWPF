@@ -1,0 +1,20 @@
+﻿<UserControl x:Class="ChessWPF.Views.Cells.ChessConstructorCell"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:ChessWPF.Views.Cells"
+             mc:Ignorable="d"
+             Background="{Binding BackgroundBrush,UpdateSourceTrigger=PropertyChanged}">
+    <Grid SizeChanged="Grid_SizeChanged">
+        <Button x:Name="updateCellBtn" Command="{Binding UpdateConstructorCellCommand}"
+                Click="updateCellBtn_Click"
+                ></Button>
+        <Button x:Name="selectCellPieceBtn" Command="{Binding SelectPieceFromCellCommand}"
+                Click="selectCellPieceBtn_Click"
+                IsEnabled="{Binding CanBeSelected,UpdateSourceTrigger=PropertyChanged}"
+                IsEnabledChanged="selectCellPieceBtn_IsEnabledChanged"
+                ></Button>
+        <Image x:Name="imgPiece" Source="{Binding CellImage, UpdateSourceTrigger=PropertyChanged}"></Image>
+    </Grid>
+</UserControl>

@@ -1,4 +1,4 @@
-﻿using ChessWPF.Models.Data.Board;
+﻿using ChessWPF.Models.Cells;
 using System;
 
 namespace ChessWPF.HelperClasses.CustomEventArgs

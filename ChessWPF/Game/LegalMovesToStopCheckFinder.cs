@@ -1,6 +1,7 @@
-﻿using ChessWPF.Models.Data.Board;
-using ChessWPF.Models.Data.Pieces;
-using ChessWPF.Models.Data.Pieces.Enums;
+﻿using ChessWPF.Models.Boards;
+using ChessWPF.Models.Cells;
+using ChessWPF.Models.Pieces;
+using ChessWPF.Models.Pieces.Enums;
 using System;
 using System.Collections.Generic;
 using System.Linq;

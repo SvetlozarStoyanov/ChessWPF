@@ -5,7 +5,7 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.TimeControls"
              mc:Ignorable="d" >
-    <RadioButton x:Name="timeControlRadioButton" Padding="5px"
+    <RadioButton x:Name="timeControlRadioButton" Style="{StaticResource timeControlRadioButton}" Padding="5px"
                 SizeChanged="timeControlRadioButton_SizeChanged"  Margin="10,20" 
                 GroupName="TimeControlGroup" HorizontalAlignment="Center"
                 VerticalAlignment="Center" HorizontalContentAlignment="Center"

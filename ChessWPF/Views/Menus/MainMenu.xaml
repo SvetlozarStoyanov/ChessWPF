@@ -22,13 +22,17 @@
         </Grid.ColumnDefinitions>
         <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
                 Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="1" Grid.Column="2" Command="{Binding NavigateToGameCommand}">Start Game</Button>
+                Grid.Row="0" Grid.Column="2" Command="{Binding NavigateToGameCommand}">Start Game</Button>
         <Button HorizontalAlignment="Center" VerticalAlignment="Center"
                 Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="2" Grid.Column="2" Command="{Binding NavigateToOptionsCommand}">Options</Button>
+                Grid.Row="1" Grid.Column="2" Command="{Binding NavigateToOptionsCommand}">Options</Button>
+        <Button HorizontalAlignment="Center" VerticalAlignment="Center"
+                Padding="20px" FontSize="25px" FontWeight="Bold"
+                Grid.Row="2" Grid.Column="2" Command="{Binding NavigateToBoardConstructorCommand}">Board Constructor
+        </Button>
         <Button HorizontalAlignment="Center" VerticalAlignment="Center"
                 x:Name="exitApplicationButton" Click="exitApplicationButton_Click"
                 Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="3" Grid.Column="2" >Exit</Button>
+                Grid.Row="3" Grid.Column="2">Exit</Button>
     </Grid>
 </UserControl>
