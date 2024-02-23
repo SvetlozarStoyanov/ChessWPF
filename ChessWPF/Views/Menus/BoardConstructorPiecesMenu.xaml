@@ -7,7 +7,9 @@
              xmlns:pieces="clr-namespace:ChessWPF.Views.Pieces"
              mc:Ignorable="d" 
              >
-    <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+    <Border HorizontalAlignment="Center" BorderBrush="Black" BorderThickness="3">
+        
+    <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" Orientation="Horizontal">
         <Grid x:Name="selectPieceGrid">
 
             <RadioButton x:Name="selectPieceRadioButton"
@@ -42,4 +44,6 @@
             </RadioButton>
         </Grid>
     </StackPanel>
+    </Border>
+
 </UserControl>
