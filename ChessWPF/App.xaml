@@ -137,24 +137,24 @@
                                 <BulletDecorator.Bullet>
                                     <Grid>
                                         <Ellipse x:Name="Border"  
-    Fill="Transparent"
-    StrokeThickness="1"
-    Stroke="Transparent" />
+                                            Fill="Transparent"
+                                            StrokeThickness="1"
+                                            Stroke="Transparent" />
                                         <Ellipse x:Name="CheckMark"
-    Margin="0"
-    Fill="Transparent" />
+                                        Margin="0"
+                                        Fill="Transparent" />
                                     </Grid>
                                 </BulletDecorator.Bullet>
                                 <ContentPresenter Name="PART_Content"
-Margin="0,0,0,0"
-VerticalAlignment="Center"
-HorizontalAlignment="Left"
-RecognizesAccessKey="True"/>
+                                    Margin="0,0,0,0"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Left"
+                                    RecognizesAccessKey="True"/>
                             </BulletDecorator>
                             <ControlTemplate.Triggers>
                                 <Trigger Property="IsChecked" Value="false">
                                     <Setter TargetName="CheckMark" Property="Visibility" Value="Collapsed"/>
-                                    
+
                                 </Trigger>
                                 <Trigger Property="IsMouseOver" Value="true">
                                     <Setter TargetName="Border" Property="Fill" Value="Black" />
@@ -173,7 +173,15 @@ RecognizesAccessKey="True"/>
                     </Setter.Value>
                 </Setter>
             </Style>
+            <Style x:Key="boardConstructorCastlingRightsCheckbox" TargetType="{x:Type CheckBox}">
+                <Setter Property="LayoutTransform">
+                    <Setter.Value>
+                        <ScaleTransform ScaleX="1.8" ScaleY="1.8">
+                        </ScaleTransform>
+                    </Setter.Value>
+                </Setter>
 
+            </Style>
         </ResourceDictionary>
     </Application.Resources>
 
