@@ -33,7 +33,9 @@ namespace ChessWPF.ViewModels
             BoardConstructor = new BoardConstructor();
             MatchConstructorCellsToViewModels();
             CreateConstructorCellPieceViewModels();
-            BoardConstructor.ImportPosition(gameStateStore.CurrentPosition);
+            BoardConstructor.ImportInProgress = true;
+            BoardConstructor.LoadPosition(gameStateStore.CurrentPositionFenAnnotation);
+            BoardConstructor.ImportInProgress = false;
             NavigateToMainMenuCommand = new NavigateCommand<MainMenuViewModel>(gameStateStore, () => new MainMenuViewModel(gameStateStore));
             NavigateToGameCommand = new NavigateCommand<GameViewModel>(gameStateStore, () => new GameViewModel(gameStateStore));
             SelectDeletePieceCommand = new SelectDeletePieceCommand(this);
@@ -142,16 +144,17 @@ namespace ChessWPF.ViewModels
 
         private void ResetBoard(object? sender, EventArgs e)
         {
-            LoadPosition(PositionCreator.CreateDefaultPosition());
+            LoadPosition(PositionCreator.CreateDefaultPositionFenAnnotation());
         }
 
         private void LoadLastSavedPosition(object? sender, EventArgs e)
         {
-            LoadPosition(gameStateStore.CurrentPosition);
+            LoadPosition(gameStateStore.CurrentPositionFenAnnotation);
         }
 
-        private void LoadPosition(Position position)
+        private void LoadPosition(string position)
         {
+            BoardConstructor.ImportInProgress = true;
             DisableSelectingPiecesFromBoard();
             BoardConstructor.LoadPosition(position);
             if (SelectorEnabled)
@@ -162,8 +165,9 @@ namespace ChessWPF.ViewModels
             {
                 SelectDeletePiece();
             }
-            BoardConstructorMenuViewModel.SelectedEnPassantCoordinates = position.EnPassantCoordinates;
+            BoardConstructorMenuViewModel.SelectedEnPassantCoordinates = BoardConstructor.EnPassantCoordinates;
             BoardConstructorMenuViewModel.SelectedTurnColor = BoardConstructor.TurnColor;
+            BoardConstructor.ImportInProgress = false;
         }
 
         private void ClearBoard(object? sender, EventArgs e)
@@ -180,8 +184,8 @@ namespace ChessWPF.ViewModels
         {
             try
             {
-                var position = BoardConstructor.ExportPosition();
-                gameStateStore.CurrentPosition = position;
+                
+                gameStateStore.UpdateCurrentPositionFenAnnotation(BoardConstructor.FenAnnotation);
                 BoardConstructorMenuViewModel.SaveIsEnabled = true;
                 BoardConstructorMenuViewModel.PositionErrorText = null;
             }
@@ -207,7 +211,7 @@ namespace ChessWPF.ViewModels
 
         private bool[] GetCastlingRightsFromBoardConstructor()
         {
-            return new bool[] { BoardConstructor.CastlingRights.Item1, BoardConstructor.CastlingRights.Item2, BoardConstructor.CastlingRights.Item3, BoardConstructor.CastlingRights.Item4 };
+            return BoardConstructor.CastlingRights;
         }
 
         private void UpdateTurnColor(object? sender, TurnColorChangedEventArgs e)

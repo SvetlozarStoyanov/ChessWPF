@@ -13,12 +13,13 @@ namespace ChessWPF.Models.Boards
 {
     public sealed class BoardConstructor
     {
+        private bool importInProgress;
         private string fenAnnotation;
         private PieceColor turnColor;
         private CellCoordinates? enPassantCoordinates;
-        private ValueTuple<bool, bool, bool, bool> castlingRights;
+        private bool[] castlingRights;
         private HashSet<CellCoordinates?> enPassantPosibilities;
-        private bool[] castlingPosibilities;
+        private bool[] castlingPossibilities;
         private Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> menuPieces;
         private char[,] simplifiedCells;
         private ConstructorCell[,] constructorCells;
@@ -28,6 +29,7 @@ namespace ChessWPF.Models.Boards
             CreateCells();
             CreateConstructorPieces();
             EnPassantPossibilities = new HashSet<CellCoordinates?>();
+            CastlingPossibilities = new bool[4];
         }
 
         public event UpdateCastlingPosibilitiesEventHandler CastlingPossibilitiesUpdate;
@@ -40,6 +42,12 @@ namespace ChessWPF.Models.Boards
         public delegate void UpdateFenAnnotationEventHandler(object? sender, EventArgs e);
         public event UpdatePositionStatusEventHandler PositionStatusUpdate;
         public delegate void UpdatePositionStatusEventHandler(object? sender, PositionStatusEventArgs e);
+
+        public bool ImportInProgress
+        {
+            get => importInProgress;
+            set => importInProgress = value;
+        }
 
         public string FenAnnotation
         {
@@ -59,7 +67,7 @@ namespace ChessWPF.Models.Boards
             private set => enPassantCoordinates = value;
         }
 
-        public ValueTuple<bool, bool, bool, bool> CastlingRights
+        public bool[] CastlingRights
         {
             get => castlingRights;
             private set => castlingRights = value;
@@ -67,14 +75,14 @@ namespace ChessWPF.Models.Boards
 
         public HashSet<CellCoordinates?> EnPassantPossibilities
         {
-            get { return enPassantPosibilities; }
-            private set { enPassantPosibilities = value; }
+            get => enPassantPosibilities;
+            private set => enPassantPosibilities = value;
         }
 
         public bool[] CastlingPossibilities
         {
-            get { return castlingPosibilities; }
-            private set { castlingPosibilities = value; }
+            get => castlingPossibilities;
+            private set => castlingPossibilities = value;
         }
 
         public Dictionary<PieceColor, HashSet<ConstructorMenuPiece>> ConstructorPieces
@@ -95,6 +103,8 @@ namespace ChessWPF.Models.Boards
             private set => constructorCells = value;
         }
 
+
+
         public void CreateCells()
         {
             ConstructorCells = new ConstructorCell[8, 8];
@@ -109,8 +119,9 @@ namespace ChessWPF.Models.Boards
             }
         }
 
-        public void LoadPosition(Position position)
+        public void LoadPosition(string fenAnnotation)
         {
+            var position = FenAnnotationReader.GetPosition(fenAnnotation);
             ClearAllPieces();
             ImportPosition(position);
             UpdateCastlingRightsBackend();
@@ -122,10 +133,10 @@ namespace ChessWPF.Models.Boards
         {
             ClearAllPieces();
             ClearCastlingPossibilities();
-            CastlingRights = (false, false, false, false);
+            Array.Fill(CastlingRights, false);
             ClearEnPassantPossibilities();
             UpdateCastlingRightsBackend();
-            //UpdateFenAnnotation();
+            UpdateFenAnnotation();
         }
 
         public void ClearAllPieces()
@@ -149,10 +160,7 @@ namespace ChessWPF.Models.Boards
                 SimplifiedCells[piece.Row, piece.Col] = simplifiedPiece;
             }
             CastlingRights = position.CastlingRights;
-            CastlingPossibilities = new bool[4];
-            EnPassantCoordinates = position.EnPassantCoordinates;
             UpdateEnPassantCoordinates(position.EnPassantCoordinates);
-            //UpdateTurnColor(position.TurnColor);
             TurnColor = position.TurnColor;
             UpdateCastlingPossibilities();
             UpdateEnPassantPossibilities();
@@ -160,22 +168,23 @@ namespace ChessWPF.Models.Boards
 
         public Position ExportPosition()
         {
-            var position = new Position(
-                SimplifiedCells,
-                TurnColor,
-                FenAnnotation,
-                CastlingRights,
-                EnPassantCoordinates,
-                0,
-                1);
-            position.Pieces = FindPieces();
-            
+            var position = FenAnnotationReader.GetPosition(FenAnnotation);
+            //var position = new Position(
+            //    SimplifiedCells,
+            //    TurnColor,
+            //    FenAnnotation,
+            //    CastlingRights,
+            //    EnPassantCoordinates,
+            //    0,
+            //    1);
+            //position.Pieces = FindPieces();
+
             return position;
         }
 
         public void UpdateCastlingRightsFromUI(bool[] castlingRights)
         {
-            CastlingRights = (castlingRights[0], castlingRights[1], castlingRights[2], castlingRights[3]);
+            CastlingRights = new bool[] { castlingRights[0], castlingRights[1], castlingRights[2], castlingRights[3] };
             UpdateFenAnnotation();
         }
 
@@ -205,17 +214,24 @@ namespace ChessWPF.Models.Boards
         {
             TurnColor = turnColor;
             UpdateEnPassantPossibilities();
-            UpdateFenAnnotation();
+            if (!ImportInProgress)
+            {
+                UpdateFenAnnotation();
+            }
         }
 
         public void UpdateEnPassantCoordinates(CellCoordinates? cellCoordinates)
         {
             EnPassantCoordinates = cellCoordinates;
-            UpdateFenAnnotation();
+            if (!ImportInProgress)
+            {
+                UpdateFenAnnotation();
+            }
         }
 
         public void UpdateFenAnnotation()
         {
+            //Console.WriteLine("Updated FEN");
             FenAnnotation = FenAnnotationWriter.WriteFenAnnotationFromBoardConstructor(SimplifiedCells,
                TurnColor,
                CastlingRights,
@@ -315,6 +331,10 @@ namespace ChessWPF.Models.Boards
             var condition = simplifiedCells[7, 4] == 'K' && simplifiedCells[7, 7] == 'R';
             if (CastlingPossibilities[0] != condition)
             {
+                if (!condition)
+                {
+                    CastlingRights[0] = false;
+                }
                 isChanged = true;
             }
             CastlingPossibilities[0] = condition;
@@ -322,6 +342,10 @@ namespace ChessWPF.Models.Boards
             condition = simplifiedCells[7, 4] == 'K' && simplifiedCells[7, 0] == 'R';
             if (CastlingPossibilities[1] != condition)
             {
+                if (!condition)
+                {
+                    CastlingRights[1] = false;
+                }
                 isChanged = true;
             }
             CastlingPossibilities[1] = condition;
@@ -329,6 +353,10 @@ namespace ChessWPF.Models.Boards
             condition = simplifiedCells[0, 4] == 'k' && simplifiedCells[0, 7] == 'r';
             if (CastlingPossibilities[2] != condition)
             {
+                if (!condition)
+                {
+                    CastlingRights[2] = false;
+                }
                 isChanged = true;
             }
             CastlingPossibilities[2] = condition;
@@ -336,6 +364,10 @@ namespace ChessWPF.Models.Boards
             condition = simplifiedCells[0, 4] == 'k' && simplifiedCells[0, 0] == 'r';
             if (CastlingPossibilities[3] != condition)
             {
+                if (!condition)
+                {
+                    CastlingRights[3] = false;
+                }
                 isChanged = true;
             }
             CastlingPossibilities[3] = condition;
@@ -350,13 +382,7 @@ namespace ChessWPF.Models.Boards
         {
             CastlingRightsUpdate?.Invoke(
                 null,
-                new UpdateCastlingRightsEventArgs(new bool[4]
-            {
-                CastlingRights.Item1,
-                CastlingRights.Item2,
-                CastlingRights.Item3,
-                CastlingRights.Item4
-            }));
+                new UpdateCastlingRightsEventArgs(CastlingRights));
         }
 
         private void UpdateEnPassantPossibilities()

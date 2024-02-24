@@ -1,4 +1,5 @@
 ﻿using ChessWPF.Commands;
+using ChessWPF.Game;
 using ChessWPF.HelperClasses.CustomEventArgs;
 using ChessWPF.Models.Boards;
 using ChessWPF.Models.Moves;
@@ -28,7 +29,7 @@ namespace ChessWPF.ViewModels
 
         public GameViewModel(GameStateStore gameStateStore)
         {
-            SetupBoardViewModel(gameStateStore.CurrentPosition);
+            SetupBoardViewModel(gameStateStore.CurrentPositionFenAnnotation);
             SetupGameMenuViewModel(BoardViewModel);
             SetupGameClockViewModels(gameStateStore.GameOptions.TimeControl);
             StartGame();
@@ -182,9 +183,9 @@ namespace ChessWPF.ViewModels
             }
         }
 
-        private void SetupBoardViewModel(Position position)
+        private void SetupBoardViewModel(string fenAnnotation)
         {
-            BoardViewModel = new BoardViewModel(position);
+            BoardViewModel = new BoardViewModel(fenAnnotation);
             BoardViewModel.MovedPiece += MovePiece;
             BoardViewModel.UndoLastMove += UndoMove;
             BoardViewModel.Reset += ResetBoard;
