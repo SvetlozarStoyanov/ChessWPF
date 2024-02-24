@@ -122,21 +122,13 @@ namespace ChessWPF.ViewModels
         public ObservableCollection<bool> CastlingRights
         {
             get => castlingRights;
-            private set
-            {
-                castlingRights = value;
-                OnPropertyChanged(nameof(CastlingRights));
-            }
+            private set => castlingRights = value;
         }
 
         public ObservableCollection<bool> CastlingPossibilities
         {
             get => castlingPossibilities;
-            private set
-            {
-                castlingPossibilities = value;
-                OnPropertyChanged(nameof(CastlingPossibilities));
-            }
+            private set => castlingPossibilities = value;
         }
 
         public ObservableCollection<PieceColor> TurnColors
