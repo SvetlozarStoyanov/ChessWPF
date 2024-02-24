@@ -10,18 +10,18 @@ namespace ChessWPF.Stores
     {
         private ViewModelBase currentViewModel;
         private GameOptions gameOptions;
-        private Position currentPosition;
+        private string currentPositionFenAnnotation;
 
 
 
         public GameStateStore()
         {
             GameOptions = new GameOptions();
-            CurrentPosition = PositionCreator.CreateDefaultPosition();
+            CurrentPositionFenAnnotation = PositionCreator.CreateDefaultPositionFenAnnotation();
         }
 
         public event Action CurrentViewModelChanged;
-        public ViewModelBase CurrentViewModel 
+        public ViewModelBase CurrentViewModel
         {
             get => currentViewModel;
             set
@@ -38,10 +38,15 @@ namespace ChessWPF.Stores
             set { gameOptions = value; }
         }
 
-        public Position CurrentPosition 
-        { 
-            get => currentPosition;
-            set => currentPosition = value;
+        public string CurrentPositionFenAnnotation
+        {
+            get => currentPositionFenAnnotation;
+            private set => currentPositionFenAnnotation = value;
+        }
+
+        public void UpdateCurrentPositionFenAnnotation(string fenAnnotation)
+        {
+            CurrentPositionFenAnnotation = fenAnnotation;
         }
 
         private void OnCurrentViewModelChanged()
