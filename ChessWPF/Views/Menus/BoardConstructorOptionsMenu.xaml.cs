@@ -1,4 +1,5 @@
 ﻿using ChessWPF.ViewModels;
+using System;
 using System.Windows;
 using System.Windows.Controls;
 
@@ -20,7 +21,7 @@ namespace ChessWPF.Views.Menus
             if (!checkbox!.IsEnabled)
             {
                 checkbox!.IsChecked = false;
-                checkbox.Command?.Execute(null);
+                //checkbox.Command?.Execute(null);
             }
         }
 
@@ -34,6 +35,21 @@ namespace ChessWPF.Views.Menus
         {
             enPassantComboBox.Items.Clear();
             enPassantComboBox.ItemsSource = (DataContext as BoardConstructorMenuViewModel)!.EnPassantPossibilities;
+        }
+
+        private void resetBoardBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //Console.Clear();
+        }
+
+        private void clearBoardBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //Console.Clear();
+        }
+
+        private void loadLastSavedPositionBtn_Click(object sender, RoutedEventArgs e)
+        {
+            //Console.Clear();
         }
     }
 }

@@ -119,11 +119,12 @@
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                     <ColumnDefinition Width="2*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
-                <Button Grid.Row="0" Grid.Column="0" FontSize="18px" FontWeight="SemiBold" Command="{Binding ResetBoardToDefaultCommand}">Reset Board</Button>
-                <Button Grid.Row="2" Grid.Column="0" FontSize="18px" FontWeight="SemiBold" Command="{Binding SavePositionCommand}"
+                <Button x:Name="resetBoardBtn" Click="resetBoardBtn_Click" Grid.Row="0" Grid.Column="0" FontSize="18px" FontWeight="SemiBold" Command="{Binding ResetBoardToDefaultCommand}"
+                        >Reset Board</Button>
+                <Button x:Name="saveBtn" Grid.Row="2" Grid.Column="0" FontSize="18px" FontWeight="SemiBold" Command="{Binding SavePositionCommand}"
                     IsEnabled="{Binding SaveIsEnabled,UpdateSourceTrigger=PropertyChanged}">Save</Button>
-                <Button Grid.Row="0" Grid.Column="3" FontSize="18px" FontWeight="SemiBold" Command="{Binding ClearBoardCommand}">Clear Board</Button>
-                <Button Grid.Row="2" Grid.Column="3" FontSize="18px" FontWeight="SemiBold" Command="{Binding LoadSavedPositionCommand}">Load Last Saved</Button>
+                <Button x:Name="clearBoardBtn" Click="clearBoardBtn_Click" Grid.Row="0" Grid.Column="3" FontSize="18px" FontWeight="SemiBold" Command="{Binding ClearBoardCommand}">Clear Board</Button>
+                <Button x:Name="loadLastSavedPositionBtn" Click="loadLastSavedPositionBtn_Click" Grid.Row="2" Grid.Column="3" FontSize="18px" FontWeight="SemiBold" Command="{Binding LoadSavedPositionCommand}">Load Last Saved</Button>
             </Grid>
     </Grid>
     </Border>
