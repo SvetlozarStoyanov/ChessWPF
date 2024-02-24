@@ -26,9 +26,9 @@ namespace ChessWPF.Game
             return position;
         }
 
-        private static ValueTuple<bool, bool, bool, bool> GetCastlingRights(string castlingRightsAnnotation)
+        private static bool[] GetCastlingRights(string castlingRightsAnnotation)
         {
-            var castlingRights = new ValueTuple<bool, bool, bool, bool>();
+            var castlingRights = new bool[4];
 
             if (castlingRightsAnnotation == "-")
             {
@@ -39,16 +39,16 @@ namespace ChessWPF.Game
                 switch (character)
                 {
                     case 'K':
-                        castlingRights.Item1 = true;
+                        castlingRights[0] = true;
                         break;
                     case 'Q':
-                        castlingRights.Item2 = true;
+                        castlingRights[1] = true;
                         break;
                     case 'k':
-                        castlingRights.Item3 = true;
+                        castlingRights[2] = true;
                         break;
                     case 'q':
-                        castlingRights.Item4 = true;
+                        castlingRights[3] = true;
                         break;
                 }
             }

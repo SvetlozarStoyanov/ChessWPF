@@ -1228,8 +1228,8 @@ namespace ChessWPF.Game
         {
             var legalCastlingMoves = new List<Cell>();
             var castlingRights = king.Color == PieceColor.White
-                ? new bool[2] { board.StartingPosition.CastlingRights.Item1, board.StartingPosition.CastlingRights.Item2 }
-                : new bool[2] { board.StartingPosition.CastlingRights.Item3, board.StartingPosition.CastlingRights.Item4 };
+                ? new bool[2] { board.StartingPosition.CastlingRights[0], board.StartingPosition.CastlingRights[1] }
+                : new bool[2] { board.StartingPosition.CastlingRights[2], board.StartingPosition.CastlingRights[3] };
             if (castlingRights[0] && board.Cells[king.Row, king.Col + 3].Piece != null
                 && board.Cells[king.Row, king.Col + 3].Piece!.PieceType == PieceType.Rook)
             {

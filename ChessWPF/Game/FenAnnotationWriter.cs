@@ -37,7 +37,7 @@ namespace ChessWPF.Game
 
         public static string WriteFenAnnotationFromBoardConstructor(char[,] cells,
             PieceColor turnColor,
-            ValueTuple<bool, bool, bool, bool> castlingRights,
+            bool[] castlingRights,
             CellCoordinates? enPassantCoordinates,
             int halfMoveCount,
             int moveNumber)
@@ -48,7 +48,7 @@ namespace ChessWPF.Game
             sb.Append(" ");
             AnnotateTurnColor(sb, turnColor);
             sb.Append(" ");
-            AnnotateCastlingRightsWithTuple(sb, castlingRights);
+            AnnotateCastlingRights(sb, castlingRights);
             sb.Append(" ");
             if (enPassantCoordinates != null)
             {
@@ -134,7 +134,7 @@ namespace ChessWPF.Game
 
         private static void AnnotateCastlingRights(StringBuilder sb, Board board)
         {
-            var castlingRights = new ValueTuple<bool, bool, bool, bool>();
+            var castlingRights = new bool[4];
             var hasWhiteKingMoved = board.Moves.Any(m => m.CellOneBefore.Piece!.PieceType == PieceType.King
                 && m.CellOneBefore.Piece.Color == PieceColor.White);
 
@@ -143,48 +143,48 @@ namespace ChessWPF.Game
 
             if (!hasWhiteKingMoved)
             {
-                if (board.StartingPosition.CastlingRights.Item1 &&
+                if (board.StartingPosition.CastlingRights[0] &&
                     !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 7) ||
                 (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 7))) &&
                 (board.Cells[7, 7].Piece != null && board.Cells[7, 7].Piece!.PieceType == PieceType.Rook &&
                 board.Cells[7, 7].Piece!.Color == PieceColor.White))
                 {
-                    castlingRights.Item1 = true;
+                    castlingRights[0] = true;
                 }
-                if (board.StartingPosition.CastlingRights.Item2 &&
+                if (board.StartingPosition.CastlingRights[1] &&
                     !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 7 && m.CellOneBefore.Col == 0) ||
                 (m.CellTwoBefore.Row == 7 && m.CellTwoBefore.Col == 0))) &&
                 (board.Cells[7, 0].Piece != null && board.Cells[7, 0].Piece!.PieceType == PieceType.Rook &&
                 board.Cells[7, 0].Piece!.Color == PieceColor.White))
                 {
-                    castlingRights.Item2 = true;
+                    castlingRights[1] = true;
                 }
             }
 
             if (!hasBlackKingMoved)
             {
-                if (board.StartingPosition.CastlingRights.Item3 &&
+                if (board.StartingPosition.CastlingRights[2] &&
                     !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 7) ||
                 (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 7))) &&
                 (board.Cells[0, 7].Piece != null && board.Cells[0, 7].Piece!.PieceType == PieceType.Rook &&
                 board.Cells[0, 7].Piece!.Color == PieceColor.Black))
                 {
-                    castlingRights.Item3 = true;
+                    castlingRights[2] = true;
                 }
-                if (board.StartingPosition.CastlingRights.Item4 &&
+                if (board.StartingPosition.CastlingRights[3] &&
                     !board.Moves.Any(m =>
                 ((m.CellOneBefore.Row == 0 && m.CellOneBefore.Col == 0) ||
                 (m.CellTwoBefore.Row == 0 && m.CellTwoBefore.Col == 0))) &&
                 (board.Cells[0, 0].Piece != null && board.Cells[0, 0].Piece!.PieceType == PieceType.Rook &&
                 board.Cells[0, 0].Piece!.Color == PieceColor.Black))
                 {
-                    castlingRights.Item4 = true;
+                    castlingRights[3] = true;
                 }
             }
-            AnnotateCastlingRightsWithTuple(sb, castlingRights);
+            AnnotateCastlingRights(sb, castlingRights);
         }
 
         private static void AnnotatePossibleEnPassant(StringBuilder sb, Move move)
@@ -218,29 +218,29 @@ namespace ChessWPF.Game
             sb.Append($"{col}{row}");
         }
 
-        private static void AnnotateCastlingRightsWithTuple(StringBuilder sb, ValueTuple<bool, bool, bool, bool> castlingRights)
+        private static void AnnotateCastlingRights(StringBuilder sb, bool[] castlingRights)
         {
-            if (castlingRights.Item1 == false
-                && castlingRights.Item2 == false
-                && castlingRights.Item3 == false
-                && castlingRights.Item4 == false)
+            if (castlingRights[0] == false
+                && castlingRights[1] == false
+                && castlingRights[2] == false
+                && castlingRights[3] == false)
             {
                 sb.Append("-");
                 return;
             }
-            if (castlingRights.Item1)
+            if (castlingRights[0])
             {
                 sb.Append("K");
             }
-            if (castlingRights.Item2)
+            if (castlingRights[1])
             {
                 sb.Append("Q");
             }
-            if (castlingRights.Item3)
+            if (castlingRights[2])
             {
                 sb.Append("k");
             }
-            if (castlingRights.Item4)
+            if (castlingRights[3])
             {
                 sb.Append("q");
             }

@@ -107,28 +107,28 @@ namespace ChessWPF.Game
         {
             var castlingRights = position.CastlingRights;
             var simplifiedCells = position.SimplifiedCells;
-            if (castlingRights.Item1 == true)
+            if (castlingRights[0] == true)
             {
                 if (simplifiedCells[7, 4] != 'K' || simplifiedCells[7, 7] != 'R')
                 {
                     return false;
                 }
             }
-            if (castlingRights.Item2 == true)
+            if (castlingRights[1] == true)
             {
                 if (simplifiedCells[7, 4] != 'K' || simplifiedCells[7, 0] != 'R')
                 {
                     return false;
                 }
             }
-            if (castlingRights.Item3 == true)
+            if (castlingRights[2] == true)
             {
                 if (simplifiedCells[0, 4] != 'k' || simplifiedCells[0, 7] != 'r')
                 {
                     return false;
                 }
             }
-            if (castlingRights.Item4 == true)
+            if (castlingRights[3] == true)
             {
                 if (simplifiedCells[0, 4] != 'k' || simplifiedCells[0, 0] != 'r')
                 {
