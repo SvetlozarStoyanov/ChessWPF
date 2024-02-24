@@ -104,7 +104,6 @@ namespace ChessWPF.Models.Boards
         }
 
 
-
         public void CreateCells()
         {
             ConstructorCells = new ConstructorCell[8, 8];

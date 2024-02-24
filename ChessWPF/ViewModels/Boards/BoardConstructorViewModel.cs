@@ -76,10 +76,7 @@ namespace ChessWPF.ViewModels
         public string FenAnnotation
         {
             get => BoardConstructor.FenAnnotation;
-            set
-            {
-                OnPropertyChanged(nameof(BoardConstructor.FenAnnotation));
-            }
+            set => OnPropertyChanged(nameof(BoardConstructor.FenAnnotation));
         }
 
         public IConstructorPiece? SelectedPiece
@@ -222,7 +219,6 @@ namespace ChessWPF.ViewModels
         private void UpdateCastlingRightsUI(object? sender, EventArgs e)
         {
             BoardConstructor.UpdateCastlingRightsFromUI((sender as BoardConstructorMenuViewModel)!.CastlingRights.ToArray());
-            //BoardConstructor.UpdateFenAnnotation("UpdateCastlingRightsUI from BoardConstructorViewModel");
         }
 
         private void UpdateCastlingRightsBackend(object? sender, UpdateCastlingRightsEventArgs e)
