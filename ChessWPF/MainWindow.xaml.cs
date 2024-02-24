@@ -1,4 +1,5 @@
 ﻿using ChessWPF.HelperClasses.WindowDimensions;
+using System.Runtime.InteropServices;
 using System.Windows;
 using static System.Windows.SystemParameters;
 
@@ -9,6 +10,8 @@ namespace ChessWPF
     /// </summary>
     public partial class MainWindow : Window
     {
+        //[DllImport("Kernel32")]
+        //public static extern void AllocConsole();
         public MainWindow()
         {
             InitializeComponent();
@@ -16,6 +19,7 @@ namespace ChessWPF
             this.MinWidth = PrimaryScreenWidth / 2;
             this.MaxHeight = PrimaryScreenHeight;
             this.MinHeight = PrimaryScreenHeight / 2;
+            //AllocConsole();
         }
 
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
