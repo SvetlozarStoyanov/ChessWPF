@@ -26,7 +26,7 @@ namespace ChessWPF.Models.Boards
         private List<Cell> backupCells;
         private Dictionary<PieceColor, List<Piece>> pieces;
 
-        public Board(Position position)
+        public Board()
         {
             CreateCells();
             Moves = new Stack<Move>();
@@ -35,7 +35,6 @@ namespace ChessWPF.Models.Boards
                 { PieceColor.White, new List<Piece>() },
                 { PieceColor.Black, new List<Piece>() }
             };
-            StartingPosition = position;
             //CreateCells();
             BackupCells = new List<Cell>();
         }
@@ -124,8 +123,13 @@ namespace ChessWPF.Models.Boards
             }
         }
 
-        public void ImportPosition(Position position)
+        public void ImportPosition(string fenAnnotation)
         {
+            var position = FenAnnotationReader.GetPosition(fenAnnotation);
+            if (StartingPosition == null)
+            {
+                StartingPosition = position;
+            }
             foreach (var color in position.Pieces.Keys)
             {
                 foreach (var piece in position.Pieces[color])
@@ -182,7 +186,7 @@ namespace ChessWPF.Models.Boards
                 Moves.Clear();
             }
             HalfMoveCount = 0;
-            ImportPosition(StartingPosition);
+            ImportPosition(StartingPosition.FenAnnotation);
         }
 
         public void ReverseTurnColor()
