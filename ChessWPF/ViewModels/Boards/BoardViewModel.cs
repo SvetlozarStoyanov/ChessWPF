@@ -20,11 +20,11 @@ namespace ChessWPF.ViewModels
         private CellViewModel[][] cellViewModels;
         private List<Cell> legalMoves;
 
-        public BoardViewModel(Position position)
+        public BoardViewModel(string fenAnnotation)
         {
-            Board = new Board(position);
+            Board = new Board();
             CreateCellViewModels();
-            Board.ImportPosition(position);
+            Board.ImportPosition(fenAnnotation);
             LegalMoves = new List<Cell>();
         }
 
