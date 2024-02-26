@@ -26,7 +26,7 @@ namespace ChessWPF.Game
             return position;
         }
 
-        private static bool[] GetCastlingRights(string castlingRightsAnnotation)
+        public static bool[] GetCastlingRights(string castlingRightsAnnotation)
         {
             var castlingRights = new bool[4];
 
