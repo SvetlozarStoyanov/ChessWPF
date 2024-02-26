@@ -347,7 +347,7 @@ namespace ChessWPF.Models.Boards
             king.Attackers.Clear();
             foreach (var piece in Pieces[oppositeColor])
             {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
+                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, FenAnnotation, TurnColor, cells, Pieces);
                 piece.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                 piece.ProtectedCells = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.ProtectedCells];
                 Cells[piece.Row, piece.Col].Piece = piece;
@@ -373,7 +373,7 @@ namespace ChessWPF.Models.Boards
             }
             if (king.Attackers.Count > 1)
             {
-                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king, this);
+                var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(king, FenAnnotation, TurnColor, cells, Pieces);
                 king.LegalMoves = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves];
                 foreach (var piece in Pieces[TurnColor].Where(p => p.PieceType != PieceType.King))
                 {
@@ -385,7 +385,7 @@ namespace ChessWPF.Models.Boards
             {
                 foreach (var piece in Pieces[TurnColor])
                 {
-                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, this);
+                    var legalMovesAndProtectedCells = LegalMoveFinder.GetLegalMovesAndProtectedCells(piece, FenAnnotation, TurnColor, cells, Pieces);
                     if (validMovesToStopCheck.Count > 0 && piece.PieceType != PieceType.King && !king.Defenders.Any(d => d.Item1 == piece))
                     {
                         legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves]
@@ -397,7 +397,7 @@ namespace ChessWPF.Models.Boards
                         {
                             legalMovesAndProtectedCells[LegalMovesAndProtectedCells.LegalMoves] = new List<Cell>();
                         }
-                        var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1.HasEqualCoordinates(piece.Row,piece.Col));
+                        var currDefenderAndPotentialAttacker = king.Defenders.First(d => d.Item1.HasEqualCoordinates(piece.Row, piece.Col));
                         var movesToPreventPotentialCheck = LegalMovesToStopCheckFinder.GetLegalMovesToStopCheck(king, currDefenderAndPotentialAttacker.Item2, this);
                         movesToPreventPotentialCheck.Remove(movesToPreventPotentialCheck.FirstOrDefault(c => c.Row == currDefenderAndPotentialAttacker.Item1.Row && c.Col == currDefenderAndPotentialAttacker.Item1.Col)!);
                         movesToPreventPotentialCheck.Add(Cells[currDefenderAndPotentialAttacker.Item2.Row, currDefenderAndPotentialAttacker.Item2.Col]);
