@@ -79,6 +79,7 @@ namespace ChessWPF.Game
 
         private static bool ValidatePiecesAreSufficientForPlay()
         {
+            var pieces = position.Pieces;
             var whitePieces = position.Pieces[PieceColor.White];
             var blackPieces = position.Pieces[PieceColor.Black];
             if (whitePieces.Count == 1 && blackPieces.Count == 1)
@@ -98,6 +99,17 @@ namespace ChessWPF.Game
                 && whitePieces.Count == 1)
             {
                 return false;
+            }
+
+            if (pieces.Any(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop)))
+            {
+                if ((pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).HasEvenCoordinates()
+                    && pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).HasEvenCoordinates())
+                    || !pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).HasEvenCoordinates()
+                    && !pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).HasEvenCoordinates())
+                {
+                    return false;
+                }
             }
 
             return true;
