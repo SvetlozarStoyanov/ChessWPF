@@ -15,24 +15,32 @@
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center" 
-                Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="0" Grid.Column="2" Command="{Binding NavigateToGameCommand}">Start Game</Button>
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center"
-                Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="1" Grid.Column="2" Command="{Binding NavigateToOptionsCommand}">Options</Button>
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center"
-                Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="2" Grid.Column="2" Command="{Binding NavigateToBoardConstructorCommand}">Board Constructor
-        </Button>
-        <Button HorizontalAlignment="Center" VerticalAlignment="Center"
+        <Label Grid.Row="0" FontSize="60px" FontWeight="ExtraBold"
+               HorizontalAlignment="Center" VerticalAlignment="Center">
+            ChessWPF
+        </Label>
+        
+        <UniformGrid Rows="4" Columns="1" Grid.Row="1" Grid.Column="0" Grid.RowSpan="2" >
+            <Button Style="{StaticResource menuButton}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Padding="20px" FontSize="35px" FontWeight="Bold"
+                 Command="{Binding NavigateToGameCommand}">Start Game
+            </Button>
+            <Button Style="{StaticResource menuButton}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Padding="20px" FontSize="35px" FontWeight="Bold"
+                 Command="{Binding NavigateToOptionsCommand}">
+                Options
+            </Button>
+            <Button Style="{StaticResource menuButton}" HorizontalAlignment="Center" VerticalAlignment="Center"
+                 Padding="20px" FontSize="35px" FontWeight="Bold"
+                 Command="{Binding NavigateToBoardConstructorCommand}">
+                Board Constructor
+            </Button>
+            <Button Style="{StaticResource menuButton}" HorizontalAlignment="Center" VerticalAlignment="Center"
                 x:Name="exitApplicationButton" Click="exitApplicationButton_Click"
-                Padding="20px" FontSize="25px" FontWeight="Bold"
-                Grid.Row="3" Grid.Column="2">Exit</Button>
+                Padding="20px" FontSize="35px" FontWeight="Bold">
+                Exit
+            </Button>
+        </UniformGrid>
     </Grid>
 </UserControl>
