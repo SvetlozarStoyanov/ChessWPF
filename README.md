@@ -17,7 +17,7 @@ Features:
   - Undo move button
   - Added new piece => Knook (moves like rook and knight combined)
   - Ability to export current position to popular chess websites by copying the FenAnnotation
-  - 
+  
 2. Options:
   - Time Controls
 
