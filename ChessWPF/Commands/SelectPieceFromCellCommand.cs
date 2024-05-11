@@ -13,7 +13,7 @@ namespace ChessWPF.Commands
 
         public override void Execute(object? parameter)
         {
-            constructorCellViewModel.SelectPiece();
+            constructorCellViewModel.Select();
         }
     }
 }
