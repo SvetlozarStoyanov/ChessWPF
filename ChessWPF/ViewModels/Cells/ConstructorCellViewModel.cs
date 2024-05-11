@@ -8,18 +8,23 @@ using System.Windows.Media.Imaging;
 
 namespace ChessWPF.ViewModels
 {
-    public class ConstructorCellViewModel : ViewModelBase
+    public sealed class ConstructorCellViewModel : ViewModelBase
     {
+        private bool isSelected;
         private bool canBeSelected;
+        private Color selectedColor;
+        private Color defaultColor;
         private BitmapImage? cellImage;
         private SolidColorBrush backgroundBrush;
         private ConstructorCell constructorCell;
 
-        public ConstructorCellViewModel(ConstructorCell constructorCell, Color color)
+        public ConstructorCellViewModel(ConstructorCell constructorCell, Color defaultColor, Color selectedColor)
         {
             ConstructorCell = constructorCell;
             ConstructorCell.Update += UpdateCellImage;
-            BackgroundBrush = new SolidColorBrush(color);
+            this.defaultColor = defaultColor;
+            this.selectedColor = selectedColor;
+            BackgroundBrush = new SolidColorBrush(defaultColor);
             UpdateConstructorCellCommand = new UpdateConstructorCellCommand(this);
             SelectPieceFromCellCommand = new SelectPieceFromCellCommand(this);
         }
@@ -37,6 +42,23 @@ namespace ChessWPF.ViewModels
             {
                 canBeSelected = value;
                 OnPropertyChanged(nameof(CanBeSelected));
+            }
+        }
+        public bool IsSelected
+        {
+            get => isSelected;
+            private set
+            {
+                isSelected = value;
+                if (!isSelected)
+                {
+                    BackgroundBrush.Color = defaultColor;
+                }
+                else
+                {
+                    BackgroundBrush.Color = selectedColor;
+                }
+                OnPropertyChanged(nameof(BackgroundBrush));
             }
         }
 
@@ -82,6 +104,28 @@ namespace ChessWPF.ViewModels
             {
                 CellImage = null;
             }
+            if (IsSelected)
+            {
+                UnSelect();
+            }
+        }
+
+        public void UnSelect()
+        {
+            IsSelected = false;
+        }
+
+        public void Select()
+        {
+            if (IsSelected)
+            {
+                UnSelect();
+            }
+            else
+            {
+                IsSelected = true;
+                SelectPiece();
+            }
         }
 
         public void UpdateCellPiece()
@@ -89,14 +133,14 @@ namespace ChessWPF.ViewModels
             UpdateConstructorCellViewModel(null, new UpdateConstructorCellViewModelEventArgs(ConstructorCell.Row, ConstructorCell.Col));
         }
 
-        public void SelectPiece()
+        private void SelectPiece()
         {
-            SelectPieceFromConstructorCellViewModelCell(null,new SelectPieceFromConstructorCellViewModelEventArgs(ConstructorCell.Row,
+            SelectPieceFromConstructorCellViewModelCell(null, new SelectPieceFromConstructorCellViewModelEventArgs(ConstructorCell.Row,
                 ConstructorCell.Col,
                 ConstructorCell.ConstructorBoardPiece!));
         }
 
-        
+
         public void UpdateCanBeSelected(Type type, bool canBeSelected)
         {
             if (type.Equals(typeof(BoardConstructorViewModel)))
@@ -108,5 +152,6 @@ namespace ChessWPF.ViewModels
                 throw new InvalidOperationException($"Can only be called from {nameof(BoardConstructorViewModel)}");
             }
         }
+
     }
 }
