@@ -22,12 +22,13 @@ namespace ChessWPF.ViewModels
         private string selectorImage;
         private Color movedToColor;
         private Color defaultColor;
+        private Color selectedColor;
         private Cell cell = null!;
         private SolidColorBrush backgroundBrush;
         private BitmapImage? cellPieceImage;
         private Dictionary<SelectorStates, string> selectors;
 
-        public CellViewModel(Cell cell, Color defaultColor, Color movedToColor)
+        public CellViewModel(Cell cell, Color defaultColor, Color movedToColor, Color selectedColor)
         {
             Cell = cell;
             Cell.Update += Update;
@@ -37,6 +38,7 @@ namespace ChessWPF.ViewModels
             Cell.UpdateMovedTo += UpdateMarkAsMovedTo;
             this.defaultColor = defaultColor;
             this.movedToColor = movedToColor;
+            this.selectedColor = selectedColor;
             BackgroundBrush = new SolidColorBrush(defaultColor);
 
             SelectCommand = new SelectCommand(this);
@@ -81,6 +83,14 @@ namespace ChessWPF.ViewModels
             set
             {
                 isSelected = value;
+                if (isSelected)
+                {
+                    BackgroundBrush.Color = selectedColor;
+                }
+                else
+                {
+                    BackgroundBrush.Color = IsPartOfLastMove ? movedToColor : defaultColor;
+                }
                 OnPropertyChanged(nameof(IsSelected));
             }
         }
