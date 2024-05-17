@@ -4,7 +4,6 @@ using ChessWPF.Models.Cells;
 using ChessWPF.Models.Moves;
 using ChessWPF.Models.Pieces;
 using ChessWPF.Models.Pieces.Enums;
-using ChessWPF.Models.Positions;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -294,8 +293,8 @@ namespace ChessWPF.ViewModels
             if (SelectedCell != null)
             {
                 SelectedCell.IsSelected = false;
-            SelectedCell = null;
-        }
+                SelectedCell = null;
+            }
         }
 
         private List<Cell> GetLegalMoves(Piece piece)
@@ -332,15 +331,15 @@ namespace ChessWPF.ViewModels
             {
                 ClearLegalMoves();
                 if (!SelectedCell.Cell.HasEqualRowAndCol(cellViewModel.Cell))
-            {
+                {
                     UnselectSelectedCell();
-                SelectedCell = cellViewModel;
+                    SelectedCell = cellViewModel;
+                }
+                else
+                {
+                    UnselectSelectedCell();
+                }
             }
-            else
-            {
-                UnselectSelectedCell();
-            }
-        }
             if (SelectedCell != null)
             {
                 LegalMoves = GetLegalMoves(SelectedCell.Cell.Piece!);
