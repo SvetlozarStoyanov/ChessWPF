@@ -128,6 +128,8 @@ namespace ChessWPF.ViewModels
             var evenTileColor = (Color)new ColorConverter().ConvertFrom("#FAE8C8")!;
             var oddTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#315375")!;
             var evenTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#5693D1")!;
+            var oddTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#CBBE11")!;
+            var evenTileoddTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#E2D313")!;
 
             CellViewModels = new CellViewModel[8][];
 
@@ -138,11 +140,11 @@ namespace ChessWPF.ViewModels
                 {
                     if ((row + col) % 2 == 0)
                     {
-                        MatchCellViewModelToCell(row, col, evenTileColor, evenTileMovedToColor);
+                        MatchCellViewModelToCell(row, col, evenTileColor, evenTileMovedToColor, evenTileoddTileSelectedColor);
                     }
                     else
                     {
-                        MatchCellViewModelToCell(row, col, oddTileColor, oddTileMovedToColor);
+                        MatchCellViewModelToCell(row, col, oddTileColor, oddTileMovedToColor, oddTileSelectedColor);
                     }
                 }
             }
@@ -341,9 +343,9 @@ namespace ChessWPF.ViewModels
             OnPromote(args.PieceType);
         }
 
-        private void MatchCellViewModelToCell(int row, int col, Color defaultColor, Color movedToColor)
+        private void MatchCellViewModelToCell(int row, int col, Color defaultColor, Color movedToColor, Color selectedColor)
         {
-            CellViewModels[row][col] = new CellViewModel(Board.Cells[row, col], defaultColor, movedToColor);
+            CellViewModels[row][col] = new CellViewModel(Board.Cells[row, col], defaultColor, movedToColor, selectedColor);
             var cellViewModel = CellViewModels[row][col];
             //cellViewModel.UpdateCellImage();
             cellViewModel.Select += OnCellViewModelSelect;
