@@ -291,7 +291,11 @@ namespace ChessWPF.ViewModels
 
         private void UnselectSelectedCell()
         {
+            if (SelectedCell != null)
+            {
+                SelectedCell.IsSelected = false;
             SelectedCell = null;
+        }
         }
 
         private List<Cell> GetLegalMoves(Piece piece)
