@@ -45,19 +45,6 @@ namespace ChessWPF.Views.Cells
             }
 
         }
-        private void cellBtnSelect_Click(object sender, RoutedEventArgs e)
-        {
-            if (cellBtnSelect.Opacity == 0.7)
-            {
-                cellBtnSelect.Opacity = 0;
-                cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
-            }
-            else
-            {
-                cellBtnSelect.Opacity = 0.7;
-                cellBtnSelect.Style = this.FindResource("selectedBtn") as Style;
-            }
-        }
 
         private void cellBtnSelect_LostFocus(object sender, RoutedEventArgs e)
         {
