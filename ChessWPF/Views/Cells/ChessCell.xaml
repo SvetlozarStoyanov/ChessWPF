@@ -9,7 +9,7 @@
              >
     <Grid x:Name="cellBackground" SizeChanged="cellBackground_SizeChanged">
         
-        <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" Click="cellBtnSelect_Click" LostFocus="cellBtnSelect_LostFocus" >
+        <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" LostFocus="cellBtnSelect_LostFocus" >
         </Button>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
         </Button>
