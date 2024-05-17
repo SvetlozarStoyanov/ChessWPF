@@ -323,17 +323,28 @@ namespace ChessWPF.ViewModels
 
         private void OnCellViewModelSelect(object sender, SelectCellViewModelEventArgs args)
         {
-            ClearLegalMoves();
             var cellViewModel = args.CellViewModel;
-            if (SelectedCell == null || !SelectedCell.Cell.HasEqualRowAndCol(args.CellViewModel.Cell))
+            if (SelectedCell == null)
             {
                 SelectedCell = cellViewModel;
-                LegalMoves = GetLegalMoves(cellViewModel.Cell.Piece!);
-                ShowLegalMoves();
+            }
+            else
+            {
+                ClearLegalMoves();
+                if (!SelectedCell.Cell.HasEqualRowAndCol(cellViewModel.Cell))
+            {
+                    UnselectSelectedCell();
+                SelectedCell = cellViewModel;
             }
             else
             {
                 UnselectSelectedCell();
+            }
+        }
+            if (SelectedCell != null)
+            {
+                LegalMoves = GetLegalMoves(SelectedCell.Cell.Piece!);
+                ShowLegalMoves();
             }
         }
 
