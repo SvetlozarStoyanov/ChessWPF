@@ -45,7 +45,7 @@ namespace ChessWPF.ViewModels
             MoveCommand = new MoveCommand(this);
             PromoteCommand = new PromoteCommand(this);
             IsOccupied = false;
-            
+
 
             selectors = new Dictionary<SelectorStates, string>()
             {
@@ -136,8 +136,8 @@ namespace ChessWPF.ViewModels
         public bool IsOccupied
         {
             get { return isOccupied; }
-            set 
-            { 
+            set
+            {
                 isOccupied = value;
                 OnPropertyChanged(nameof(IsOccupied));
             }
