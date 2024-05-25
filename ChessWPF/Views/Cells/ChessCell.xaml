@@ -17,7 +17,10 @@
         </RepeatButton>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
         </Button>
-        <Button Command="{Binding MoveCommand}" BorderThickness="0" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
+        <Button Command="{Binding MoveCommand}" x:Name="cellBtnMove"
+                Drop="cellBtnMove_Drop"
+                BorderThickness="0" IsEnabledChanged="cellBtnMove_IsEnabledChanged"
+                AllowDrop="True">
         </Button>
 
         <Image x:Name="imgCheckMarker" IsEnabled="{Binding IsInCheck,UpdateSourceTrigger=PropertyChanged}" IsEnabledChanged="imgCheckMarker_IsEnabledChanged" HorizontalAlignment="Center" VerticalAlignment="Center"/>
