@@ -31,7 +31,7 @@ namespace ChessWPF.ViewModels
         {
             GameStateStore = gameStateStore;
             BoardConstructor = new BoardConstructor();
-            MatchConstructorCellsToViewModels();
+            SetupCellConstructorViewModels();
             CreateConstructorCellPieceViewModels();
             BoardConstructor.ImportInProgress = true;
             BoardConstructor.LoadPosition(gameStateStore.CurrentPositionFenAnnotation);
@@ -316,12 +316,12 @@ namespace ChessWPF.ViewModels
             return viewModels;
         }
 
-        private void MatchConstructorCellsToViewModels()
+        private void SetupCellConstructorViewModels()
         {
             var oddTileColor = (Color)new ColorConverter().ConvertFrom("#14691B")!;
             var evenTileColor = (Color)new ColorConverter().ConvertFrom("#FAE8C8")!;
-            var oddTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#315375")!;
-            var evenTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#5693D1")!;
+            var oddTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#CBBE11")!;
+            var evenTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#E2D313")!;
             ConstructorCellViewModels = new ConstructorCellViewModel[8][];
             for (int row = 0; row < ConstructorCellViewModels.Length; row++)
             {
