@@ -23,6 +23,11 @@ namespace ChessWPF.Views.Cells
             selectCellPieceBtn.Style = this.FindResource("defaultBtn") as Style;
         }
 
+        private void ChessConstructorCell_Loaded(object sender, RoutedEventArgs e)
+        {
+            selectCommand = (this.DataContext as ConstructorCellViewModel)!.SelectPieceFromCellCommand;
+        }
+
         private void Grid_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             imgPiece.Height = this.ActualHeight - 1;
