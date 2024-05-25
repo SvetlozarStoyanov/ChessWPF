@@ -6,6 +6,7 @@
              xmlns:local="clr-namespace:ChessWPF.Views.Cells"
              mc:Ignorable="d" 
                Background="{Binding BackgroundBrush,UpdateSourceTrigger=PropertyChanged}" 
+             Loaded="ChessCell_Loaded"
              >
     <Grid x:Name="cellBackground" SizeChanged="cellBackground_SizeChanged">
         
