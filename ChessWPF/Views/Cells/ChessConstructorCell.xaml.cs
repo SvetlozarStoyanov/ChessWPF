@@ -20,7 +20,7 @@ namespace ChessWPF.Views.Cells
             this.MaxWidth = this.MaxHeight;
             this.MinWidth = this.MinHeight;
             updateCellBtn.Style = this.FindResource("defaultBtn") as Style;
-            selectCellPieceBtn.Style = this.FindResource("defaultBtn") as Style;
+            selectCellPieceBtn.Style = this.FindResource("defaultRepeatBtn") as Style;
         }
 
         private void ChessConstructorCell_Loaded(object sender, RoutedEventArgs e)

@@ -11,11 +11,11 @@
         <Button x:Name="updateCellBtn" Command="{Binding UpdateConstructorCellCommand}"
                 Click="updateCellBtn_Click"
                 ></Button>
-        <Button x:Name="selectCellPieceBtn" Command="{Binding SelectPieceFromCellCommand}"
-                Click="selectCellPieceBtn_Click"
+        <RepeatButton x:Name="selectCellPieceBtn"
+                GotMouseCapture="selectCellPieceBtn_GotMouseCapture"
                 IsEnabled="{Binding CanBeSelected,UpdateSourceTrigger=PropertyChanged}"
                 IsEnabledChanged="selectCellPieceBtn_IsEnabledChanged"
-                ></Button>
+                ></RepeatButton>
         <Image x:Name="imgPiece" Source="{Binding CellImage, UpdateSourceTrigger=PropertyChanged}"></Image>
     </Grid>
 </UserControl>
