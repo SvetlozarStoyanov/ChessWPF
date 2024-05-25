@@ -52,27 +52,30 @@ namespace ChessWPF.Game
             while (IsCellValid(king.Row + increment, king.Col, board))
             {
                 currCell = board.Cells[king.Row + increment, king.Col];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row + ++increment, king.Col, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row + increment, king.Col];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var pinningPiece = currCell.Piece;
+                        var isDefender = false;
+                        while (IsCellValid(king.Row + ++increment, king.Col, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row + increment, king.Col];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
-                                isDefender = true;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
@@ -83,27 +86,30 @@ namespace ChessWPF.Game
             while (IsCellValid(king.Row - increment, king.Col, board))
             {
                 currCell = board.Cells[king.Row - increment, king.Col];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    bool isDefender = false;
-                    var pinningPiece = currCell.Piece;
-                    while (IsCellValid(king.Row - ++increment, king.Col, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row - increment, king.Col];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var isDefender = false;
+                        var pinningPiece = currCell.Piece;
+                        while (IsCellValid(king.Row - ++increment, king.Col, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row - increment, king.Col];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
-                                isDefender = true;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
@@ -114,27 +120,30 @@ namespace ChessWPF.Game
             while (IsCellValid(king.Row, king.Col + increment, board))
             {
                 currCell = board.Cells[king.Row, king.Col + increment];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row, king.Col + ++increment, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row, king.Col + increment];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var pinningPiece = currCell.Piece;
+                        var isDefender = false;
+                        while (IsCellValid(king.Row, king.Col + ++increment, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row, king.Col + increment];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
-                                isDefender = true;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
@@ -145,27 +154,30 @@ namespace ChessWPF.Game
             while (IsCellValid(king.Row, king.Col - increment, board))
             {
                 currCell = board.Cells[king.Row, king.Col - increment];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row, king.Col - ++increment, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row, king.Col - increment];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var pinningPiece = currCell.Piece;
+                        var isDefender = false;
+                        while (IsCellValid(king.Row, king.Col - ++increment, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row, king.Col - increment];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
-                                isDefender = true;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
@@ -325,147 +337,152 @@ namespace ChessWPF.Game
 
         private static List<ValueTuple<Piece, Piece>> CheckDiagonals(King king, Board board)
         {
-            int rowIncrement = 1;
-            int colIncrement = 1;
+            var increment = 1;
             var defenders = new List<ValueTuple<Piece, Piece>>();
             var pinningPieceTypes = new PieceType[] { PieceType.Bishop, PieceType.Queen };
 
             var currCell = board.Cells[king.Row, king.Col];
             var defenderCell = board.Cells[king.Row, king.Col];
-            while (IsCellValid(king.Row + rowIncrement, king.Col + colIncrement, board))
+            while (IsCellValid(king.Row + increment, king.Col + increment, board))
             {
-                currCell = board.Cells[king.Row + rowIncrement, king.Col + colIncrement];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                currCell = board.Cells[king.Row + increment, king.Col + increment];
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row + ++rowIncrement, king.Col + ++colIncrement, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row + rowIncrement, king.Col + colIncrement];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var pinningPiece = currCell.Piece;
+                        var isDefender = false;
+                        while (IsCellValid(king.Row + ++increment, king.Col + increment, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row + increment, king.Col + increment];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
-                                isDefender = true;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
 
-                rowIncrement++;
-                colIncrement++;
+                increment++;
             }
-            rowIncrement = 1;
-            colIncrement = 1;
-            while (IsCellValid(king.Row + rowIncrement, king.Col - colIncrement, board))
+            increment = 1;
+            while (IsCellValid(king.Row + increment, king.Col - increment, board))
             {
-                currCell = board.Cells[king.Row + rowIncrement, king.Col - colIncrement];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                currCell = board.Cells[king.Row + increment, king.Col - increment];
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row + ++rowIncrement, king.Col - ++colIncrement, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row + rowIncrement, king.Col - colIncrement];
-                        if (currCell.Piece != null)
+                        if (currCell.Piece.Color == king.Color)
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            defenderCell = currCell;
+                            var pinningPiece = currCell.Piece;
+                            var isDefender = false;
+                            while (IsCellValid(king.Row + ++increment, king.Col - increment, board))
                             {
-                                pinningPiece = currCell.Piece;
-
-                                isDefender = true;
+                                currCell = board.Cells[king.Row + increment, king.Col - increment];
+                                if (currCell.Piece != null)
+                                {
+                                    if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                    {
+                                        pinningPiece = currCell.Piece;
+                                        isDefender = true;
+                                    }
+                                    break;
+                                }
                             }
-                            break;
+                            if (isDefender)
+                            {
+                                defenders.Add((defenderCell.Piece, pinningPiece));
+                            }
                         }
+                        break;
                     }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
-                    }
-                    break;
                 }
-                rowIncrement++;
-                colIncrement++;
+                increment++;
             }
-            rowIncrement = 1;
-            colIncrement = 1;
+            increment = 1;
 
-            while (IsCellValid(king.Row - rowIncrement, king.Col - colIncrement, board))
+            while (IsCellValid(king.Row - increment, king.Col - increment, board))
             {
-                currCell = board.Cells[king.Row - rowIncrement, king.Col - colIncrement];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                currCell = board.Cells[king.Row - increment, king.Col - increment];
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row - ++rowIncrement, king.Col - ++colIncrement, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row - rowIncrement, king.Col - colIncrement];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var pinningPiece = currCell.Piece;
+
+                        bool isDefender = false;
+                        while (IsCellValid(king.Row - ++increment, king.Col - increment, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row - increment, king.Col - increment];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
 
-                                isDefender = true;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
-                rowIncrement++;
-                colIncrement++;
+                increment++;
             }
-            rowIncrement = 1;
-            colIncrement = 1;
+            increment = 1;
 
-            while (IsCellValid(king.Row - rowIncrement, king.Col + colIncrement, board))
+            while (IsCellValid(king.Row - increment, king.Col + increment, board))
             {
-                currCell = board.Cells[king.Row - rowIncrement, king.Col + colIncrement];
-                if (currCell.Piece != null && currCell.Piece.Color == king.Color)
+                currCell = board.Cells[king.Row - increment, king.Col + increment];
+                if (currCell.Piece != null)
                 {
-                    defenderCell = currCell;
-                    var pinningPiece = currCell.Piece;
-
-                    bool isDefender = false;
-                    while (IsCellValid(king.Row - ++rowIncrement, king.Col + ++colIncrement, board))
+                    if (currCell.Piece.Color == king.Color)
                     {
-                        currCell = board.Cells[king.Row - rowIncrement, king.Col + colIncrement];
-                        if (currCell.Piece != null)
+                        defenderCell = currCell;
+                        var pinningPiece = currCell.Piece;
+
+                        var isDefender = false;
+                        while (IsCellValid(king.Row - ++increment, king.Col + increment, board))
                         {
-                            if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                            currCell = board.Cells[king.Row - increment, king.Col + increment];
+                            if (currCell.Piece != null)
                             {
-                                pinningPiece = currCell.Piece;
+                                if (currCell.Piece.Color != king.Color && pinningPieceTypes.Contains(currCell.Piece.PieceType))
+                                {
+                                    pinningPiece = currCell.Piece;
 
-                                isDefender = true;
+                                    isDefender = true;
+                                }
+                                break;
                             }
-                            break;
                         }
-                    }
-                    if (isDefender)
-                    {
-                        defenders.Add((defenderCell.Piece, pinningPiece));
+                        if (isDefender)
+                        {
+                            defenders.Add((defenderCell.Piece, pinningPiece));
+                        }
                     }
                     break;
                 }
-                rowIncrement++;
-                colIncrement++;
+                increment++;
             }
             return defenders;
         }
