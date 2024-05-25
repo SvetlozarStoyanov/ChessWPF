@@ -5,11 +5,11 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.Cells"
              mc:Ignorable="d" 
-               Background="{Binding BackgroundBrush,UpdateSourceTrigger=PropertyChanged}" 
+             Background="{Binding BackgroundBrush,UpdateSourceTrigger=PropertyChanged}"
              Loaded="ChessCell_Loaded"
              >
     <Grid x:Name="cellBackground" SizeChanged="cellBackground_SizeChanged">
-        
+
         <RepeatButton x:Name="cellBtnSelect"
                 IsEnabled="{Binding CanBeSelected,UpdateSourceTrigger=PropertyChanged}"
                 GotMouseCapture="cellBtnSelect_GotMouseCapture"

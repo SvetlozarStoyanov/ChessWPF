@@ -25,7 +25,6 @@ namespace ChessWPF.Views.Cells
             this.Width = this.Height;
             this.MaxWidth = this.MaxHeight;
             this.MinWidth = this.MinHeight;
-
             var imageUrl = $"/Graphics/Selectors/Red Marker.png";
             var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgCheckMarker.Source = new BitmapImage(resourceUri);
