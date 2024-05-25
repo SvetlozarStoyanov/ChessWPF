@@ -34,6 +34,19 @@ namespace ChessWPF.Views.Cells
             cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
         }
 
+        private void ChessCell_Loaded(object sender, RoutedEventArgs e)
+        {
+            selectCommand = (this.DataContext as CellViewModel)!.SelectCommand;
+        }
+
+        private void Unselect()
+        {
+            if (imgPiece.Source != null)
+            {
+                selectCommand.Execute(null);
+            }
+        }
+
         private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
             cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
