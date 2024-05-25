@@ -18,7 +18,6 @@ namespace ChessWPF.Views.Cells
             Panel.SetZIndex(imgPiece, 1);
             Panel.SetZIndex(selectCellPieceBtn, 2);
 
-
             this.Width = this.Height;
             this.MaxWidth = this.MaxHeight;
             this.MinWidth = this.MinHeight;
@@ -56,7 +55,7 @@ namespace ChessWPF.Views.Cells
         private void selectCellPieceBtn_GotMouseCapture(object sender, MouseEventArgs e)
         {
             if (selectCellPieceBtn.IsEnabled)
-        {
+            {
                 selectCommand.Execute(null);
                 updateCellBtn.IsEnabled = false;
                 DragDrop.DoDragDrop(selectCellPieceBtn, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
@@ -67,7 +66,7 @@ namespace ChessWPF.Views.Cells
         private void updateCellBtn_Drop(object sender, DragEventArgs e)
         {
             if (updateCellBtn.IsEnabled)
-        {
+            {
                 updateCellBtn.Command.Execute(null);
             }
         }
