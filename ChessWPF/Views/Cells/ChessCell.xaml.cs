@@ -29,7 +29,7 @@ namespace ChessWPF.Views.Cells
             var imageUrl = $"/Graphics/Selectors/Red Marker.png";
             var resourceUri = new Uri(@$"pack://application:,,,{imageUrl}");
             imgCheckMarker.Source = new BitmapImage(resourceUri);
-            cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
+            cellBtnSelect.Style = this.FindResource("defaultRepeatBtn") as Style;
             cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
             cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
         }
@@ -49,8 +49,6 @@ namespace ChessWPF.Views.Cells
 
         private void cellBtnSelect_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
         {
-            cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
-            cellBtnSelect.Opacity = 0;
             if (cellBtnSelect.IsEnabled)
             {
                 Panel.SetZIndex(cellBtnSelect, 2);
@@ -59,13 +57,6 @@ namespace ChessWPF.Views.Cells
             {
                 Panel.SetZIndex(cellBtnSelect, 1);
             }
-
-        }
-
-        private void cellBtnSelect_LostFocus(object sender, RoutedEventArgs e)
-        {
-            cellBtnSelect.Opacity = 0;
-            cellBtnSelect.Style = this.FindResource("defaultBtn") as Style;
         }
 
         private void cellBtnMove_IsEnabledChanged(object sender, DependencyPropertyChangedEventArgs e)
