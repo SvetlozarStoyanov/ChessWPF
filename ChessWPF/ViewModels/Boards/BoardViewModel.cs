@@ -305,7 +305,7 @@ namespace ChessWPF.ViewModels
 
         private void ShowLegalMoves()
         {
-            foreach (var cell in legalMoves)
+            foreach (var cell in LegalMoves)
             {
                 CellViewModels[cell.Row][cell.Col].CanBeMovedTo = true;
             }
