@@ -42,6 +42,41 @@
                     </Trigger>
                 </Style.Triggers>
             </Style>
+            <Style x:Key="defaultRepeatBtn" x:Name="DefaultRepeatButton" TargetType="RepeatButton">
+                <Setter Property="Background" Value="Transparent"></Setter>
+                <Setter Property="Opacity" Value="0"></Setter>
+                <Setter Property="Foreground" Value="Transparent"></Setter>
+                <Style.Triggers>
+                    <Trigger Property="IsEnabled" Value="False">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsEnabled" Value="True">
+                        <Setter Property="Background" Value="Transparent"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="True">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsMouseOver" Value="False">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="True">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                    <Trigger Property="IsFocused" Value="False">
+                        <Setter Property="Background"  Value="Transparent"></Setter>
+                        <Setter Property="Foreground"  Value="Transparent"></Setter>
+                        <Setter Property="Opacity"  Value="0"></Setter>
+                    </Trigger>
+                </Style.Triggers>
+            </Style>
             <Style x:Key="selectedBtn" x:Name="SelectedButton" TargetType="Button">
                 <Setter Property="Background" Value="Transparent"></Setter>
                 <Setter Property="Opacity" Value="1"></Setter>
