@@ -1,5 +1,7 @@
-﻿using System.Windows;
+﻿using ChessWPF.ViewModels;
+using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Input;
 
 namespace ChessWPF.Views.Cells
 {
@@ -8,6 +10,7 @@ namespace ChessWPF.Views.Cells
     /// </summary>
     public partial class ChessConstructorCell : UserControl
     {
+        private ICommand selectCommand;
         public ChessConstructorCell()
         {
             InitializeComponent();
@@ -50,9 +53,15 @@ namespace ChessWPF.Views.Cells
             }
         }
 
-        private void updateCellBtn_Click(object sender, RoutedEventArgs e)
+        private void selectCellPieceBtn_GotMouseCapture(object sender, MouseEventArgs e)
         {
-
+            if (selectCellPieceBtn.IsEnabled)
+        {
+                selectCommand.Execute(null);
+                updateCellBtn.IsEnabled = false;
+                DragDrop.DoDragDrop(selectCellPieceBtn, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
+                updateCellBtn.IsEnabled = true;
+            }
         }
 
         private void updateCellBtn_Drop(object sender, DragEventArgs e)
