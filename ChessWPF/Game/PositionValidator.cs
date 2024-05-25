@@ -101,7 +101,7 @@ namespace ChessWPF.Game
                 return false;
             }
 
-            if (pieces.Any(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop)))
+            if (pieces.All(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop)))
             {
                 if ((pieces[PieceColor.White].First(p => p.PieceType == PieceType.Bishop).HasEvenCoordinates()
                     && pieces[PieceColor.Black].First(p => p.PieceType == PieceType.Bishop).HasEvenCoordinates())
