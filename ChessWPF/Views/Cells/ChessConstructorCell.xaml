@@ -9,7 +9,8 @@
              Loaded="ChessConstructorCell_Loaded">
     <Grid SizeChanged="Grid_SizeChanged">
         <Button x:Name="updateCellBtn" Command="{Binding UpdateConstructorCellCommand}"
-                Click="updateCellBtn_Click"
+                AllowDrop="True"
+                Drop="updateCellBtn_Drop"
                 ></Button>
         <RepeatButton x:Name="selectCellPieceBtn"
                 GotMouseCapture="selectCellPieceBtn_GotMouseCapture"

@@ -55,9 +55,12 @@ namespace ChessWPF.Views.Cells
 
         }
 
-        private void selectCellPieceBtn_Click(object sender, RoutedEventArgs e)
+        private void updateCellBtn_Drop(object sender, DragEventArgs e)
         {
-
+            if (updateCellBtn.IsEnabled)
+        {
+                updateCellBtn.Command.Execute(null);
+            }
         }
     }
 }
