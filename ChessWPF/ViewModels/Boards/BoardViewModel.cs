@@ -128,7 +128,7 @@ namespace ChessWPF.ViewModels
             var oddTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#315375")!;
             var evenTileMovedToColor = (Color)new ColorConverter().ConvertFrom("#5693D1")!;
             var oddTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#CBBE11")!;
-            var evenTileoddTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#E2D313")!;
+            var evenTileSelectedColor = (Color)new ColorConverter().ConvertFrom("#E2D313")!;
 
             CellViewModels = new CellViewModel[8][];
 
@@ -139,7 +139,7 @@ namespace ChessWPF.ViewModels
                 {
                     if ((row + col) % 2 == 0)
                     {
-                        MatchCellViewModelToCell(row, col, evenTileColor, evenTileMovedToColor, evenTileoddTileSelectedColor);
+                        MatchCellViewModelToCell(row, col, evenTileColor, evenTileMovedToColor, evenTileSelectedColor);
                     }
                     else
                     {
