@@ -9,8 +9,11 @@
              >
     <Grid x:Name="cellBackground" SizeChanged="cellBackground_SizeChanged">
         
-        <Button Command="{Binding SelectCommand}" x:Name="cellBtnSelect" IsEnabledChanged="cellBtnSelect_IsEnabledChanged" LostFocus="cellBtnSelect_LostFocus" >
-        </Button>
+        <RepeatButton x:Name="cellBtnSelect"
+                IsEnabled="{Binding CanBeSelected,UpdateSourceTrigger=PropertyChanged}"
+                GotMouseCapture="cellBtnSelect_GotMouseCapture"
+                IsEnabledChanged="cellBtnSelect_IsEnabledChanged">
+        </RepeatButton>
         <Button Command="{Binding PromoteCommand}" x:Name="cellBtnPromote" IsEnabledChanged="cellBtnPromote_IsEnabledChanged">
         </Button>
         <Button Command="{Binding MoveCommand}" BorderThickness="0" x:Name="cellBtnMove" IsEnabledChanged="cellBtnMove_IsEnabledChanged">
