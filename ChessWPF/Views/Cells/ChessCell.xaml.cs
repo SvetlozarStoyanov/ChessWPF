@@ -138,5 +138,24 @@ namespace ChessWPF.Views.Cells
                 imgSelector.Stretch = Stretch.Uniform;
             }
         }
+
+        private void cellBtnSelect_GotMouseCapture(object sender, MouseEventArgs e)
+        {
+            if (cellBtnSelect.IsEnabled)
+            {
+                selectCommand.Execute(null);
+                DragDrop.DoDragDrop(this, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
+            }
+        }
+
+        private void cellBtnMove_Drop(object sender, DragEventArgs e)
+        {
+            if (cellBtnMove.IsEnabled)
+            {
+                cellBtnMove.Command.Execute(null);
+            }
+        }
+
+
     }
 }
