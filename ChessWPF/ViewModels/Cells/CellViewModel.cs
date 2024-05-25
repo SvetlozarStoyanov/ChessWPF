@@ -245,14 +245,7 @@ namespace ChessWPF.ViewModels
 
         private void OnSelect()
         {
-            if (!this.IsSelected)
-            {
-                IsSelected = true;
-            }
-            else
-            {
-                IsSelected = false;
-            }
+            IsSelected = !IsSelected;
             Select(this, new SelectCellViewModelEventArgs(this));
         }
 
