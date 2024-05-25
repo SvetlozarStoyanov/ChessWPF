@@ -985,23 +985,23 @@ namespace ChessWPF.Models.Boards
 
         private bool CheckForDraw()
         {
-            var isGameDrawn = false;
+            
             if (HalfMoveCount >= 100)
             {
                 GameResult = "Draw! 100 moves were made with no pawn advances or piece captures!";
-                isGameDrawn = true;
+                return true;
             }
             else if (Pieces.Sum(p => p.Value.Count) == 2)
             {
                 GameResult = "Draw!";
-                isGameDrawn = true;
+                return true;
             }
             else if (Pieces.Sum(p => p.Value.Count) == 3)
             {
                 if (Pieces.Any(p => p.Value.Count == 2 && p.Value.Any(p => p.PieceType == PieceType.Bishop || p.PieceType == PieceType.Knight)))
                 {
                     GameResult = "Draw! Insufficient pieces to checkmate!";
-                    isGameDrawn = true;
+                    return true;
                 }
             }
             else if (Pieces.Sum(p => p.Value.Count) == 4)
@@ -1018,8 +1018,17 @@ namespace ChessWPF.Models.Boards
                     }
                 }
             }
+            else if (pieces.All(pc => pc.Value.Count(p => p.PieceType == PieceType.Bishop) == pc.Value.Count - 1))
+            {
+                if (pieces.All(pc => pc.Value.Where(p => p.PieceType == PieceType.Bishop).All(b => b.HasEvenCoordinates()))
+                    || pieces.All(pc => pc.Value.Where(p => p.PieceType == PieceType.Bishop).All(b => !b.HasEvenCoordinates())))
+                {
+                    GameResult = "Draw! Insufficient pieces to checkmate!";
+                    return true;
+                }
+            }
 
-            return isGameDrawn;
+            return false;
         }
 
         private bool CheckForThreefoldRepetition()

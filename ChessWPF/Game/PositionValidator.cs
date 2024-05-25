@@ -112,6 +112,15 @@ namespace ChessWPF.Game
                 }
             }
 
+            if (pieces.All(pc => pc.Value.Count(p => p.PieceType == PieceType.Bishop) == pc.Value.Count - 1))
+            {
+                if (pieces.All(pc => pc.Value.Where(p => p.PieceType == PieceType.Bishop).All(b => b.HasEvenCoordinates())) 
+                    || pieces.All(pc => pc.Value.Where(p => p.PieceType == PieceType.Bishop).All(b => !b.HasEvenCoordinates())))
+                {
+                    return false;
+                }
+            }
+
             return true;
         }
 
