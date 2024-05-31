@@ -15,6 +15,8 @@ namespace ChessWPF.Views.Cells
     public partial class ChessCell : UserControl
     {
         private ICommand selectCommand;
+        private Regex pieceRegex;
+        private CellViewModel viewModel;
         public ChessCell()
         {
             InitializeComponent();
@@ -31,11 +33,13 @@ namespace ChessWPF.Views.Cells
             cellBtnSelect.Style = this.FindResource("defaultRepeatBtn") as Style;
             cellBtnMove.Style = this.FindResource("defaultBtn") as Style;
             cellBtnPromote.Style = this.FindResource("defaultBtn") as Style;
+            pieceRegex = new Regex(@"(White|Black) [A-Za-z]+");
         }
 
         private void ChessCell_Loaded(object sender, RoutedEventArgs e)
         {
-            selectCommand = (this.DataContext as CellViewModel)!.SelectCommand;
+            viewModel = this.DataContext as CellViewModel;
+            selectCommand = viewModel!.SelectCommand;
         }
 
         private void Unselect()
