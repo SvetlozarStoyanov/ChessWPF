@@ -58,5 +58,10 @@ namespace ChessWPF.Views.Boards
                 }
             }
         }
+
+        private void ChessBoard_GiveFeedback(object sender, GiveFeedbackEventArgs e)
+        {
+            e.Handled = true;
+        }
     }
 }

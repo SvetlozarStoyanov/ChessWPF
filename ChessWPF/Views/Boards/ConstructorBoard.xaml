@@ -6,7 +6,8 @@
              xmlns:local="clr-namespace:ChessWPF.Views.Boards"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800"
- MaxHeight="1000px" MaxWidth="1000px">
+        MaxHeight="1000px" MaxWidth="1000px"
+             GiveFeedback="ConstructorBoard_GiveFeedback">
     <Grid x:Name="mainGrid" SizeChanged="mainGrid_SizeChanged" Loaded="mainGrid_Loaded" >
         <Grid.RowDefinitions>
             <RowDefinition/>
