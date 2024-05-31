@@ -63,8 +63,13 @@ namespace ChessWPF.Views.Cells
             {
                 selectCommand.Execute(null);
                 updateCellBtn.IsEnabled = false;
+                var cursorImage = pieceRegex.Match(imgPiece.Source.ToString());
+                Mouse.OverrideCursor = new Cursor(Application.GetResourceStream(new Uri($"Graphics/Cursors/{cursorImage}.cur", UriKind.Relative)).Stream);
+                imgPiece.Opacity = 0.0;
                 DragDrop.DoDragDrop(selectCellPieceBtn, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
                 updateCellBtn.IsEnabled = true;
+                Mouse.OverrideCursor = Cursors.Arrow;
+                imgPiece.Opacity = 1.0;
             }
         }
 
