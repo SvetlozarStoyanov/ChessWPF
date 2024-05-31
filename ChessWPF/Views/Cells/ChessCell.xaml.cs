@@ -147,8 +147,16 @@ namespace ChessWPF.Views.Cells
             if (cellBtnSelect.IsEnabled)
             {
                 selectCommand.Execute(null);
+                if (viewModel.IsSelected)
+                {
+                    var cursorImage = pieceRegex.Match(imgPiece.Source.ToString());
+                    Mouse.OverrideCursor = new Cursor(Application.GetResourceStream(new Uri($"Graphics/Cursors/{cursorImage}.cur", UriKind.Relative)).Stream);
+                    imgPiece.Opacity = 0.0;
                 DragDrop.DoDragDrop(this, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
+                    Mouse.OverrideCursor = Cursors.Arrow;
+                    imgPiece.Opacity = 1;
             }
+        }
         }
 
         private void cellBtnMove_Drop(object sender, DragEventArgs e)
@@ -158,7 +166,5 @@ namespace ChessWPF.Views.Cells
                 cellBtnMove.Command.Execute(null);
             }
         }
-
-
     }
 }
