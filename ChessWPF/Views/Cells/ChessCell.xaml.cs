@@ -1,6 +1,7 @@
 ﻿using ChessWPF.HelperClasses.WindowDimensions;
 using ChessWPF.ViewModels;
 using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -152,11 +153,11 @@ namespace ChessWPF.Views.Cells
                     var cursorImage = pieceRegex.Match(imgPiece.Source.ToString());
                     Mouse.OverrideCursor = new Cursor(Application.GetResourceStream(new Uri($"Graphics/Cursors/{cursorImage}.cur", UriKind.Relative)).Stream);
                     imgPiece.Opacity = 0.0;
-                DragDrop.DoDragDrop(this, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
+                    DragDrop.DoDragDrop(this, new DataObject(DataFormats.Serializable, this), DragDropEffects.Move);
                     Mouse.OverrideCursor = Cursors.Arrow;
                     imgPiece.Opacity = 1;
+                }
             }
-        }
         }
 
         private void cellBtnMove_Drop(object sender, DragEventArgs e)
