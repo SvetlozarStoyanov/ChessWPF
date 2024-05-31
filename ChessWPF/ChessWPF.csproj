@@ -23,6 +23,20 @@
     <None Remove="Graphics\Chess Pieces\White Pawn.png" />
     <None Remove="Graphics\Chess Pieces\White Queen.png" />
     <None Remove="Graphics\Chess Pieces\White Rook.png" />
+    <None Remove="Graphics\Cursors\Black Bishop.cur" />
+    <None Remove="Graphics\Cursors\Black King.cur" />
+    <None Remove="Graphics\Cursors\Black Knight.cur" />
+    <None Remove="Graphics\Cursors\Black Knook.cur" />
+    <None Remove="Graphics\Cursors\Black Pawn.cur" />
+    <None Remove="Graphics\Cursors\Black Queen.cur" />
+    <None Remove="Graphics\Cursors\Black Rook.cur" />
+    <None Remove="Graphics\Cursors\White Bishop.cur" />
+    <None Remove="Graphics\Cursors\White King.cur" />
+    <None Remove="Graphics\Cursors\White Knight.cur" />
+    <None Remove="Graphics\Cursors\White Knook.cur" />
+    <None Remove="Graphics\Cursors\White Pawn.cur" />
+    <None Remove="Graphics\Cursors\White Queen.cur" />
+    <None Remove="Graphics\Cursors\White Rook.cur" />
     <None Remove="Graphics\Icons\BoardConstructor\Pointer.png" />
     <None Remove="Graphics\Icons\BoardConstructor\Trash.png" />
     <None Remove="Graphics\Selectors\Empty Selector.png" />
@@ -52,6 +66,20 @@
 
   <ItemGroup>
     <Resource Include="Graphics\Chess Pieces\Black Pawn.png" />
+    <Resource Include="Graphics\Cursors\Black Bishop.cur" />
+    <Resource Include="Graphics\Cursors\Black King.cur" />
+    <Resource Include="Graphics\Cursors\Black Knight.cur" />
+    <Resource Include="Graphics\Cursors\Black Knook.cur" />
+    <Resource Include="Graphics\Cursors\Black Pawn.cur" />
+    <Resource Include="Graphics\Cursors\Black Queen.cur" />
+    <Resource Include="Graphics\Cursors\Black Rook.cur" />
+    <Resource Include="Graphics\Cursors\White Bishop.cur" />
+    <Resource Include="Graphics\Cursors\White King.cur" />
+    <Resource Include="Graphics\Cursors\White Knight.cur" />
+    <Resource Include="Graphics\Cursors\White Knook.cur" />
+    <Resource Include="Graphics\Cursors\White Pawn.cur" />
+    <Resource Include="Graphics\Cursors\White Queen.cur" />
+    <Resource Include="Graphics\Cursors\White Rook.cur" />
     <Resource Include="Graphics\Icons\BoardConstructor\Pointer.png" />
     <Resource Include="Graphics\Icons\BoardConstructor\Trash.png" />
     <Resource Include="Graphics\Selectors\Empty Selector.png" />
