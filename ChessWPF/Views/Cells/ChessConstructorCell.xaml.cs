@@ -1,4 +1,6 @@
 ﻿using ChessWPF.ViewModels;
+using System;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -11,6 +13,8 @@ namespace ChessWPF.Views.Cells
     public partial class ChessConstructorCell : UserControl
     {
         private ICommand selectCommand;
+        private Regex pieceRegex;
+
         public ChessConstructorCell()
         {
             InitializeComponent();
@@ -23,6 +27,7 @@ namespace ChessWPF.Views.Cells
             this.MinWidth = this.MinHeight;
             updateCellBtn.Style = this.FindResource("defaultBtn") as Style;
             selectCellPieceBtn.Style = this.FindResource("defaultRepeatBtn") as Style;
+            pieceRegex = new Regex(@"(White|Black) [A-Za-z]+");
         }
 
         private void ChessConstructorCell_Loaded(object sender, RoutedEventArgs e)
