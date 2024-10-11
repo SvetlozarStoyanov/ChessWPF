@@ -1,10 +1,16 @@
 ﻿using ChessWPF.Models.Cells;
 using ChessWPF.Models.Pieces.Enums;
+using System.Collections.Generic;
 
 namespace ChessWPF.Models.Moves
 {
     public sealed class Move
     {
+        public Move()
+        {
+            ChildMoves = new List<Move>();
+        }
+
         public int CurrHalfMoveCount { get; set; }
         public string FenAnnotation { get; set; } = null!;
         public string Annotation { get; set; } = null!;
@@ -17,11 +23,13 @@ namespace ChessWPF.Models.Moves
         public Cell? CellThreeAfter { get; set; }
         public Cell? CellFourBefore { get; set; }
         public Cell? CellFourAfter { get; set; }
+        public Move ParentMove { get; set; }
+        public List<Move> ChildMoves { get; set; }
 
         public override bool Equals(object? obj)
         {
             var otherMove = obj as Move;
-            if (this.CellOneBefore.Equals(otherMove.CellOneBefore) 
+            if (this.CellOneBefore.Equals(otherMove.CellOneBefore)
                 && this.CellTwoBefore.Equals(otherMove.CellTwoBefore)
                 && this.CellOneAfter.Equals(otherMove.CellOneAfter)
                 && this.CellTwoAfter.Equals(otherMove.CellTwoAfter))
@@ -46,7 +54,7 @@ namespace ChessWPF.Models.Moves
         public bool IsHalfMove()
         {
             if (this.CellOneBefore.Piece!.PieceType == PieceType.Pawn ||
-                (this.CellTwoAfter.Piece != null && this.CellTwoBefore.Piece != null 
+                (this.CellTwoAfter.Piece != null && this.CellTwoBefore.Piece != null
                 && this.CellTwoBefore.Piece.Color != this.CellOneBefore.Piece.Color))
             {
                 return false;
