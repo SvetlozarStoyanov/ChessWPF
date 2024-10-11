@@ -7,6 +7,7 @@ using ChessWPF.Models.Options;
 using ChessWPF.Models.Pieces.Enums;
 using ChessWPF.Models.Positions;
 using ChessWPF.Stores;
+using ChessWPF.ViewModels.Moves;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -25,13 +26,17 @@ namespace ChessWPF.ViewModels
         private Regex regex = new Regex(regexPattern);
         private BoardViewModel boardViewModel;
         private GameMenuViewModel menuViewModel;
+        private MoveGridViewModel moveGridViewModel;
         private Dictionary<string, GameClockViewModel> gameClockViewModels;
+
+
 
         public GameViewModel(GameStateStore gameStateStore)
         {
             SetupBoardViewModel(gameStateStore.CurrentPositionFenAnnotation);
             SetupGameMenuViewModel(BoardViewModel);
             SetupGameClockViewModels(gameStateStore.GameOptions.TimeControl);
+            SetupMoveGridViewModel();
             StartGame();
             NavigateToMainMenuCommand = new NavigateCommand<MainMenuViewModel>(gameStateStore, () => new MainMenuViewModel(gameStateStore));
         }
@@ -72,6 +77,11 @@ namespace ChessWPF.ViewModels
             set => menuViewModel = value;
         }
 
+        public MoveGridViewModel MoveGridViewModel
+        {
+            get { return moveGridViewModel; }
+            set { moveGridViewModel = value; }
+        }
 
         public Dictionary<string, GameClockViewModel> GameClockViewModels
         {
@@ -195,6 +205,11 @@ namespace ChessWPF.ViewModels
         private void SetupGameMenuViewModel(BoardViewModel boardViewModel)
         {
             GameMenuViewModel = new GameMenuViewModel(boardViewModel);
+        }
+
+        private void SetupMoveGridViewModel()
+        {
+            MoveGridViewModel = new MoveGridViewModel();
         }
 
         private void AddToMoveAnnotation(Move move)
