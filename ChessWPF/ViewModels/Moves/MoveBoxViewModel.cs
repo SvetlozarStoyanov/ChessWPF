@@ -1,6 +1,7 @@
 ﻿using ChessWPF.Models.Moves;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Windows.Media;
 
 namespace ChessWPF.ViewModels.Moves
@@ -9,11 +10,13 @@ namespace ChessWPF.ViewModels.Moves
     {
         private Move move;
 
-        public MoveBoxViewModel(Move move, SolidColorBrush defaultColor, SolidColorBrush selectedColor)
+        public MoveBoxViewModel(Move move)
         {
-            this.DefaultColor = Brushes.Gray;
-            this.SelectedColor = Brushes.LightGreen;
-            this.move = move;
+            DefaultColor = Brushes.Gray;
+            SelectedColor = Brushes.LightGreen;
+            BackgroundColor = Brushes.Gray;
+            Children = new ObservableCollection<MoveBoxViewModel>();
+            Move = move;
         }
 
         public Move Move
@@ -23,7 +26,7 @@ namespace ChessWPF.ViewModels.Moves
         }
 
         public MoveBoxViewModel Parent { get; set; }
-        public List<MoveBoxViewModel> Children { get; set; }
+        public ObservableCollection<MoveBoxViewModel> Children { get; set; }
         public SolidColorBrush BackgroundColor { get; set; }
         public SolidColorBrush DefaultColor { get; set; }
         public SolidColorBrush SelectedColor { get; set; }

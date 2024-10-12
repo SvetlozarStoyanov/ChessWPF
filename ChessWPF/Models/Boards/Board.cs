@@ -36,7 +36,6 @@ namespace ChessWPF.Models.Boards
                 { PieceColor.White, new List<Piece>() },
                 { PieceColor.Black, new List<Piece>() }
             };
-            //CreateCells();
             BackupCells = new List<Cell>();
         }
 
@@ -115,7 +114,10 @@ namespace ChessWPF.Models.Boards
         public Move MovesTree 
         { 
             get => movesTree;
-            set => movesTree = value;
+            set 
+            {
+                movesTree = value;
+            }
         }
 
         public void CreateCells()
@@ -213,7 +215,6 @@ namespace ChessWPF.Models.Boards
                 UnCheckKing(king!);
             }
             var move = Moves.Pop();
-            var moveFromTree = MovesTree;
             MovesTree = MovesTree.ParentMove;
             var cellOneBefore = move.CellOneBefore;
             var cellTwoBefore = move.CellTwoBefore;

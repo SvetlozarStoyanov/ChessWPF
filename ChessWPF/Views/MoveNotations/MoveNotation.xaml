@@ -4,7 +4,7 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:ChessWPF.Views.MoveNotations"
-             xmlns:View.Clocks="clr-namespace:ChessWPF.Views.Clocks"
+             xmlns:moves="clr-namespace:ChessWPF.Views.Moves" xmlns:clocks="clr-namespace:ChessWPF.Views.Clocks"
              mc:Ignorable="d" 
              d:DesignHeight="700" d:DesignWidth="700">
     <Grid VerticalAlignment="Center">
@@ -18,9 +18,9 @@
             <ColumnDefinition Width="3*"/>
         </Grid.ColumnDefinitions>
 
-        <View.Clocks:GameClock VerticalAlignment="Bottom" Grid.Row="0" DataContext="{Binding GameClockViewModels[Black]}"/>
+        <clocks:GameClock VerticalAlignment="Bottom" Grid.Row="0" DataContext="{Binding GameClockViewModels[Black]}"/>
 
-        <View.Clocks:GameClock VerticalAlignment="Top" Grid.Row="2" DataContext="{Binding GameClockViewModels[White]}"/>
+        <clocks:GameClock VerticalAlignment="Top" Grid.Row="2" DataContext="{Binding GameClockViewModels[White]}"/>
 
         <Border Grid.Row="1" BorderBrush="Black" BorderThickness="4 0 4 0">
             <Grid x:Name="moveNotationGrid" SizeChanged="moveNotationGrid_SizeChanged" Grid.Row="1" VerticalAlignment="Stretch"
@@ -29,11 +29,14 @@
                     <RowDefinition Height="8*"/>
                     <RowDefinition/>
                 </Grid.RowDefinitions>
-                <TextBox Grid.Row="0" x:Name="moveNotationTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
+                <moves:MoveGrid Visibility="Visible" Grid.Row="0" Background="Red" DataContext="{Binding MoveGridViewModel, UpdateSourceTrigger=PropertyChanged}">
+                    
+                </moves:MoveGrid>
+                <TextBox Visibility="Hidden" Grid.Row="0" x:Name="moveNotationTextBox" VerticalAlignment="Stretch" HorizontalAlignment="Stretch" 
                   TextWrapping="Wrap" AcceptsReturn="True" IsReadOnly="True" FontWeight="Bold"
                Background="White" FontSize="16px" Text="{Binding MoveNotation,UpdateSourceTrigger=PropertyChanged}" TextChanged="moveNotationTextBox_TextChanged">
                 </TextBox>
-                <Button Grid.Row="1" Name="copyMoveNotationButton" Click="copyMoveNotationButton_Click"
+                <Button Visibility="Hidden" Grid.Row="1" Name="copyMoveNotationButton" Click="copyMoveNotationButton_Click"
                  IsEnabled="{Binding CanCopyMoveNotation,UpdateSourceTrigger=PropertyChanged}"
                  >Copy</Button>
             </Grid>

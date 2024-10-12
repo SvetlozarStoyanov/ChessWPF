@@ -124,6 +124,7 @@ namespace ChessWPF.ViewModels
             if (Board.Moves.Any() && !Board.Moves.Peek().IsPromotionMove && Board.OngoingPromotionMove == null)
             {
                 GameClockViewModels[currTurnColor.ToString()].AddIncrement();
+                MoveGridViewModel.AddMove(new MoveBoxViewModel(Board.MovesTree));
                 AddToMoveAnnotation(Board.Moves.Peek());
             }
             if (BoardViewModel.GameResult != null)

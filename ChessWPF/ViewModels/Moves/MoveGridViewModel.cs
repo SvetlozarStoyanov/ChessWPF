@@ -9,13 +9,17 @@ namespace ChessWPF.ViewModels.Moves
 
         public MoveGridViewModel()
         {
-
+            MovesTree = new MoveBoxViewModel(null);
         }
 
         public MoveBoxViewModel MovesTree
         {
             get { return movesTree; }
-            set { movesTree = value; }
+            set 
+            { 
+                movesTree = value;
+                OnPropertyChanged(nameof(MovesTree));
+            }
         }
 
         public event ChangeSelectedMoveEventHandler ChangeSelectedMove;
@@ -26,7 +30,7 @@ namespace ChessWPF.ViewModels.Moves
             MovesTree?.Children.Add(moveBoxViewModel);
             moveBoxViewModel.Parent = MovesTree!;
             moveBoxViewModel.SelectMove += SelectMove;
-            MovesTree = moveBoxViewModel;
+            //MovesTree = moveBoxViewModel;
         }
 
         public void SelectMove(object sender, EventArgs e)

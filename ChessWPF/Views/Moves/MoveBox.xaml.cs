@@ -1,6 +1,6 @@
 ﻿using System.Windows.Controls;
 
-namespace ChessWPF.Views
+namespace ChessWPF.Views.Moves
 {
     /// <summary>
     /// Interaction logic for MoveBox.xaml

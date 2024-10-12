@@ -6,7 +6,15 @@
              xmlns:local="clr-namespace:ChessWPF.Views.Moves"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
-    <Grid>
-            
-    </Grid>
+
+    <ScrollViewer VerticalScrollBarVisibility="Auto">
+        <TreeView ItemsSource="{Binding MovesTree.Children, UpdateSourceTrigger=PropertyChanged}">
+            <TreeView.ItemTemplate>
+                <HierarchicalDataTemplate ItemsSource="{Binding Children, UpdateSourceTrigger=PropertyChanged}">
+                    <local:MoveBox></local:MoveBox>
+                </HierarchicalDataTemplate>
+            </TreeView.ItemTemplate>
+        </TreeView>
+    </ScrollViewer>
+
 </UserControl>
